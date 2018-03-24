@@ -1,0 +1,191 @@
+<h1>studentData</h1>
+
+
+<% if (result.length == 0) { %>
+  <h4>
+    0 studentData
+  </h4>
+<% } else { %>
+<table>
+	<thead>
+    <th>#</th>
+		<th>id</th>
+			<th>userid</th>
+			<th>name</th>
+			<th>roll_number</th>
+			<th>registration_number</th>
+			<th>current_section</th>
+			<th>current_year</th>
+			<th>joining_year</th>
+			<th>course</th>
+			<th>branch</th>
+			<th>gender</th>
+			<th>birthday</th>
+			<th>country</th>
+			<th>mobile</th>
+			<th>emergency_contact</th>
+			<th>sbh_account</th>
+			<th>passport</th>
+			<th>hostel_room</th>
+			<th>hostel</th>
+			<th>mess</th>
+			<th>created_location</th>
+			<th>created_time</th>
+			<th>guardian1</th>
+			<th>relationship1</th>
+			<th>email1</th>
+			<th>mobile1</th>
+			<th>guardian2</th>
+			<th>relationship2</th>
+			<th>email2</th>
+			<th>mobile2</th>
+			<th>homenumber</th>
+			<th>address</th>
+			<th>bloodgroup</th>
+			<th>adhaar</th>
+			<th>linkedin</th>
+			<th>mac</th>
+
+		<th>created at</th>
+		<th>updated at</th>
+		<th colspan="3"></th>
+	</thead>
+
+	<tbody>
+		<% result.forEach((item, i) => { %>
+			<tr>
+				<td>
+					<%= (i + 1) %>
+				</td>
+				<td>
+					<%= item.id %>
+				</td>
+					<td>
+						<%= item.userid %>
+					</td>
+					<td>
+						<%= item.name %>
+					</td>
+					<td>
+						<%= item.roll_number %>
+					</td>
+					<td>
+						<%= item.registration_number %>
+					</td>
+					<td>
+						<%= item.current_section %>
+					</td>
+					<td>
+						<%= item.current_year %>
+					</td>
+					<td>
+						<%= item.joining_year %>
+					</td>
+					<td>
+						<%= item.course %>
+					</td>
+					<td>
+						<%= item.branch %>
+					</td>
+					<td>
+						<%= item.gender %>
+					</td>
+					<td>
+						<%= item.birthday %>
+					</td>
+					<td>
+						<%= item.country %>
+					</td>
+					<td>
+						<%= item.mobile %>
+					</td>
+					<td>
+						<%= item.emergency_contact %>
+					</td>
+					<td>
+						<%= item.sbh_account %>
+					</td>
+					<td>
+						<%= item.passport %>
+					</td>
+					<td>
+						<%= item.hostel_room %>
+					</td>
+					<td>
+						<%= item.hostel %>
+					</td>
+					<td>
+						<%= item.mess %>
+					</td>
+					<td>
+						<%= item.created_location %>
+					</td>
+					<td>
+						<%= item.created_time %>
+					</td>
+					<td>
+						<%= item.guardian1 %>
+					</td>
+					<td>
+						<%= item.relationship1 %>
+					</td>
+					<td>
+						<%= item.email1 %>
+					</td>
+					<td>
+						<%= item.mobile1 %>
+					</td>
+					<td>
+						<%= item.guardian2 %>
+					</td>
+					<td>
+						<%= item.relationship2 %>
+					</td>
+					<td>
+						<%= item.email2 %>
+					</td>
+					<td>
+						<%= item.mobile2 %>
+					</td>
+					<td>
+						<%= item.homenumber %>
+					</td>
+					<td>
+						<%= item.address %>
+					</td>
+					<td>
+						<%= item.bloodgroup %>
+					</td>
+					<td>
+						<%= item.adhaar %>
+					</td>
+					<td>
+						<%= item.linkedin %>
+					</td>
+					<td>
+						<%= item.mac %>
+					</td>
+				<td>
+					<%= item.createdAt %>
+				</td>
+				<td>
+					<%= item.updatedAt %>
+				</td>
+				<td>
+					<a href="/studentData/show/<%= item.id %>">Show</a>
+				</td>
+				<td>
+					<a href="/studentData/delete/<%= item.id %>">Delete</a>
+				</td>
+        <td>
+					<a href="/studentData/edit/<%= item.id %>">Edit</a>
+				</td>
+			</tr>
+			<% }) %>
+	</tbody>
+</table>
+
+<% } %>
+
+<br>
+<a href="/studentData/create">New</a>

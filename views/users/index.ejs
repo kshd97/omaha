@@ -1,0 +1,127 @@
+<h1>users</h1>
+
+
+<% if (result.length == 0) { %>
+  <h4>
+    0 users
+  </h4>
+<% } else { %>
+<table>
+	<thead>
+    <th>#</th>
+		<th>id</th>
+			<th>id</th>
+			<th>ip_address</th>
+			<th>username</th>
+			<th>password</th>
+			<th>profile_edited</th>
+			<th>salt</th>
+			<th>email</th>
+			<th>activation_code</th>
+			<th>forgotten_password_code</th>
+			<th>forgotten_password_time</th>
+			<th>remember_code</th>
+			<th>created_on</th>
+			<th>last_login</th>
+			<th>active</th>
+			<th>first_name</th>
+			<th>middle_name</th>
+			<th>last_name</th>
+			<th>company</th>
+			<th>phone</th>
+
+		<th>created at</th>
+		<th>updated at</th>
+		<th colspan="3"></th>
+	</thead>
+
+	<tbody>
+		<% result.forEach((item, i) => { %>
+			<tr>
+				<td>
+					<%= (i + 1) %>
+				</td>
+				<td>
+					<%= item.id %>
+				</td>
+					<td>
+						<%= item.id %>
+					</td>
+					<td>
+						<%= item.ip_address %>
+					</td>
+					<td>
+						<%= item.username %>
+					</td>
+					<td>
+						<%= item.password %>
+					</td>
+					<td>
+						<%= item.profile_edited %>
+					</td>
+					<td>
+						<%= item.salt %>
+					</td>
+					<td>
+						<%= item.email %>
+					</td>
+					<td>
+						<%= item.activation_code %>
+					</td>
+					<td>
+						<%= item.forgotten_password_code %>
+					</td>
+					<td>
+						<%= item.forgotten_password_time %>
+					</td>
+					<td>
+						<%= item.remember_code %>
+					</td>
+					<td>
+						<%= item.created_on %>
+					</td>
+					<td>
+						<%= item.last_login %>
+					</td>
+					<td>
+						<%= item.active %>
+					</td>
+					<td>
+						<%= item.first_name %>
+					</td>
+					<td>
+						<%= item.middle_name %>
+					</td>
+					<td>
+						<%= item.last_name %>
+					</td>
+					<td>
+						<%= item.company %>
+					</td>
+					<td>
+						<%= item.phone %>
+					</td>
+				<td>
+					<%= item.createdAt %>
+				</td>
+				<td>
+					<%= item.updatedAt %>
+				</td>
+				<td>
+					<a href="/users/show/<%= item.id %>">Show</a>
+				</td>
+				<td>
+					<a href="/users/delete/<%= item.id %>">Delete</a>
+				</td>
+        <td>
+					<a href="/users/edit/<%= item.id %>">Edit</a>
+				</td>
+			</tr>
+			<% }) %>
+	</tbody>
+</table>
+
+<% } %>
+
+<br>
+<a href="/users/create">New</a>

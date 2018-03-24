@@ -1,0 +1,88 @@
+<div class="">
+  <h1>New users</h1>
+
+  <div class="body">
+    <form class="" action="/users/update" method="post">
+      <input name="id" value="<%= element.id %>" hidden="true" required>
+        <div class="">
+          <label for="">id</label>
+          <input type="number" name="id" value="<%= element.id %>" required="false">
+        </div>
+        <div class="">
+          <label for="">ip_address</label>
+          <input type="text" name="ip_address" value="<%= element.ip_address %>" required="false">
+        </div>
+        <div class="">
+          <label for="">username</label>
+          <input type="text" name="username" value="<%= element.username %>" required="false">
+        </div>
+        <div class="">
+          <label for="">password</label>
+          <input type="text" name="password" value="<%= element.password %>" required="false">
+        </div>
+        <div class="">
+          <label for="">profile_edited</label>
+          <input type="number" name="profile_edited" value="<%= element.profile_edited %>" required="false">
+        </div>
+        <div class="">
+          <label for="">salt</label>
+          <input type="text" name="salt" value="<%= element.salt %>" required="false">
+        </div>
+        <div class="">
+          <label for="">email</label>
+          <input type="text" name="email" value="<%= element.email %>" required="false">
+        </div>
+        <div class="">
+          <label for="">activation_code</label>
+          <input type="text" name="activation_code" value="<%= element.activation_code %>" required="false">
+        </div>
+        <div class="">
+          <label for="">forgotten_password_code</label>
+          <input type="text" name="forgotten_password_code" value="<%= element.forgotten_password_code %>" required="false">
+        </div>
+        <div class="">
+          <label for="">forgotten_password_time</label>
+          <input type="number" name="forgotten_password_time" value="<%= element.forgotten_password_time %>" required="false">
+        </div>
+        <div class="">
+          <label for="">remember_code</label>
+          <input type="text" name="remember_code" value="<%= element.remember_code %>" required="false">
+        </div>
+        <div class="">
+          <label for="">created_on</label>
+          <input type="number" name="created_on" value="<%= element.created_on %>" required="false">
+        </div>
+        <div class="">
+          <label for="">last_login</label>
+          <input type="number" name="last_login" value="<%= element.last_login %>" required="false">
+        </div>
+        <div class="">
+          <label for="">active</label>
+          <input type="number" name="active" value="<%= element.active %>" required="false">
+        </div>
+        <div class="">
+          <label for="">first_name</label>
+          <input type="text" name="first_name" value="<%= element.first_name %>" required="false">
+        </div>
+        <div class="">
+          <label for="">middle_name</label>
+          <input type="text" name="middle_name" value="<%= element.middle_name %>" required="false">
+        </div>
+        <div class="">
+          <label for="">last_name</label>
+          <input type="text" name="last_name" value="<%= element.last_name %>" required="false">
+        </div>
+        <div class="">
+          <label for="">company</label>
+          <input type="text" name="company" value="<%= element.company %>" required="false">
+        </div>
+        <div class="">
+          <label for="">phone</label>
+          <input type="text" name="phone" value="<%= element.phone %>" required="false">
+        </div>
+      <button type="submit">Update users</button>
+    </form>
+    <br />
+    <a href="/users">Index</a>
+  </div>
+</div>

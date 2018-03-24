@@ -1,0 +1,83 @@
+<h1>Show users</h1>
+
+	<p>
+		<strong>id:</strong>
+		<%= element.id %>
+	</p>
+	<p>
+		<strong>ip_address:</strong>
+		<%= element.ip_address %>
+	</p>
+	<p>
+		<strong>username:</strong>
+		<%= element.username %>
+	</p>
+	<p>
+		<strong>password:</strong>
+		<%= element.password %>
+	</p>
+	<p>
+		<strong>profile_edited:</strong>
+		<%= element.profile_edited %>
+	</p>
+	<p>
+		<strong>salt:</strong>
+		<%= element.salt %>
+	</p>
+	<p>
+		<strong>email:</strong>
+		<%= element.email %>
+	</p>
+	<p>
+		<strong>activation_code:</strong>
+		<%= element.activation_code %>
+	</p>
+	<p>
+		<strong>forgotten_password_code:</strong>
+		<%= element.forgotten_password_code %>
+	</p>
+	<p>
+		<strong>forgotten_password_time:</strong>
+		<%= element.forgotten_password_time %>
+	</p>
+	<p>
+		<strong>remember_code:</strong>
+		<%= element.remember_code %>
+	</p>
+	<p>
+		<strong>created_on:</strong>
+		<%= element.created_on %>
+	</p>
+	<p>
+		<strong>last_login:</strong>
+		<%= element.last_login %>
+	</p>
+	<p>
+		<strong>active:</strong>
+		<%= element.active %>
+	</p>
+	<p>
+		<strong>first_name:</strong>
+		<%= element.first_name %>
+	</p>
+	<p>
+		<strong>middle_name:</strong>
+		<%= element.middle_name %>
+	</p>
+	<p>
+		<strong>last_name:</strong>
+		<%= element.last_name %>
+	</p>
+	<p>
+		<strong>company:</strong>
+		<%= element.company %>
+	</p>
+	<p>
+		<strong>phone:</strong>
+		<%= element.phone %>
+	</p>
+
+<br>
+<a href="/users/edit/<%= element.id %>">Edit</a>
+<a href="/users/create">New</a>
+<a href="/users">Back</a>
