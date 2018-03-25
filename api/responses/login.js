@@ -19,7 +19,7 @@ module.exports = function login(inputs) {
   Users.attemptLogin({
     username: inputs.username,
     password: inputs.password
-  }, function (err, user) {
+  },req, res, function (err, user) {
     if (err) return res.negotiate(err);
     if (!user) {
 

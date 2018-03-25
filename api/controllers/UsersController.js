@@ -54,16 +54,39 @@ module.exports = {
         });
     },
 
-     login: function (req, res) {
+    login: function (req, res) {
 
-    // See `api/responses/login.js`
-    sails.log("I am a debug message");
-    return res.login({
-      username: req.param('username'),
-      password: req.param('password'),
-      successRedirect: '/dashboard',
-      invalidRedirect: '/fail'
+    var bcrypt = require('bcrypt');
+    var password = req.param('password');
+
+        sails.log("I am a debug message");
+        Users.findOne({
+            username: req.param('username'),
+        }).exec(function(err, result){
+            if (err) return res.negotiate(err);
+
+            sails.log(result.password);
+            bcrypt.compare(password, result.password, function(err, res1) {
+                if(res1) {
+                    sails.log("Matched");
+                    req.session.me = result.id;
+                    sails.log(req.session.me);
+
+                    return res.redirect('/dashboard');
+                }
+                else{
+                    sails.log("Incorrect");
+                    return res.redirect('/fail');
+                }
+            });
+
     });
-  },
+        // return res.login({
+        //     username: req.param('username'),
+        //     password: req.param('password'),
+        //     successRedirect: '/dashboard',
+        //     invalidRedirect: '/fail'
+        // });
+    },
 
 };

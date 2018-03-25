@@ -32,7 +32,9 @@ module.exports = {
         branch: {
             type: "string"
         },
-        gender: {},
+        gender: {
+            type: "string"
+        },
         birthday: {
             type: "date"
         },

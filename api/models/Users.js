@@ -64,25 +64,25 @@ module.exports = {
         }
     },
 
-    attemptLogin: function (inputs, cb) {
-    // Create a user
-    var bcrypt = require('bcrypt');
-    const saltRounds = 10;
-    var hash1;
+  //   attemptLogin: function (inputs, cb) {
+  //   // Create a user
+  //   var bcrypt = require('bcrypt');
+  //   const saltRounds = 10;
+  //   var hash1;
     
-    bcrypt.hash(inputs.password, saltRounds, function(err, hash) { 
+  //   bcrypt.hash(inputs.password, saltRounds, function(err, hash) { 
         
-        hash1 = hash;
-        sails.log.debug(hash1);
-    });
+  //       hash1 = hash;
+  //       sails.log.debug(hash1);
+  //   });
 
-    Users.findOne({
-      username: 'jatin6102 ',
-      // TODO: But encrypt the password first
+  //   Users.findOne({
+  //     username: inputs.username,
+  //     // TODO: But encrypt the password first
       
-      password:  '$2y$08$tk4lFKhB.ylklzbyHySuguUBbdwUhxy7vyihwCPl80LMlE.3vwele' 
-    })
-    .exec(cb);
-  }
+  //     password: hash1 
+  //   })
+  //   .exec(cb);
+  // }
 
 };

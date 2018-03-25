@@ -10,7 +10,14 @@ module.exports = {
   attributes: {
   		name: {
   			type: 'string'
-  		}
+  		},
+  	capacity: {
+  			type: 'integer'
+  		},
+  	allotted: {				
+  			type: 'integer' //no of people allotted to
+  		},
+
   }
 };
 

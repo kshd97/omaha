@@ -12,14 +12,15 @@ module.exports = {
   			model: 'hostelfloors'
   		},
   		roomno: {
+        type: 'string'
   		},
   		capacity: {
   			type: 'integer'
   		},
-  		condition: {
+  		conditionid: {          // 1 is good 0 is bad
   			type: 'integer'
   		},
-  		alotted: {
+  		allotted: {            // 1 is allotted 0 is not
   			type: 'integer'
   		}
   }
