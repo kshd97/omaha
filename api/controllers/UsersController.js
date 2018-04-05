@@ -56,7 +56,7 @@ module.exports = {
 
     login: function (req, res) {
 
-    var bcrypt = require('bcrypt');
+    var bcrypt = require('bcryptjs');
     var password = req.param('password');
 
         sails.log("I am a debug message");
