@@ -9,7 +9,7 @@ module.exports = {
 	book: function (req, res) {
 		
 		var uid = req.session.me;
-		var await1 = require('await');
+		// var await1 = require('await');
 		var unique = require('array-unique').immutable;
 		sails.log(uid);
 		StudentData.findOne({userid:uid}).exec(function (err, result){
@@ -54,6 +54,7 @@ module.exports = {
 			  						hostelfloors[i] = result6[i].hostelfloors;
 			  					}
 			  					sails.log(hostelfloors);
+			  					req.session.hostelfloors = hostelfloors;
 			  					//var result7 = Hostelfloors.find({ id: hostelfloors[0] });
 			  					//sails.log(result7.hostel);
 			  					var inclause = "(";
@@ -67,7 +68,7 @@ module.exports = {
 			  							return res.serverError(err7);
 			  						}
 			  						sails.log(result7);
-			  						var hostelids = [];
+			  						var hostelids = []; 
 			  						for (var i = 0; i < result7.length; i++) {
 			  							hostelids[i] = result7[i].hostel;
 			  						}
@@ -90,10 +91,9 @@ module.exports = {
 			  								hostelnames[i] = result8[i].name;
 			  							}
 			  							sails.log(hostelnames);
-			  							// return res.view('displayhostels', {
-    								// 		hostelnames: hostelnames,
-    								// 		hostelfloors: result7
-			  							// });			  							
+			  							return res.view('displayhostels', {
+    										hostelnames: hostelnames,
+			  							});			  							
 			  						});
 			  					});
 			  				});
@@ -103,21 +103,15 @@ module.exports = {
 		  	});
 		});
 	});
-  
-// });
-// 		StudentData.find(userid : 25).exec(function(err, result){
-// 			sails.log(result.gender);
-// 		});
-	// 		if(err) {
-	// 			return res.serverError(err);
-	// 		}
-	// 		sails.log(result.gender);
-	// 		// sails.log(result.current_year);
-	// 		// sails.log(result.course);
-	// 	});
-	 	return res.redirect('/dashboard');
-	// }),
 },
+
+
+showhostel: function(req, res){
+	sails.log(req.session.hostelfloors);
+	return res.redirect('/dashboard');
+},
+
+
 	
 };
 

@@ -8,8 +8,11 @@ module.exports.routes = {
   '/fail': { view: 'fail' },
 
   '/bookroom': 'BookingController.book',
+  '/showhostel': 'BookingController.showhostel',
+
   '/genstdtypeids' : 'StudenttypeidController.index',
   'post /login': 'UsersController.login',
+
 
   /**
  * AllotmentController

@@ -1,4 +1,41 @@
 YO
-<%for(var i=0; i<hostelnames.length; i++) { %>
-	<%= hostelnames[i] %> 
+<!-- <% for(var i=0; i<hostelnames.length; i++) { %>
+	<%=hostelnames[i] %>
+<% } %> -->
+ 
+<!-- <select name="hostl" id="hostel" onchange="SetFloor(this)">
+    <option>select</option>
+    <%for(var i=0; i<hostelnames.length; i++) { %>
+	<option><%= hostelnames[i] %></option> 
 	<% } %>
+</select>
+
+<select name="floor" id="floor" disabled="disabled">
+    <option>select</option>
+</select> -->
+
+<script>
+function SetFloor(objLanguage) {
+    var objMedia = document.getElementById("floor");
+    objMedia.options.length = 0;
+        objMedia.disabled = false;
+    switch (objLanguage.value) {
+    case "English":
+        objMedia.options.add(new Option("The Indian Express"));
+        objMedia.options.add(new Option("The Hindu"));
+        break;
+    case "Tamil":
+        objMedia.options.add(new Option("Tamil Paper 1"));
+        objMedia.options.add(new Option("Tamil Paper 2"));
+        break;
+    case "Telugu":
+        objMedia.options.add(new Option("Telugu Paper 1"));
+        objMedia.options.add(new Option("Telugu Paper 2"));
+        break;
+    default:
+        objMedia.options.add(new Option("select"));
+        objMedia.disabled = true;
+        break;
+    }
+}
+</script>
