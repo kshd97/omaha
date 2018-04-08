@@ -30,6 +30,7 @@
 
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/login.css">
     <!--STYLES END-->
   </head>
 
@@ -89,6 +90,32 @@
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/dependencies/login.js"></script>
+    <script type="text/javascript">
+      function SetMedia(objLanguage) {
+        var objMedia = document.getElementById("floor");
+        objMedia.options.length = 0;
+        objMedia.disabled = false;
+        switch (objLanguage.value) {
+        case "English":
+            objMedia.options.add(new Option("The Indian Express"));
+            objMedia.options.add(new Option("The Hindu"));
+            break;
+        case "Tamil":
+            objMedia.options.add(new Option("Tamil Paper 1"));
+            objMedia.options.add(new Option("Tamil Paper 2"));
+            break;
+        case "Telugu":
+            objMedia.options.add(new Option("Telugu Paper 1"));
+            objMedia.options.add(new Option("Telugu Paper 2"));
+            break;
+        default:
+            objMedia.options.add(new Option("select"));
+            objMedia.disabled = true;
+            break;
+        }
+      }
+    </script>
     <!--SCRIPTS END-->
   </body>
 </html>

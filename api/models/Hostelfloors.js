@@ -17,7 +17,6 @@ module.exports = {
   		floor: {
   			type: 'integer'
   		}
-
   }
 };
 

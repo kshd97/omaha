@@ -11,6 +11,7 @@ module.exports = {
 		var uid = req.session.me;
 		// var await1 = require('await');
 		var unique = require('array-unique').immutable;
+		var HashMap = require('hashmap');
 		sails.log(uid);
 		StudentData.findOne({userid:uid}).exec(function (err, result){
 		  if (err) {
@@ -91,8 +92,70 @@ module.exports = {
 			  								hostelnames[i] = result8[i].name;
 			  							}
 			  							sails.log(hostelnames);
+			  							inclause = "(";
+			  							var a = unique(hostelids);
+				  						for (var i = 0; i < a.length - 1; i++) {
+				  							inclause = inclause + a[i] + ","; 
+				  						}
+				  						inclause = inclause + a[a.length-1] + ")";
+			  							query = "SELECT * from hostelfloors where hostel in "+ inclause;
+			  							Hostelfloors.query(query, [], function(err9, result9){
+			  								sails.log(result9);
+			  								var b = [];
+			  								for (var i = 0; i < result9.length; i++) {
+			  									b[i] = result9[i].id;
+			  								}
+			  								inclause = "(";
+			  								for (var i = 0; i < b.length-1; i++) {
+			  									inclause = inclause + b[i] + ",";
+			  								}
+			  								inclause = inclause + b[b.length-1] + ")";
+			  								query = "SELECT hostelfloors from hosteltypeid where hostelfloors in "+ inclause + "and studenttypeid = "+ result5.id;
+			  								Hosteltypeid.query(query, [], function(err10, result10){
+			  									sails.log(result10);
+			  									var finalhostelfloors = [];
+			  									for (var i = 0; i < result10.length; i++) {
+			  										finalhostelfloors[i] = result10[i].hostelfloors;
+			  									}
+			  									sails.log(finalhostelfloors);
+			  									inclause = "(";
+			  									for (var i = 0; i < finalhostelfloors.length-1; i++) {
+			  										inclause = inclause + finalhostelfloors[i] + ",";
+			  									}
+			  									inclause = inclause + finalhostelfloors[finalhostelfloors.length-1] + ")";
+			  									query = "SELECT hostel.name, hostelfloors.block, hostelfloors.floor from hostelfloors, hostel where hostelfloors.id in "+ inclause +"and hostel.id = hostelfloors.hostel";
+			  									Hostelfloors.query(query, [], function(err11, result11){
+			  										sails.log(result11);
+			  										// var arr2d = [][];
+			  										var map = new HashMap();
+			  										for (var i = 0; i < result11.length; i++) {
+			  											if(!map.get(result11[i].name)){
+			  												var arr = [];
+			  												arr.push(result11[i]);
+			  												sails.log("HEYYY");
+			  												sails.log(arr);
+			  												map.set(result11[i].name,arr);
+			  												sails.log(map);
+			  											}
+			  											else{
+			  												var arr = [];
+			  												arr = map.get(result11[i].name);
+			  												sails.log(arr);
+			  												sails.log("pushed");
+			  												arr.push(result11[i]);
+			  												sails.log("BC");
+			  												sails.log(arr);
+			  												map.delete(result11[i].name);
+			  												map.set(result11[i].name, arr);
+			  												sails.log(map);
+			  											}
+			  										}
+			  										sails.log(map);
+			  									});
+			  								});
+			  							});
 			  							return res.view('displayhostels', {
-    										hostelnames: hostelnames,
+    										hostels: map,
 			  							});			  							
 			  						});
 			  					});
