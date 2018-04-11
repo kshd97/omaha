@@ -1,3 +1,3 @@
 module.exports.pubsub = {
-	_hookTimeout: 60000
+	_hookTimeout: 1200000
 };

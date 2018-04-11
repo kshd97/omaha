@@ -9,6 +9,7 @@
     "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "ejs": "2.3.4",
+    "find-process": "^1.1.0",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",

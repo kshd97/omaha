@@ -1,8 +1,21 @@
+<% block('localScripts', '<script src="/js/index.js"></script>') %>
+<!-- <script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script> -->
 YO
-<select name="hostel" id="hostel" onchange="ShowFloors(this)">
+<select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)">  
     <option>select</option>
-    <%- hostels.forEach(function(value, key){ %>
-    		<option><%= key %></option> 
+    <% hostels.forEach(function(value, key){ %>
+    		<option><%= key %></option>
+    		<!-- <% for(var i=0; i < value.length; i++) {%>
+    			<% var a = JSON.parse(JSON.stringify(value[i])); %>
+    			<h6><%=a["name"]%></h6>
+    		<% } %> -->
     <% }) %>
 </select>
 
@@ -10,3 +23,12 @@ YO
     <option>select</option>
 </select>
 
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
