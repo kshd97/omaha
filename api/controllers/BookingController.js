@@ -48,6 +48,7 @@ module.exports = {
 			  			if(err4){
 			  				return res.serverError(err4);
 			  			}
+			  			
 			  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
 			  				if(err5){
 					  			return res.serverError(err5);

@@ -23,12 +23,14 @@ YO
     <option>select</option>
 </select>
 
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
-</script>
+<div class="container">
+	<section ng-controller="RoomCtrl">
+	    <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
+	      <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
+	      <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
+	      {{entry.roomno}}
+	      <!-- <small class="meta text-muted">
+	      </small> -->
+	    </div>
+	  </section>
+</div>

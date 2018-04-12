@@ -3,6 +3,7 @@ function ShowFloors(hostel, hostelsfromcon) {
         objFloor.options.length = 0;
         objFloor.disabled = false;
         console.log(hostelsfromcon);
+        objFloor.options.add(new Option("select"));
 
         // <%= hostelsfromcon.forEach(function(value, key){ %>
         //   <% if(key == hostel.value) { %>
