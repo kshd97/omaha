@@ -28,23 +28,16 @@ function ShowFloors(hostel, hostelsfromcon) {
           } 
         }
 
+}
+function showRooms(hostelfloor){
+  var final ={};
+  var str = hostelfloor.value.split(' ');
+  var host = document.getElementById("hostel");
+  final.name = host.options[host.selectedIndex].text;
+  final.block = str[0];
+  final.floor = str[2];
+  console.log(final);
 
-      //   switch (objLanguage.value) {
-      //   case "English":
-      //       objMedia.options.add(new Option("The Indian Express"));
-      //       objMedia.options.add(new Option("The Hindu"));
-      //       break;
-      //   case "Tamil":
-      //       objMedia.options.add(new Option("Tamil Paper 1"));
-      //       objMedia.options.add(new Option("Tamil Paper 2"));
-      //       break;
-      //   case "Telugu":
-      //       objMedia.options.add(new Option("Telugu Paper 1"));
-      //       objMedia.options.add(new Option("Telugu Paper 2"));
-      //       break;
-      //   default:
-      //       objMedia.options.add(new Option("select"));
-      //       objMedia.disabled = true;
-      //       break;
-      //   }
+  var socket = io();
+  socket.emit('getrooms', {"hostelfloor": final});
 }
