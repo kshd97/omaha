@@ -25,9 +25,9 @@ module.exports = {
   		}
   },
 
-  afteUpdate: function(entry, cb) {
-    sails.sockets.broadcast('room', 'new_entry', entry);
-    cb();
-  }
+  // afteUpdate: function(entry, cb) {
+  //   sails.sockets.broadcast('room', 'new_entry', entry);
+  //   cb();
+  // },
 };
 

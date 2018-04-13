@@ -7,20 +7,9 @@
 
 module.exports = {
 	book: function (req, res) {
-		
 		var uid = req.session.me;
-		// var await1 = require('await');
 		var unique = require('array-unique').immutable;
 		var HashMap = require('hashmap');
-		//var io = require('socket.io')(80);
-
-		// io.on('connection', function (socket) {
-		//   socket.emit('news', { hello: 'world' });
-		//   socket.on('my other event', function (data) {
-		//     console.log(data);
-		//   });
-		// });
-
 		sails.log(uid);
 		StudentData.findOne({userid:uid}).exec(function (err, result){
 		  if (err) {

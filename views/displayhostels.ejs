@@ -19,18 +19,16 @@ YO
     <% }) %>
 </select>
 
-<select name="floor" id="floor" disabled="disabled" onchange="showRooms(this)">
-    <option>select</option>
-</select>
+<section ng-controller="RoomCtrl1"> 
+  <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor);">
+      <option>select</option>
+  </select>
+  <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
+        <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
+        <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
+        {{entry.gender}}
+        <!-- <small class="meta text-muted">
+        </small> -->
+      </div>
+</section>
 
-<div class="container">
-	<section ng-controller="RoomCtrl">
-	    <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
-	      <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
-	      <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-	      {{entry.roomno}}
-	      <!-- <small class="meta text-muted">
-	      </small> -->
-	    </div>
-	  </section>
-</div>

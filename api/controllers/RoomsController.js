@@ -8,7 +8,7 @@
 module.exports = {
 
 	subscribe: function(req, res) {
-		sails.log("HEYYY");
+	sails.log("HEYYY");
     if( ! req.isSocket) {
       return res.badRequest();
     }
