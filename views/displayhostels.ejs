@@ -26,9 +26,10 @@ YO
   <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
         <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
         <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-        {{entry.gender}}
+        <a href="/book/{{entry.id}}">{{entry.roomno}}</a>
         <!-- <small class="meta text-muted">
         </small> -->
       </div>
 </section>
+
 

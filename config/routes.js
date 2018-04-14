@@ -6,9 +6,13 @@ module.exports.routes = {
   '/': { view: 'login' },
   '/dashboard': { view: 'dashboard' },
   '/fail': { view: 'fail' },
+  '/mess': {view:'choosemess'},
 
   '/bookroom': 'BookingController.book',
   '/showhostel': 'BookingController.showhostel',
+  '/book/:roomid': 'BookingController.bookroom',
+  '/fillallotmenttable': 'BookingController.fillallotmenttable',
+  '/messbook/:messname': 'BookingController.bookmess',
 
   '/genstdtypeids' : 'StudenttypeidController.index',
   'post /login': 'UsersController.login',

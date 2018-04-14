@@ -29,15 +29,15 @@ function ShowFloors(hostel, hostelsfromcon) {
         }
 
 }
-function showRooms(hostelfloor){
-  var final ={};
-  var str = hostelfloor.value.split(' ');
-  var host = document.getElementById("hostel");
-  final.name = host.options[host.selectedIndex].text;
-  final.block = str[0];
-  final.floor = str[2];
-  console.log(final);
+// function showRooms(hostelfloor){
+//   var final ={};
+//   var str = hostelfloor.value.split(' ');
+//   var host = document.getElementById("hostel");
+//   final.name = host.options[host.selectedIndex].text;
+//   final.block = str[0];
+//   final.floor = str[2];
+//   console.log(final);
 
-  var socket = io();
-  socket.emit('getrooms', {"hostelfloor": final});
-}
+//   var socket = io();
+//   socket.emit('getrooms', {"hostelfloor": final});
+// }

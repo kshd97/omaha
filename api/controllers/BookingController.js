@@ -44,6 +44,7 @@ module.exports = {
 					  		}
 			  				sails.log(result5.id);
 			  				sails.log("TMKC");
+			  				req.session.studenttypeid = result5.id;
 			  				Hosteltypeid.find({studenttypeid: result5.id}).exec(function(err6, result6){
 			  					if(err6){
 			  						return res.serverError(err6);
@@ -178,6 +179,69 @@ showhostel: function(req, res){
 	sails.log(req.session.hostelfloors);
 	return res.redirect('/dashboard');
 },
+
+bookroom: function(req,res){
+
+	console.log(req.param('roomid'));
+	var userid = req.session.me;
+	var roomid = req.param('roomid');
+	var criteria = {studentdata: userid};
+	var valuestoset = {room: roomid}
+
+	Allotment.update(criteria, valuestoset).exec(function(err, result){
+		if(err) {
+			return res.serverError(err);
+		}
+		sails.log(result);
+		criteria = {id: roomid};
+		valuestoset = {allotted: 1};
+		Rooms.update(criteria, valuestoset).exec(function(err1, result1){
+			if(err1){
+				return res.serverError(err);
+			}
+			sails.sockets.broadcast('room', 'new_entry', result1);
+			sails.log(result1);
+			Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err2, result2){
+			  	if(err2){
+					return res.serverError(err2);
+				}			  					
+				return res.view('/mess',{messes : result2});
+		
+			});
+		});
+	});
+	
+},
+
+// bookmess:function(req,res){
+// 	var messname = req.param('messname');
+// 	Mess.find({name: messname}).exec(function(err, result){
+// 			  	if(err){
+// 					return res.serverError(err);
+// 				}			  					
+
+
+// },
+
+
+fillallotmenttable: function(req,res){
+	StudentData.find().exec(function(err, result){
+		// sails.log(result);
+		for (var i = 0; i < result.length; i++) {
+			//sails.log(result[i].id);
+			Allotment.create({studentdata: result[i].userid, room: null, mess: null}).exec(function(err, sample) {
+
+			    if (err) {return res.serverError(err);}
+			   	sails.log(sample);
+			    return res.redirect('/');
+
+			});
+		}
+
+		
+	});	
+	
+}
 
 
 	

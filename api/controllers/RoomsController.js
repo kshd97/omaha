@@ -8,7 +8,7 @@
 module.exports = {
 
 	subscribe: function(req, res) {
-	sails.log("HEYYY");
+	sails.log("HEYYY1");
     if( ! req.isSocket) {
       return res.badRequest();
     }
@@ -16,18 +16,18 @@ module.exports = {
 		sails.sockets.join(req.socket, 'rooms');
 
 		return res.ok();
-	},
-	subscribe1: function(req, res) {
-    sails.log("HEYYY");
-    if( ! req.isSocket) {
-      return res.badRequest();
-    }
-
-
-		// sails.sockets.join(req.socket, 'rooms');
-
-		return res.ok();
 	}
+	// subscribe1: function(req, res) {
+ //    sails.log("HEYYY");
+ //    if( ! req.isSocket) {
+ //      return res.badRequest();
+ //    }
+
+
+	// 	// sails.sockets.join(req.socket, 'rooms');
+
+	// 	return res.ok();
+	// }
 	
 };
 

@@ -1,0 +1,6 @@
+<select name="mess" id="mess">  
+    <option>select</option>
+    <% messes.forEach(function(value, key){ %>
+    		<option><a href="/messbook/{{key}}"<%= key %></option>
+    <% }) %>
+</select>
