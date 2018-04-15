@@ -182,35 +182,37 @@ showhostel: function(req, res){
 
 bookroom: function(req,res){
 
-	console.log(req.param('roomid'));
+	console.log(req.param('roomno'));
 	var userid = req.session.me;
-	var roomid = req.param('roomid');
+	var roomno = req.param('roomno');
 	var criteria = {studentdata: userid};
-	var valuestoset = {room: roomid}
-
-	Allotment.update(criteria, valuestoset).exec(function(err, result){
-		if(err) {
-			return res.serverError(err);
-		}
-		sails.log(result);
-		criteria = {id: roomid};
-		valuestoset = {allotted: 1};
-		Rooms.update(criteria, valuestoset).exec(function(err1, result1){
-			if(err1){
+	var valuestoset = {};
+	Rooms.findOne({roomno: roomno}).exec(function(err, result){
+		valuestoset = {room: result.id};
+			Allotment.update(criteria, valuestoset).exec(function(err, result1){
+			if(err) {
 				return res.serverError(err);
 			}
-			sails.sockets.broadcast('room', 'new_entry', result1);
 			sails.log(result1);
-			Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err2, result2){
-			  	if(err2){
-					return res.serverError(err2);
-				}			  					
-				return res.view('/mess',{messes : result2});
-		
+			criteria = {id: result.id};
+			valuestoset = {allotted: 1};
+			Rooms.update(criteria, valuestoset).exec(function(err1, result2){
+				if(err1){
+					return res.serverError(err);
+				}
+				sails.log("JSN"+ roomno);
+				sails.sockets.broadcast('rooms', 'new_entry', roomno);
+				sails.log(result2);
+				Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err2, result3){
+				  	if(err2){
+						return res.serverError(err2);
+					}			  					
+					return res.redirect('/dashboard');
+			
+				});
 			});
 		});
-	});
-	
+	});	
 },
 
 // bookmess:function(req,res){

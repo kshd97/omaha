@@ -23,10 +23,12 @@ YO
   <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor);">
       <option>select</option>
   </select>
+</section>
+<section ng-controller="RoomCtrl">
   <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
         <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
         <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-        <a href="/book/{{entry.id}}">{{entry.roomno}}</a>
+        <a href="/book/{{entry}}">{{entry}}</a>
         <!-- <small class="meta text-muted">
         </small> -->
       </div>

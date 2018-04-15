@@ -10,9 +10,9 @@ module.exports.routes = {
 
   '/bookroom': 'BookingController.book',
   '/showhostel': 'BookingController.showhostel',
-  '/book/:roomid': 'BookingController.bookroom',
+  '/book/:roomno': 'BookingController.bookroom',
   '/fillallotmenttable': 'BookingController.fillallotmenttable',
-  '/messbook/:messname': 'BookingController.bookmess',
+  // '/messbook/:messname': 'BookingController.bookmess',
 
   '/genstdtypeids' : 'StudenttypeidController.index',
   'post /login': 'UsersController.login',

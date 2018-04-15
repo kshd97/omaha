@@ -23,12 +23,6 @@ module.exports = {
   		allotted: {            // 1 is allotted 0 is not
   			type: 'integer'
   		}
-  },
-
-  afteUpdate: function(entry, cb) {
-    console.log("HEY BROTHEr");
-    sails.sockets.broadcast('room', 'new_entry', entry);
-    cb();
-  },
+  }
 };
 
