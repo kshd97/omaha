@@ -158,11 +158,9 @@ module.exports = {
 			    										hostels: map,
 			    										req: req,
 						  							});
-
 			  									});
 			  								});
-			  							});
-			  										  							
+			  							});			  							
 			  						});
 			  					});
 			  				});
@@ -189,41 +187,72 @@ bookroom: function(req,res){
 	var valuestoset = {};
 	Rooms.findOne({roomno: roomno}).exec(function(err, result){
 		valuestoset = {room: result.id};
-			Allotment.update(criteria, valuestoset).exec(function(err, result1){
+		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
 			if(err) {
-				return res.serverError(err);
+				return res.serverError(err1);
 			}
 			sails.log(result1);
 			criteria = {id: result.id};
 			valuestoset = {allotted: 1};
-			Rooms.update(criteria, valuestoset).exec(function(err1, result2){
+			Rooms.update(criteria, valuestoset).exec(function(err2, result2){
 				if(err1){
-					return res.serverError(err);
+					return res.serverError(err2);
 				}
+				sails.log(result2);
 				sails.log("JSN"+ roomno);
 				sails.sockets.broadcast('rooms', 'new_entry', roomno);
-				sails.log(result2);
-				Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err2, result3){
+				Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
 				  	if(err2){
-						return res.serverError(err2);
-					}			  					
-					return res.redirect('/dashboard');
-			
+						return res.serverError(err3);
+					}
+					sails.log(result3);	
+					var messesid=[];
+					for (var i = 0; i < result3.length; i++) {
+				  		messesid[i] = result3[i].mess;
+					}
+				  	sails.log(messesid);
+				 	inclause = "(";
+				  	for (var i = 0; i < messesid.length - 1; i++) {
+			  			inclause = inclause + messesid[i] + ","; 
+			  		}
+			  		inclause = inclause + messesid[messesid.length-1] + ")";
+			  		query = "SELECT * from mess where id in" + inclause;
+			  		Mess.query(query, [], function(err4, result4){
+			  			if(err4){
+			  				return res.serverError(err4)
+			  			}
+			  			sails.log(result4);		  					
+						return res.view('choosemess',{messes : result4});
+					});	
 				});
 			});
-		});
-	});	
+		});	
+	});
 },
 
-// bookmess:function(req,res){
-// 	var messname = req.param('messname');
-// 	Mess.find({name: messname}).exec(function(err, result){
-// 			  	if(err){
-// 					return res.serverError(err);
-// 				}			  					
-
-
-// },
+bookmess:function(req,res){
+	var messid = req.param('messid');
+	var userid = req.session.me;
+	var criteria = {studentdata: userid};
+	var valuestoset = {mess: messid};
+	console.log(messid);
+	Allotment.update(criteria, valuestoset).exec(function(err1, result1){
+		if(err1) {
+			return res.serverError(err1);
+		}
+		sails.log(result1);
+		Mess.findOne({id:messid}).exec(function(err2, result2) {
+			if(err2){
+				return res.serverError(err);
+			}
+			sails.log(result2);
+			result2.allotted++;
+  			result2.save(function(err2) { /* updated user */ 
+  				return res.redirect('/');
+  			});
+		});
+	});					
+},
 
 
 fillallotmenttable: function(req,res){

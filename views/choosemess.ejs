@@ -1,6 +1,15 @@
+
 <!-- <select name="mess" id="mess">  
     <option>select</option>
+=======
+<% block('localScripts', '<script src="/js/index.js"></script>') %>
+
+<!-- <select name="mess" id="mess" onchange="BookMess(this, <%=JSON.stringify(messes)%>)">   -->
+    <!-- <option>select</option> -->
+    <h6>Choose Mess</h6>
     <% messes.forEach(function(value, key){ %>
-    		<option><a href="/messbook/{{key}}"<%= key %></option>
+    		<a href="/messbook/<%= value.id %>"><%= value.name %></a>
+    		<br>
     <% }) %>
-</select> -->
+</select>
+<!-- </select> -->
