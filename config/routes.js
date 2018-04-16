@@ -12,6 +12,7 @@ module.exports.routes = {
   '/showhostel': 'BookingController.showhostel',
   '/book/:roomno': 'BookingController.bookroom',
   '/messbook/:messid': 'BookingController.bookmess',
+  'post /messbookgroup': 'BookingController.messbookgroup',
   '/fillallotmenttable': 'BookingController.fillallotmenttable',
   // '/messbook/:messname': 'BookingController.bookmess',
 

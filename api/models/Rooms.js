@@ -17,6 +17,9 @@ module.exports = {
   		capacity: {
   			type: 'integer'
   		},
+      noofbedsleft:{
+        type: 'integer'
+      },
   		conditionid: {          // 1 is good 0 is bad
   			type: 'integer'
   		},

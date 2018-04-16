@@ -1,0 +1,20 @@
+<form id ="messbookgroup" action="/messbookgroup" method="post">
+<% for(var i=0 ; i < names.length ; i++){ %>
+	<h6> Choose mess for <%= names[i].name %> </h6>
+	<br>
+	<input name="userid" type="hidden" value="<%= names[i].userid %>">
+	<select name="student" form = "messbookgroup">  
+    <option>select</option>
+    <% messes.forEach(function(value, key){ %>
+    		<option value ="<%= value.id %>"><%= value.name %></option>
+    <% }) %>
+	</select>
+	<br><br>
+<% } %>
+
+<input type="submit"/>
+</form>
+
+
+
+
