@@ -5,11 +5,11 @@ module.exports.routes = {
 
   '/': { view: 'login' },
   '/dashboard': { view: 'dashboard' },
+  '/notallowed': { view: 'notallowed' },
   '/fail': { view: 'fail' },
   '/mess': {view:'choosemess'},
 
   '/bookroom': 'BookingController.book',
-  '/showhostel': 'BookingController.showhostel',
   '/book/:roomno': 'BookingController.bookroom',
   '/messbook/:messid': 'BookingController.bookmess',
   'post /messbookgroup': 'BookingController.messbookgroup',
@@ -18,6 +18,7 @@ module.exports.routes = {
 
   '/genstdtypeids' : 'StudenttypeidController.index',
   'post /login': 'UsersController.login',
+  '/logout': 'UsersController.logout',
 
 
   /**

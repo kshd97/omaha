@@ -24,7 +24,7 @@ YO
   <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
         <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
         <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-        <a href="/book/{{entry}}">{{entry}}</a>
+        <button ng-click="thisroomismine(entry)">{{entry}}</button>
         <!-- <small class="meta text-muted">
         </small> -->
       </div>

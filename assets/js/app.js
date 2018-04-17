@@ -1,42 +1,39 @@
 var roomApp = angular.module('roomApp', ['ngResource', 'angularMoment', 'ngAnimate']);
 
-roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope', function($scope, $resource, $timeout, $rootScope) {
+roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope','$window', function($scope, $resource, $timeout, $rootScope, $window) {
   
   io.socket.get('/rooms/subscribe', function(data, jwr) {
-      //console.log("BOOM"+ jwr);
-      io.socket.on('new_entry', function(entry) {
-        //console.log(entry);
-        //console.log("HEY THERE");
-        //console.log($rootScope.roomEntries);
-        $timeout(function() {
-          console.log(entry);
-          $rootScope.roomEntries.splice($rootScope.roomEntries.indexOf(entry), 1);
-        });
+    io.socket.on('new_entry', function(entry) {
+      $timeout(function() {
+        console.log(entry);
+        $rootScope.roomEntries.splice($rootScope.roomEntries.indexOf(entry), 1);
       });
     });
-
-  //console.log("fsygfdhy");
-  //var final ={};
-  //onsole.log($scope.floor);
-  //var str = hostelfloor.value.split(' ');
-  //var host = angular.element(document.getElementById("hostel"));
-  //var blockfloor = angular.element(document.getElementById("floor"));
-  //console.log(blockfloor);
-  //var str = blockfloor.value.split(' ');
-  // final.name = host.options[host.selectedIndex].text;
-  // final.block = str[0];
-  // final.floor = str[2];
-  // console.log("jfdkjfdk");
-  // console.log(final);
-
-  // $scope.hostelfloor = $resource('/hostelfloors').query({hostel: final.name, block: final.block, floor: final.floor});
-  // $scope.roomEntries = $resource('/rooms').query({hostelfloors: $scope.hostelfloor});
-  // console.log()
-  
+    // io.socket.on('room_entry', function(room){
+    //   $timeout(function(){
+    //     $rootScope.roomnames.unshift(room);
+    //   });
+    // });
+  });
+  $scope.thisroomismine = function(roomno){
+    console.log("KGFJH");
+    //var a = $rootScope.roomnames.indexOf(roomno);
+    $scope.room = $resource('/rooms').query({roomno:roomno});
+    $scope.room.$promise.then(function(result){
+      console.log(result[0]);
+      if(result[0].allotted == 0){
+        $window.location.href = "/book/"+roomno;
+      }
+      else{
+        alert("ALready booked");
+      }
+    });
+  };  
 }]);
 roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope', function($scope, $resource, $timeout, $rootScope) {
 	$scope.showRooms = function(floor){
 		var final ={};
+    //$rootScope.roomnames = [];
 		var host = angular.element(document.getElementById("hostel"));
   	var blockfloor = angular.element(document.getElementById("floor"));
   	var str = blockfloor[0].value.split(' ');
@@ -45,11 +42,6 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
   	final.block = str[0];
   	final.floor = str[2];
     var roomEntries = [];
-    
-		// console.log(host[0].value );
-		// console.log(blockfloor[0].value);
-		// $scope.roomEntries = $resource('/gender').query();
-		// console.log("FFF" + $scope.roomEntries);
     $scope.hostelid = $resource('/hostel').query({name: final.name});
     $scope.hostelid.$promise.then(function(result){
       console.log(result[0].id);
@@ -72,6 +64,5 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
       });
   
 		});
-    //console.log($scope.roomEntries);
   }
 }]);
