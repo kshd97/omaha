@@ -201,14 +201,26 @@ bookroom: function(req,res){
 		var roomno = req.param('roomno');
 		var criteria = {};
 		var valuestoset = {};
+		//sails.log(Global.roomlist);	
+		// var str = "hsgf"
+		if(Global.roomlist.indexOf(roomno) != -1){
+			sails.log("HHOHOHOHOHO");
+			return res.redirect('/bookroom');
+		}
+		Global.roomlist.push(roomno);
+		
+
+		sails.log("FJHDIKJF");
 		Allotment.findOne({studentdata:userid}).exec(function(err,alreadybookcheck){
 			if(alreadybookcheck.room != null){
-				return res.redirect('/notallowed');
+				sails.log("ALREADY BOOKED user");
+				return res.redirect('/bookroom');
 			}
 			else{
 				Rooms.findOne({roomno: roomno}).exec(function(err, result){
 					if(result.allotted == 1){
-						return res.redirect("/notallowed");
+						sails.log("ALREADY BOOKED room");
+						return res.redirect("/bookroom");
 					}
 					valuestoset = {room: result.id};
 					Rmr_student_groups_members.findOne({userid: userid}).exec(function(err,groupid){
@@ -369,31 +381,31 @@ bookmess:function(req,res){
 messbookgroup:function(req,res){
 	if(req.session.me)
 	{
-	var data = req.params.all();
-	sails.log(data.student.length);
-	for (var i = 0; i < data.student.length; i++) {
-		var messid = data.student[i];
-		var userid = data.userid[i];
-		var criteria = {studentdata: userid};
-		var valuestoset = {mess: messid};
-		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
-			if(err1) {
-				return res.serverError(err1);
-			}
-			Mess.findOne({id:messid}).exec(function(err2, result2) {
-				if(err2){
-					return res.serverError(err);
+		var data = req.params.all();
+		sails.log(data.student.length);
+		for (var i = 0; i < data.student.length; i++) {
+			var messid = data.student[i];
+			var userid = data.userid[i];
+			var criteria = {studentdata: userid};
+			var valuestoset = {mess: messid};
+			Allotment.update(criteria, valuestoset).exec(function(err1, result1){
+				if(err1) {
+					return res.serverError(err1);
 				}
-				sails.log(result2);
-				result2.allotted++;
-	  			result2.save(function(err2) { /* updated user */ 
-	  				
-	  			});
-			});
-		});					
-	}	
-	return res.redirect('/');
-}
+				Mess.findOne({id:messid}).exec(function(err2, result2) {
+					if(err2){
+						return res.serverError(err);
+					}
+					sails.log(result2);
+					result2.allotted++;
+		  			result2.save(function(err2) { /* updated user */ 
+		  				
+		  			});
+				});
+			});					
+		}	
+		return res.redirect('/');
+	}
 	else
 		return res.redirect('/');
 },
