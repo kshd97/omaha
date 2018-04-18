@@ -8,6 +8,7 @@
   });
 </script> -->
 YO
+<h2><%= group_size %></h2>
 <select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)">  
     <option>select</option>
     <% hostels.forEach(function(value, key){ %>
@@ -16,7 +17,7 @@ YO
 </select>
 
 <section ng-controller="RoomCtrl1"> 
-  <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor);">
+  <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);">
       <option>select</option>
   </select>
 </section>

@@ -72,6 +72,9 @@ module.exports = {
                     req.session.me = result.id;
                     sails.log(req.session.me);
                     Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                        if(!admin){
+                            return res.redirect('/dashboard');
+                        }
                         if(admin.is_group_admin == 1)
                             return res.redirect('/dashboard');
                         else

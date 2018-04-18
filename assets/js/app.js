@@ -6,7 +6,14 @@ roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope',
     io.socket.on('new_entry', function(entry) {
       $timeout(function() {
         console.log(entry);
-        $rootScope.roomEntries.splice($rootScope.roomEntries.indexOf(entry), 1);
+        $scope.noofbedsleft = $resource('/rooms/:noofbedsleft').query({roomno:entry});
+        $scope.noofbedsleft.$promise.then(function(result){
+          console.log(result[0].noofbedsleft+" "+ $rootScope.group_size);
+          if($rootScope.group_size>result[0].noofbedsleft){
+            $rootScope.roomEntries.splice($rootScope.roomEntries.indexOf(entry), 1);
+          }  
+        }); 
+        
       });
     });
     // io.socket.on('room_entry', function(room){
@@ -18,6 +25,7 @@ roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope',
   $scope.thisroomismine = function(roomno){
     console.log("KGFJH");
     //var a = $rootScope.roomnames.indexOf(roomno);
+
     $scope.room = $resource('/rooms').query({roomno:roomno});
     $scope.room.$promise.then(function(result){
       console.log(result[0]);
@@ -31,9 +39,12 @@ roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope',
   };  
 }]);
 roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope', function($scope, $resource, $timeout, $rootScope) {
-	$scope.showRooms = function(floor){
+	$scope.showRooms = function(floor, group_size){
 		var final ={};
     //$rootScope.roomnames = [];
+    console.log("hgsdhgjhgs");
+    console.log(group_size);
+    $rootScope.group_size=group_size;
 		var host = angular.element(document.getElementById("hostel"));
   	var blockfloor = angular.element(document.getElementById("floor"));
   	var str = blockfloor[0].value.split(' ');
@@ -54,7 +65,9 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
           for (var i = 0; i < result2.length; i++) {
             console.log(result2[i].roomno);
             //var single = {id: result2[i].id, roomno: result2[i].roomno};
-            roomEntries.unshift(result2[i].roomno);
+            if(result2[i].noofbedsleft>=group_size){
+              roomEntries.unshift(result2[i].roomno);
+            }
           }
           //console.log(roomEntries);
           $rootScope.roomEntries = roomEntries;
