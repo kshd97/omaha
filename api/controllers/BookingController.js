@@ -7,7 +7,6 @@
 
 module.exports = {
 	book: function (req, res) {
-		//var locks = require('semlocks');
 		if(req.session.me)
 		{
 		var uid = req.session.me;
@@ -191,6 +190,22 @@ else
 	return res.redirect('/');
 },
 
+deleteshit: function(req, res){
+	var criteria = {};
+	Global.roomlist = [];
+	var valuestoset = {room: null, mess: null};
+	Allotment.update(criteria, valuestoset).exec(function(err, result){
+		valuestoset = {allotted: 0, noofbedsleft: 1, capacity: 1};
+		Rooms.update(criteria, valuestoset).exec(function(err, result){
+			valuestoset = {allotted : 0};
+			Mess.update(criteria, valuestoset).exec(function(err, result){
+
+				return res.redirect('/');
+			});
+		});
+	});
+},
+
 bookroom: function(req,res){
 
 	if(req.session.me)
@@ -204,22 +219,29 @@ bookroom: function(req,res){
 		//sails.log(Global.roomlist);	
 		// var str = "hsgf"
 		if(Global.roomlist.indexOf(roomno) != -1){
-			sails.log("HHOHOHOHOHO");
+			sails.log("HHOHOHOHOHO");  						// send back to booking page
 			return res.redirect('/bookroom');
 		}
 		Global.roomlist.push(roomno);
-		
-
-		sails.log("FJHDIKJF");
 		Allotment.findOne({studentdata:userid}).exec(function(err,alreadybookcheck){
 			if(alreadybookcheck.room != null){
-				sails.log("ALREADY BOOKED user");
-				return res.redirect('/bookroom');
+				//user already booked a room
+				Rooms.findOne({id:alreadybookcheck.room}).exec(function(err,room){
+                    Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
+                        StudentData.findOne({userid:userid}).exec(function(err,details){
+                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+                                })
+                            });
+                        });
+                    });
+                });
 			}
 			else{
 				Rooms.findOne({roomno: roomno}).exec(function(err, result){
 					if(result.allotted == 1){
-						sails.log("ALREADY BOOKED room");
+						sails.log("Room is ALREADY BOOKED,book another");
 						return res.redirect("/bookroom");
 					}
 					valuestoset = {room: result.id};
@@ -361,7 +383,7 @@ bookmess:function(req,res){
 			if(err1) {
 				return res.serverError(err1);
 			}
-			sails.log(result1);
+			sails.log(result1[0].room);
 			Mess.findOne({id:messid}).exec(function(err2, result2) {
 				if(err2){
 					return res.serverError(err);
@@ -369,7 +391,15 @@ bookmess:function(req,res){
 				sails.log(result2);
 				result2.allotted++;
 	  			result2.save(function(err2) { /* updated user */ 
-	  				return res.redirect('/');
+	  				Rooms.findOne({id:result1[0].room}).exec(function(err,room){
+                        StudentData.findOne({userid:userid}).exec(function(err,details){
+                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:result2.name ,reg_no:details.registration_number,name: details.name});
+                                })
+                            });
+                        });
+                	});
 	  			});
 			});
 		});	
@@ -403,8 +433,21 @@ messbookgroup:function(req,res){
 		  			});
 				});
 			});					
-		}	
-		return res.redirect('/');
+		}
+		Allotment.findOne({studentdata:req.session.me}).exec(function(err,allot){
+			Rooms.findOne({id:allot.room}).exec(function(err,room){
+	            Mess.findOne({id:allot.mess}).exec(function(err,mess){
+	                StudentData.findOne({userid:req.session.me}).exec(function(err,details){
+	                    Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+	                        Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+	                            return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+	                        })
+	                    });
+	                });
+	            });
+	        });
+		});
+			
 	}
 	else
 		return res.redirect('/');

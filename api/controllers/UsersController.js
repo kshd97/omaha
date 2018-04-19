@@ -55,31 +55,44 @@ module.exports = {
     },
 
     login: function (req, res) {
-
-    var bcrypt = require('bcryptjs');
-    var password = req.param('password');
-
-        sails.log("I am a debug message");
-        Users.findOne({
-            username: req.param('username'),
-        }).exec(function(err, result){
+        sails.log("gdjhghgdsgd");
+        var bcrypt = require('bcryptjs');
+        var password = req.param('password');
+        Users.findOne({username: req.param('username'),}).exec(function(err, result){
             if (err) return res.negotiate(err);
-
-            sails.log(result.password);
             bcrypt.compare(password, result.password, function(err, res1) {
                 if(res1) {
                     sails.log("Matched");
                     req.session.me = result.id;
                     sails.log(req.session.me);
-                    Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                        if(!admin){
-                            return res.redirect('/dashboard');
+                    Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
+                        if(!result1.room && !result1.mess){
+                            Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                if(!admin){
+                                    return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                }
+                                if(admin.is_group_admin == 1)
+                                    return res.redirect('/dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                else
+                                    return res.redirect('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                            });        
                         }
-                        if(admin.is_group_admin == 1)
-                            return res.redirect('/dashboard');
-                        else
-                            return res.redirect('/notallowed');
+                        else{
+                            Rooms.findOne({id:result1.room}).exec(function(err,room){
+                                Mess.findOne({id:result1.mess}).exec(function(err,mess){
+                                    StudentData.findOne({userid:result.id}).exec(function(err,details){
+                                        Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                            Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                                return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+                                            })
+                                        });
+                                    });
+                                });
+                            });
+                            
+                        }
                     });
+                    
 
                     
                 }
@@ -88,8 +101,7 @@ module.exports = {
                     return res.redirect('/fail');
                 }
             });
-
-    });
+        });
         // return res.login({
         //     username: req.param('username'),
         //     password: req.param('password'),

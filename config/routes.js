@@ -14,6 +14,7 @@ module.exports.routes = {
   '/messbook/:messid': 'BookingController.bookmess',
   'post /messbookgroup': 'BookingController.messbookgroup',
   '/fillallotmenttable': 'BookingController.fillallotmenttable',
+  '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
   // '/messbook/:messname': 'BookingController.bookmess',
 
   '/genstdtypeids' : 'StudenttypeidController.index',

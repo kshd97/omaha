@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="roomApp">
   <head>
-    <title><%=typeof title == 'undefined' ? 'New Sails App' : title%></title>
+    <title>OMAHA</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -37,6 +37,11 @@
   </head>
 
   <body>
+  <header>
+    <div class="logout">
+      <a href="/logout">Logout</a>
+    </div>    
+  </header>
     <%- body %>
 
 
@@ -102,5 +107,10 @@
     <script src="/js/app.js"></script>
     <script src="/js/index.js"></script>
     <!--SCRIPTS END-->
+    <footer>
+      <div class="footnote">
+        Developed By WSDC.
+      </div>
+    </footer>
   </body>
 </html>
