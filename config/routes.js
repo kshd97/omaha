@@ -10,6 +10,8 @@ module.exports.routes = {
   '/mess': {view:'choosemess'},
 
   '/bookroom': 'BookingController.book',
+  '/onlymess': 'BookingController.onlymess',
+  '/mygroup': 'BookingController.mygroup',
   '/book/:roomno': 'BookingController.bookroom',
   '/messbook/:messid': 'BookingController.bookmess',
   'post /messbookgroup': 'BookingController.messbookgroup',

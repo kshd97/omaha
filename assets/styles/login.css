@@ -27,6 +27,12 @@ header{
   height:6%; 
   background: slategrey;
 }
+.mygroup{
+	text-align: right;
+    color: black;
+    font-size: 2vw;
+    margin-right: 12%;
+}
 .logout{
 	text-align: right;
     color: black;
@@ -58,4 +64,17 @@ footer{
     border-radius: 4px;
     margin-top: 3%;
     cursor: pointer;
+}
+.bookedheader{
+	margin-top: 10%;
+}
+.displayhostelheader{
+	margin-top: 10%;
+}
+.choosemessheader{
+	padding-top: 10%;
+}
+.membermess{
+	padding-top: 10%;
+	width: 30%;
 }

@@ -195,7 +195,7 @@ deleteshit: function(req, res){
 	Global.roomlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
-		valuestoset = {allotted: 0, noofbedsleft: 1, capacity: 1};
+		valuestoset = {allotted: 0, noofbedsleft: 3, capacity: 3};
 		Rooms.update(criteria, valuestoset).exec(function(err, result){
 			valuestoset = {allotted : 0};
 			Mess.update(criteria, valuestoset).exec(function(err, result){
@@ -412,7 +412,13 @@ messbookgroup:function(req,res){
 	if(req.session.me)
 	{
 		var data = req.params.all();
-		sails.log(data.student.length);
+		sails.log(data);
+		var str = '';
+		str = str + req.session.me;
+		var index = data.userid.indexOf(str);
+		sails.log(index);
+		var mess1 = data.student[index];
+		sails.log(mess1);
 		for (var i = 0; i < data.student.length; i++) {
 			var messid = data.student[i];
 			var userid = data.userid[i];
@@ -427,6 +433,7 @@ messbookgroup:function(req,res){
 						return res.serverError(err);
 					}
 					sails.log(result2);
+					mess1 = result2.id;
 					result2.allotted++;
 		  			result2.save(function(err2) { /* updated user */ 
 		  				
@@ -436,7 +443,7 @@ messbookgroup:function(req,res){
 		}
 		Allotment.findOne({studentdata:req.session.me}).exec(function(err,allot){
 			Rooms.findOne({id:allot.room}).exec(function(err,room){
-	            Mess.findOne({id:allot.mess}).exec(function(err,mess){
+	            Mess.findOne({id:mess1}).exec(function(err,mess){
 	                StudentData.findOne({userid:req.session.me}).exec(function(err,details){
 	                    Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
 	                        Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
@@ -471,9 +478,184 @@ fillallotmenttable: function(req,res){
 		
 	});	
 	
+},
+
+onlymess: function(req,res){
+	if(req.session.me){	
+	StudentData.findOne({userid:req.session.me}).exec(function (err, result){
+		  if (err) {
+		    return res.serverError(err);
+		  }
+		  Course.findOne({course: result.course}).exec(function(err1, result1){
+		  	if(err1){
+		  		
+		  		return res.serverError(err1);
+		  	}
+		  	var year = parseInt(result.current_year);
+		  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
+			  	if(err2){
+			  		return res.serverError(err2);
+			  	}
+			  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
+			  		if(err3){
+			  			return res.serverError(err3);
+			  		}
+			  		Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, result4){
+			  			if(err4){
+			  				return res.serverError(err4);
+			  			}
+			  			
+			  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
+			  				if(err5){
+					  			return res.serverError(err5);
+					  		}
+			  				sails.log(result5.id);
+							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){
+								if(!admin){
+						            Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
+									  	if(err){
+											return res.serverError(err);
+										}
+										sails.log(result6);	
+										var messesid=[];
+										for (var i = 0; i < result6.length; i++) {
+									  		messesid[i] = result6[i].mess;
+										}
+									  	sails.log(messesid);
+									 	inclause = "(";
+									  	for (var i = 0; i < messesid.length - 1; i++) {
+								  			inclause = inclause + messesid[i] + ","; 
+								  		}
+								  		inclause = inclause + messesid[messesid.length-1] + ")";
+								  		query = "SELECT * from mess where id in" + inclause;
+								  		Mess.query(query, [], function(err, result7){
+								  			if(err){
+								  				return res.serverError(err)
+								  			}
+								  			sails.log(result7);		  					
+											return res.view('choosemess',{messes : result7});
+										});	
+									});	
+						        }
+						        if(admin.is_group_admin == 1){
+						      		var rms =[];
+									Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+										if(err){
+											return res.serverError(err);
+										}
+										for (var i = 0; i < roommates.length; i++) {
+											rms[i] = roommates[i].userid;
+										}
+										inclause = "(";
+										for (var i = 0; i < rms.length - 1; i++) {
+											inclause = inclause + rms[i] + ","; 
+										}
+								  		inclause = inclause + rms[rms.length-1] + ")";
+										var query = "SELECT name,userid from studentdata where userid in "+inclause;
+										StudentData.query(query,[], function(err, names){
+											//for sending names and ids to mess page
+											Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
+											  	if(err){
+													return res.serverError(err);
+												}
+												sails.log(result6);	
+												var messesid=[];
+												for (var i = 0; i < result6.length; i++) {
+											  		messesid[i] = result6[i].mess;
+												}
+											  	sails.log(messesid);
+											 	inclause = "(";
+											  	for (var i = 0; i < messesid.length - 1; i++) {
+										  			inclause = inclause + messesid[i] + ","; 
+										  		}
+										  		inclause = inclause + messesid[messesid.length-1] + ")";
+										  		query = "SELECT * from mess where id in" + inclause;
+										  		Mess.query(query, [], function(err, result7){
+										  			if(err){
+										  				return res.serverError(err)
+										  			}
+										  			sails.log(result7);	
+										  			sails.log(names);	  					
+													return res.view('choosemessgroup',{messes : result7, names: names});
+												});	
+											});	
+										}); 
+									});				            
+						        }
+						    });    
+						});
+					});
+				});
+			});
+		});
+	});	
+}
+else{
+	return res.redirect('/');
+}
+},
+
+mygroup: function(req,res){
+	if(req.session.me){
+		StudentData.findOne({userid:req.session.me}).exec(function (err, result){
+		  if (err) {
+		    return res.serverError(err);
+		  }
+		  Course.findOne({course: result.course}).exec(function(err1, result1){
+		  	if(err1){
+		  		
+		  		return res.serverError(err1);
+		  	}
+		  	var year = parseInt(result.current_year);
+		  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
+			  	if(err2){
+			  		return res.serverError(err2);
+			  	}
+			  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
+			  		if(err3){
+			  			return res.serverError(err3);
+			  		}
+			  		Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, result4){
+			  			if(err4){
+			  				return res.serverError(err4);
+			  			}
+			  			
+			  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
+			  				if(err5){
+					  			return res.serverError(err5);
+					  		}
+			  				sails.log(result5.id);
+							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){
+								var rms =[];
+								Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+									if(err){
+										return res.serverError(err);
+									}
+									for (var i = 0; i < roommates.length; i++) {
+										rms[i] = roommates[i].userid;
+									}
+									inclause = "(";
+									for (var i = 0; i < rms.length - 1; i++) {
+										inclause = inclause + rms[i] + ","; 
+									}
+							  		inclause = inclause + rms[rms.length-1] + ")";
+									var query = "SELECT name,userid from studentdata where userid in "+inclause;
+									StudentData.query(query,[], function(err, names){
+										//for sending names and ids to mess page
+										return res.view('my_group',{names: names});
+											
+									}); 
+								});				            
+							});    
+						});
+					});
+				});
+			});
+		});
+	});	
+	}
+	else
+		return res.redirect('/');
 }
 
-
-	
 };
-

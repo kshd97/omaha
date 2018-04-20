@@ -7,28 +7,34 @@
     socket.emit('my other event', { my: 'data' });
   });
 </script> -->
-YO
-<h2><%= group_size %></h2>
-<select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)">  
-    <option>select</option>
-    <% hostels.forEach(function(value, key){ %>
-    		<option><%= key %></option>
-    <% }) %>
-</select>
+<center>
+    <h3 class="displayhostelheader">You are booking rooms for <%= group_size %> student(s) (including yourself)</h3>
+    <br>
+    <select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)">  
+        <option>Select Hostel</option>
+        <% hostels.forEach(function(value, key){ %>
+        		<option><%= key %></option>
+        <% }) %>
+    </select>
+    <br>
+    <br>
 
-<section ng-controller="RoomCtrl1"> 
-  <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);">
-      <option>select</option>
-  </select>
-</section>
-<section ng-controller="RoomCtrl">
-  <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
-        <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
-        <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-        <button ng-click="thisroomismine(entry)">{{entry}}</button>
-        <!-- <small class="meta text-muted">
-        </small> -->
-      </div>
-</section>
-
+    <section ng-controller="RoomCtrl1"> 
+      <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);">
+          <option>Select Block and Floor</option>
+      </select>
+    </section>
+    <section ng-controller="RoomCtrl">
+      <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
+            <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
+            <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
+            <div ng-if="$index%10 == 0">
+              <br>
+            </div>
+            <button ng-click="thisroomismine(entry)">{{entry}}</button>
+            <!-- <small class="meta text-muted">
+            </small> -->
+          </div>
+    </section>
+</center>
 

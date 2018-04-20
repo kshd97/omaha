@@ -72,10 +72,22 @@ module.exports = {
                                     return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
                                 }
                                 if(admin.is_group_admin == 1)
-                                    return res.redirect('/dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                    return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
                                 else
-                                    return res.redirect('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
                             });        
+                        }
+                        else if(!result1.mess){
+                            Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                if(!admin){
+                                    return res.redirect('onlymess');
+                                }
+                                if(admin.is_group_admin == 1)
+                                    return res.redirect('onlymess');
+                                else
+                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                            });        
+
                         }
                         else{
                             Rooms.findOne({id:result1.room}).exec(function(err,room){
