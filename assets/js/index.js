@@ -5,6 +5,8 @@ function ShowFloors(hostel, hostelsfromcon) {
         console.log(hostelsfromcon);
         objFloor.options.add(new Option("Select Block and Floor"));
 
+        // alert("there");
+
         // <%= hostelsfromcon.forEach(function(value, key){ %>
         //   <% if(key == hostel.value) { %>
         //     <% for(var i=0; i< value.length; i++){ %>

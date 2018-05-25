@@ -1,10 +1,45 @@
-<center>
-	<h2 class="bookedheader">Your allotment status</h2>
-	REGNO: <%= reg_no %><br>
+
+<div class="ui center aligned container">
+<div class="panel panel-success">
+	<div class="panel-heading">
+		<h2 class="bookedheader">Your allotment status</h2>
+	</div>
+	<div class="panel-body">
+
+<table class="ui celled table">
+  <thead>
+    <th>Registration Number</th>
+    <th>Name</th>
+    <th>Room Number</th>
+    <th>Block</th>
+    <th>Floor</th>
+    <th>Hostel</th>
+    <th>Mess</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= reg_no %></td>
+      <td><%= name %></td>
+      <td><%= room %></td>
+      <td><%= block %></td>
+      <td><%= floor %></td>
+      <td><%= hostel_name %></td>
+      <td><%= mess %></td>
+
+    </tr>
+    <tr>
+  </tbody>
+</table>
+
+
+
+<!-- 	REGNO: <%= reg_no %><br>
 	NAME: <%= name %><br>
 	ROOMNO: <%= room %> <br>
 	BLOCK: <%= block %> <br>
 	FLOOR: <%= floor %> <br>
 	HOSTEL: <%= hostel_name %> <br>
-	MESS: <%= mess %> <br>
-</center>
+	MESS: <%= mess %> <br> -->
+	</div>
+</div>
+</div>

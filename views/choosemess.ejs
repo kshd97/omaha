@@ -1,7 +1,13 @@
-<center>
-	<h4 class="choosemessheader">Choose Mess</h4>
-	<% messes.forEach(function(value, key){ %>
-			<a href="/messbook/<%= value.id %>"><%= value.name %></a>
-			<br>
-	<% }) %>
-</center>
+<div class="ui center aligned container" style="width: 50%;">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h4>Choose Mess</h4>
+		</div>
+		<div class="panel-body">
+		<% messes.forEach(function(value, key){ %>
+				<a class="ui brown button" href="/messbook/<%= value.id %>"><%= value.name %></a>
+				<!-- <br> -->
+		<% }) %>
+		</div>
+	</div>
+</div>
