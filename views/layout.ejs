@@ -51,6 +51,10 @@
 
 <% if (req.path != '/') { %>
     <div class='ui grey massive inverted menu'>
+        <a class='item' href="/login">
+          <span class="glyphicon glyphicon-home"></span>&nbsp;
+          <!-- Home -->
+        </a>
       <div class='right menu'>
           <% if (req.session.me != undefined) { %>
               <a class='item' href='/mygroup'>

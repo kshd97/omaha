@@ -1,7 +1,19 @@
-<div class="ui center aligned container">
-<h2>Your Group</h2>
+<div class="ui center aligned container"  style="width: 40%;">
+<!-- <h2>Your Group</h2> -->
+<table class="ui brown center aligned celled table">
+  <thead>
+    <th><h3 style="font-weight: bolder;">Your Group</h3></th>
+  </thead>
+  <tbody>
+
 <% for(var i=0 ; i < names.length ; i++){ %>
-<h4> <%= names[i].name %> </h4>
+    <tr>
+    	<td>
+		<h4> <%= names[i].name %> </h4>
+		</td>
+    </tr>
 <br><br>
 <% } %>
+  </tbody>
+</table>
 </div>
