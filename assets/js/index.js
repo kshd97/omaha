@@ -30,6 +30,21 @@ function ShowFloors(hostel, hostelsfromcon) {
           } 
         }
 
+};
+
+function startallot(id) {
+  // Get the checkbox
+  var checkBox = document.getElementById("myCheck");
+  // Get the output text
+  var text = document.getElementById("text");
+
+  // If the checkbox is checked, display the output text
+  if (checkBox.checked == true){
+    text.style.display = "block";
+    io.sockets.broadcast('rooms', 'new_id', id);
+  } else {
+    text.style.display = "none";
+  }
 }
 // function showRooms(hostelfloor){
 //   var final ={};

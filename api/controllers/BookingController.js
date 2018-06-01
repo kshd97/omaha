@@ -199,6 +199,7 @@ module.exports = {
 deleteshit: function(req, res){
 	var criteria = {};
 	Global.roomlist = [];
+	Global.idlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
 		valuestoset = {allotted: 0, noofbedsleft: 3, capacity: 3};
@@ -280,7 +281,7 @@ bookroom: function(req,res){
 											}
 										});
 									}	
-
+									
 									result.noofbedsleft -= roommates.length;
 									if(result.noofbedsleft == 0){
 										result.allotted = 1;
@@ -292,7 +293,7 @@ bookroom: function(req,res){
 										}
 										sails.sockets.broadcast('rooms', 'new_entry', roomno);
 									});
-
+									Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
 									Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
 									  	if(err3){
 											return res.serverError(err3);
@@ -340,6 +341,7 @@ bookroom: function(req,res){
 									sails.log("2345");
 									sails.sockets.broadcast('rooms', 'new_entry', roomno);
 								});
+								Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
 								Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
 								  	if(err3){
 										return res.serverError(err3);
@@ -375,6 +377,31 @@ bookroom: function(req,res){
 	else{
 		return res.redirect('/');
 	}
+},
+
+startallot:function(req,res){
+	query = "SELECT id from studenttypeid";
+	id = parseInt(req.param('id'));
+	Studenttypeid.query(query,[],function(err,result){
+		if(req.param('id')){
+			Global.idlist.push(id);
+			return res.view('startallot',{all : result , started :Global.idlist});
+		}
+		else{
+			return res.view('startallot',{all : result , started :Global.idlist});
+		}
+	});
+	
+},
+
+stopallot:function(req,res){
+	query = "SELECT id from studenttypeid";
+	id = req.param('id');
+	Studenttypeid.query(query,[],function(err,result){
+		Global.idlist.splice(Global.idlist.indexOf(id), 1);
+		return res.view('startallot',{all : result , started :Global.idlist});
+	});
+	
 },
 
 bookmess:function(req,res){
@@ -481,13 +508,15 @@ fillallotmenttable: function(req,res){
 			//sails.log(result[i].id);
 			Allotment.create({studentdata: result[i].userid, room: null, mess: null}).exec(function(err, sample) {
 
-			    if (err) {return res.serverError(err);}
+			    if (err) {
+			    	return res.serverError(err);
+			    }
 			   	sails.log(sample);
-			    return res.redirect('/');
+			    
 
 			});
 		}
-
+		return res.redirect('/');
 		
 	});	
 	
@@ -638,7 +667,7 @@ mygroup: function(req,res){
 					  			return res.serverError(err5);
 					  		}
 			  				sails.log(result5.id);
-							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){
+							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){ ///add condition of if no group
 								var rms =[];
 								Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
 									if(err){
