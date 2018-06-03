@@ -1,20 +1,39 @@
-<h2> Allotment ongoing for </h2>
-<% for(var i=0 ; i < started.length ; i++){ %>
-		<br><br><br>
-		<h4><%= started[i] %> 
-		</h4>
-		<br>
-		<br>
-		<br>
-<% } %>
-<% for(var i=0 ; i < all.length ; i++){ %>
-		<br><br><br>
-		<h4>Start allot  for  <%= all[i].id %> 
-			<a href="/start/<%= all[i].id %>">Start </a>
-			<a href="/stop/<%= all[i].id %>">Stop </a> 
-		</h4>
-		<br>
-<% } %>
+<div class="ui center aligned container">
+<div class="panel panel-success">
+	<div class='panel-heading'>
+		<h2> Allotment ongoing for </h2>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+		<% for(var i=0 ; i < started.length ; i++){ %>
+			<div class="col-sm-1">
+				<h4 style="font-weight: bold;"> <%= started[i] %> </h4>
+				<br>
+			</div>
+		<% } %>
+		</div>
+	</div>
+</div>
 
-<br>
+<div class="panel panel-danger">
+	<div class="panel-body">
+		<div class='row'>
+<% for(var i=0 ; i < all.length ; i++){ %>
+				<div class="col-sm-2">
+					<h4>Allotment  for  <%= all[i].id %> 
+					<!-- </h4> -->
+					<!-- <h4> -->
+						<a href="/start/<%= all[i].id %>">Start </a>
+						<a href="/stop/<%= all[i].id %>">Stop </a> 
+					</h4>
+					<!-- <br> -->
+					<br>
+				</div>
+	
+<% } %>
+		</div>
+	</div>
+</div>
+
+</div>
 <br>

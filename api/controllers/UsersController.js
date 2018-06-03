@@ -89,7 +89,7 @@ module.exports = {
                                             }
                                             sails.log(re5.id);
                                             sails.log(Global.idlist);
-                                            if(Global.idlist.indexOf(re5.id) != -1){
+                                            if(Global.idlist.indexOf(re5.id) != -1){   
                                                 sails.log("Matched");
                                                 req.session.me = result.id;
                                                 sails.log(req.session.me);

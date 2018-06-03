@@ -34,23 +34,60 @@ module.exports = {
 				  		if(err3){
 				  			return res.serverError(err3);
 				  		}
-				  		Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, result4){
-				  			if(err4){
+
+				  		sails.log(result.registration_number);
+				  		var admTypeQuery = 'SELECT * from type_of_admission';
+				  		var resulttype;
+				  		
+				  		Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
+
+				  			if(err14)
+				  					return res.serverError(err14);
+
+				  			var fl = 0
+				  			for(var i = 0; i < result12.length; i++)
+				  			{
+				  				if(result12[i].reg_no == result.registration_number)
+				  				{
+				  					resulttype = result12[i].admissiontypeid;
+				  					fl = 1;
+				  					break;
+				  				}
+				  			}
+
+				  			if(fl == 0)
+				  			{
+				  				return res.serverError(err14);
+				  			}
+				  		});
+
+				  		if(resulttype == 1)
+				  			resulttype = 'JEE';
+				  		else
+				  			resulttype = 'DASA';
+
+			  			sails.log(resulttype + ' is the type');
+
+				  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
+				  			if(err4){ 
 				  				return res.serverError(err4);
 				  			}
+
+				  			sails.log('result4 is ' + result4.id);
 				  			
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
 				  				if(err5){
+				  					sails.log('this is err5');
 						  			return res.serverError(err5);
 						  		}
-				  				sails.log(result5.id);
-				  				sails.log("TMKC");
+				  				sails.log('not err5' + result5.id);
 				  				req.session.studenttypeid = result5.id;
 				  				Hosteltypeid.find({studenttypeid: result5.id}).exec(function(err6, result6){
 				  					if(err6){
+				  						sails.log('this is err6');
 				  						return res.serverError(err6);
 				  					}
-				  					sails.log(result6);
+				  					sails.log('result6 is ' + result6);
 				  					var hostelfloors = [];
 				  					for (var i = 0; i < result6.length; i++) {
 				  						hostelfloors[i] = result6[i].hostelfloors;
@@ -401,7 +438,6 @@ stopallot:function(req,res){
 		Global.idlist.splice(Global.idlist.indexOf(id), 1);
 		return res.view('startallot',{all : result , started :Global.idlist});
 	});
-	
 },
 
 bookmess:function(req,res){
@@ -542,7 +578,41 @@ onlymess: function(req,res){
 			  		if(err3){
 			  			return res.serverError(err3);
 			  		}
-			  		Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, result4){
+
+			  		sails.log(result.registration_number);
+			  		var admTypeQuery = 'SELECT * from type_of_admission';
+			  		var resulttype;
+			  		
+			  		Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
+
+			  			if(err14)
+			  					return res.serverError(err14);
+
+			  			var fl = 0
+			  			for(var i = 0; i < result12.length; i++)
+			  			{
+			  				if(result12[i].reg_no == result.registration_number)
+			  				{
+			  					resulttype = result12[i].admissiontypeid;
+			  					fl = 1;
+			  					break;
+			  				}
+			  			}
+
+			  			if(fl == 0)
+			  			{
+			  				return res.serverError(err14);
+			  			}
+			  		});
+
+			  		if(resulttype == 1)
+			  			resulttype = 'JEE';
+			  		else
+			  			resulttype = 'DASA';
+
+		  			sails.log(resulttype + ' is the type');
+
+			  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
 			  			if(err4){
 			  				return res.serverError(err4);
 			  			}
@@ -657,7 +727,41 @@ mygroup: function(req,res){
 			  		if(err3){
 			  			return res.serverError(err3);
 			  		}
-			  		Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, result4){
+
+					sails.log(result.registration_number);
+			  		var admTypeQuery = 'SELECT * from type_of_admission';
+			  		var resulttype;
+			  		
+			  		Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
+
+			  			if(err14)
+			  					return res.serverError(err14);
+
+			  			var fl = 0
+			  			for(var i = 0; i < result12.length; i++)
+			  			{
+			  				if(result12[i].reg_no == result.registration_number)
+			  				{
+			  					resulttype = result12[i].admissiontypeid;
+			  					fl = 1;
+			  					break;
+			  				}
+			  			}
+
+			  			if(fl == 0)
+			  			{
+			  				return res.serverError(err14);
+			  			}
+			  		});
+
+			  		if(resulttype == 1)
+			  			resulttype = 'JEE';
+			  		else
+			  			resulttype = 'DASA';
+
+		  			sails.log(resulttype + ' is the type');
+
+			  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
 			  			if(err4){
 			  				return res.serverError(err4);
 			  			}
