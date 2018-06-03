@@ -8,7 +8,7 @@ module.exports.routes = {
   '/notallowed': { view: 'notallowed' },
   '/fail': { view: 'fail' },
   '/mess': {view:'choosemess'},
-
+  
   '/bookroom': 'BookingController.book',
   '/onlymess': 'BookingController.onlymess',
   '/mygroup': 'BookingController.mygroup',

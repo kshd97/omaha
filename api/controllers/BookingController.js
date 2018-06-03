@@ -44,7 +44,6 @@ module.exports = {
 						  			return res.serverError(err5);
 						  		}
 				  				sails.log(result5.id);
-				  				sails.log("TMKC");
 				  				req.session.studenttypeid = result5.id;
 				  				Hosteltypeid.find({studenttypeid: result5.id}).exec(function(err6, result6){
 				  					if(err6){
