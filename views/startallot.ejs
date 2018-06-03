@@ -1,0 +1,20 @@
+<h2> Allotment ongoing for </h2>
+<% for(var i=0 ; i < started.length ; i++){ %>
+		<br><br><br>
+		<h4><%= started[i] %> 
+		</h4>
+		<br>
+		<br>
+		<br>
+<% } %>
+<% for(var i=0 ; i < all.length ; i++){ %>
+		<br><br><br>
+		<h4>Start allot  for  <%= all[i].id %> 
+			<a href="/start/<%= all[i].id %>">Start </a>
+			<a href="/stop/<%= all[i].id %>">Stop </a> 
+		</h4>
+		<br>
+<% } %>
+
+<br>
+<br>
