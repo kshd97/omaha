@@ -62,53 +62,87 @@ module.exports = {
             if (err) return res.negotiate(err);
             sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
-                if(res1) {
-                    sails.log("Matched");
-                    req.session.me = result.id;
-                    sails.log(req.session.me);
-                    Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
-                        if(!result1.room && !result1.mess){
-                            Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                if(!admin){
-                                    return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
-                                }
-                                if(admin.is_group_admin == 1)
-                                    return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
-                                else
-                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
-                            });        
+                if(res1){
+                    StudentData.findOne({userid:result.id}).exec(function (err, re){
+                        if (err) {
+                            return res.serverError(err);
                         }
-                        else if(!result1.mess){
-                            Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                if(!admin){
-                                    return res.redirect('onlymess');
+                        Course.findOne({course: re.course}).exec(function(err1, re1){
+                            if(err1){
+                                return res.serverError(err1);
+                            }
+                            var year = parseInt(re.current_year);
+                            Courseyear.findOne({course: re1.id, year: year}).exec(function(err2, re2){
+                                if(err2){
+                                    return res.serverError(err2);
                                 }
-                                if(admin.is_group_admin == 1)
-                                    return res.redirect('onlymess');
-                                else
-                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
-                            });        
+                                Gender.findOne({gender: re.gender}).exec(function(err3, re3){
+                                    if(err3){
+                                        return res.serverError(err3);
+                                    }
+                                    Admissiontype.findOne({admissiontype: 'JEE'}).exec(function(err4, re4){
+                                        if(err4){
+                                            return res.serverError(err4);
+                                        }
+                                        Studenttypeid.findOne({gender: re3.id, courseyear: re2.id, admissiontype: re4.id}).exec(function(err5, re5){
+                                            if(err5){
+                                                return res.serverError(err5);
+                                            }
+                                            sails.log(re5.id);
+                                            sails.log(Global.idlist);
+                                            if(Global.idlist.indexOf(re5.id) != -1){
+                                                sails.log("Matched");
+                                                req.session.me = result.id;
+                                                sails.log(req.session.me);
+                                                Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
+                                                    if(!result1.room && !result1.mess){
+                                                        Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                                            if(!admin){
+                                                                return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                                            }
+                                                            if(admin.is_group_admin == 1)
+                                                                return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                                            else
+                                                                return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                        });        
+                                                    }
+                                                    else if(!result1.mess){
+                                                        Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                                            if(!admin){
+                                                                return res.redirect('onlymess');
+                                                            }
+                                                            if(admin.is_group_admin == 1)
+                                                                return res.redirect('onlymess');
+                                                            else
+                                                                return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                        });        
 
-                        }
-                        else{
-                            Rooms.findOne({id:result1.room}).exec(function(err,room){
-                                Mess.findOne({id:result1.mess}).exec(function(err,mess){
-                                    StudentData.findOne({userid:result.id}).exec(function(err,details){
-                                        Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
-                                            Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
-                                                return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
-                                            })
+                                                    }
+                                                    else{
+                                                        Rooms.findOne({id:result1.room}).exec(function(err,room){
+                                                            Mess.findOne({id:result1.mess}).exec(function(err,mess){
+                                                                StudentData.findOne({userid:result.id}).exec(function(err,details){
+                                                                    Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                                                        Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                                                            return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+                                                                        })
+                                                                    });
+                                                                });
+                                                            });
+                                                        }); 
+                                                    }
+                                                });
+                                            }
+                                            else{
+                                                return res.view('notyourtime');
+                                            }
                                         });
                                     });
                                 });
                             });
-                            
-                        }
-                    });
-                    
-
-                    
-                }
+                        });
+                    }); 
+                }                                           
                 else{
                     sails.log("Incorrect");
                     return res.redirect('/fail');

@@ -7,10 +7,17 @@
     socket.emit('my other event', { my: 'data' });
   });
 </script> -->
-<center>
-    <h3 class="displayhostelheader">You are booking rooms for <%= group_size %> student(s) (including yourself)</h3>
-    <br>
-    <select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)">  
+
+<!-- <center> -->
+  <div class="container-fluid">
+    <div class="ui center aligned container" style="width: 40%;">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="displayhostelheader">You are booking rooms for <%= group_size %> student(s) (including yourself)</h3>
+    </div>
+      <!-- <br> -->
+    <div class="panel-body">
+    <select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)" class='form-control'>  
         <option>Select Hostel</option>
         <% hostels.forEach(function(value, key){ %>
         		<option><%= key %></option>
@@ -20,7 +27,7 @@
     <br>
 
     <section ng-controller="RoomCtrl1"> 
-      <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);">
+      <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);" class='form-control'>
           <option>Select Block and Floor</option>
       </select>
     </section>
@@ -31,10 +38,15 @@
             <div ng-if="$index%10 == 0">
               <br>
             </div>
-            <button ng-click="thisroomismine(entry)">{{entry}}</button>
+            <button class="ui brown button" ng-click="thisroomismine(entry)">{{entry}}</button>
             <!-- <small class="meta text-muted">
             </small> -->
           </div>
     </section>
-</center>
+    </div>
+  </div>
+  </div>
+</div>
+<!-- </div> -->
+<!-- </center> -->
 

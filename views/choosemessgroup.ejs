@@ -1,10 +1,13 @@
+<div class="ui center aligned container" style="width: 25%;">
 	<form id ="messbookgroup" action="/messbookgroup" method="post">
 	<% for(var i=0 ; i < names.length ; i++){ %>
 		<div class="membermess"> 
-		<h4>Choose mess for <%= names[i].name %> </h6>
-		<br>
-		<input name="userid" type="hidden" value="<%= names[i].userid %>">
-		<select name="student" form = "messbookgroup">  
+			<br>
+		<h4>Choose mess for <%= names[i].name %> </h4>
+		<!-- <br> -->
+		<input name="userid" type="hidden" value="<%= names[i].userid %>" class='form-control' required>
+		<!-- <br> -->
+		<select name="student" form = "messbookgroup" class="form-control" required>  
 	    <option>select</option>
 	    <% messes.forEach(function(value, key){ %>
 	    		<option value ="<%= value.id %>"><%= value.name %></option>
@@ -13,10 +16,7 @@
 		</div>
 	<% } %>
 
-	<input type="submit"/>
+	<br>
+	<input class="ui huge black button" type="submit"/>
 	</form>
-
-
-
-
-
+</div>
