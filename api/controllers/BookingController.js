@@ -201,7 +201,7 @@ deleteshit: function(req, res){
 	Global.roomlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
-		valuestoset = {allotted: 0, noofbedsleft: 3, capacity: 3};
+		valuestoset = {allotted: 0, noofbedsleft: 1, capacity: 1};
 		Rooms.update(criteria, valuestoset).exec(function(err, result){
 			valuestoset = {allotted : 0};
 			Mess.update(criteria, valuestoset).exec(function(err, result){
@@ -216,22 +216,23 @@ bookroom: function(req,res){
 
 	if(req.session.me)
 	{
+		sails.log("I am here");
 		console.log(req.roomnames);
 		console.log(req.param('roomno'));
 		var userid = req.session.me;
 		var roomno = req.param('roomno');
 		var criteria = {};
 		var valuestoset = {};
-		//sails.log(Global.roomlist);	
+		sails.log("DAMN");
+		sails.log(Global.roomlist);	
 		// var str = "hsgf"
 		if(Global.roomlist.indexOf(roomno) != -1){
 			sails.log("HHOHOHOHOHO");  						// send back to booking page
 			return res.redirect('/bookroom');
 		}
-		Global.roomlist.push(roomno);
 		Allotment.findOne({studentdata:userid}).exec(function(err,alreadybookcheck){
 			if(alreadybookcheck.room != null){
-				//user already booked a room
+				//user already booked a room and tries to access through url
 				Rooms.findOne({id:alreadybookcheck.room}).exec(function(err,room){
                     Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
                         StudentData.findOne({userid:userid}).exec(function(err,details){
@@ -249,6 +250,9 @@ bookroom: function(req,res){
 					if(result.allotted == 1){
 						sails.log("Room is ALREADY BOOKED,book another");
 						return res.redirect("/bookroom");
+					}
+					if(result.noofbedsleft - 1 == 0){
+						Global.roomlist.push(roomno);
 					}
 					valuestoset = {room: result.id};
 					Rmr_student_groups_members.findOne({userid: userid}).exec(function(err,groupid){

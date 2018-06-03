@@ -57,9 +57,10 @@ module.exports = {
     login: function (req, res) {
         sails.log("gdjhghgdsgd");
         var bcrypt = require('bcryptjs');
-        var password = req.param('password');
+        var password = req.param('password'); 
         Users.findOne({username: req.param('username'),}).exec(function(err, result){
             if (err) return res.negotiate(err);
+            sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
                 if(res1) {
                     sails.log("Matched");
