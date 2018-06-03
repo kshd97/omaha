@@ -7,8 +7,12 @@ module.exports.routes = {
   '/dashboard': { view: 'dashboard' },
   '/notallowed': { view: 'notallowed' },
   '/fail': { view: 'fail' },
-  '/mess': {view:'choosemess'},
-  
+  '/mess': { view:'choosemess'},
+  //'/students': { view:'students'},
+
+  '/admin': 'BookingController.startallot',
+  '/start/:id': 'BookingController.startallot',
+  '/stop/:id': 'BookingController.stopallot',
   '/bookroom': 'BookingController.book',
   '/onlymess': 'BookingController.onlymess',
   '/mygroup': 'BookingController.mygroup',
