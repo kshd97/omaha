@@ -361,6 +361,7 @@ bookroom: function(req,res){
 								
 						}
 						else{
+							sails.log("hfhgfghghghghghhgjhuhuhuhuftddufufdytfuftydtftfdtftdtyffgfghdf");
 							sails.log("1234");
 							criteria =  {studentdata: userid};
 							Allotment.update(criteria, valuestoset).exec(function(err, result1){
@@ -623,7 +624,58 @@ onlymess: function(req,res){
 					  		}
 			  				sails.log(result5.id);
 							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){
-								if(!admin){
+								sails.log(admin);
+								if(admin){
+							        if(admin.is_group_admin == 1){
+							      		var rms =[];
+										Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+											if(err){
+												return res.serverError(err);
+											}
+											for (var i = 0; i < roommates.length; i++) {
+												rms[i] = roommates[i].userid;
+											}
+											inclause = "(";
+											for (var i = 0; i < rms.length - 1; i++) {
+												inclause = inclause + rms[i] + ","; 
+											}
+									  		inclause = inclause + rms[rms.length-1] + ")";
+											var query = "SELECT name,userid from studentdata where userid in "+inclause;
+											StudentData.query(query,[], function(err, names){
+												//for sending names and ids to mess page
+												Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
+												  	if(err){
+														return res.serverError(err);
+													}
+													sails.log(result6);	
+													var messesid=[];
+													for (var i = 0; i < result6.length; i++) {
+												  		messesid[i] = result6[i].mess;
+													}
+												  	sails.log(messesid);
+												 	inclause = "(";
+												  	for (var i = 0; i < messesid.length - 1; i++) {
+											  			inclause = inclause + messesid[i] + ","; 
+											  		}
+											  		inclause = inclause + messesid[messesid.length-1] + ")";
+											  		query = "SELECT * from mess where id in" + inclause;
+											  		Mess.query(query, [], function(err, result7){
+											  			if(err){
+											  				return res.serverError(err)
+											  			}
+											  			sails.log(result7);	
+											  			sails.log(names);	  					
+														return res.view('choosemessgroup',{messes : result7, names: names});
+													});	
+												});	
+											}); 
+										});				            
+							        }
+							        else if(admin.is_group_admin !=1){
+							        	return res.view('notallowed');
+							        }
+							    }
+								else{
 						            Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
 									  	if(err){
 											return res.serverError(err);
@@ -648,51 +700,6 @@ onlymess: function(req,res){
 											return res.view('choosemess',{messes : result7});
 										});	
 									});	
-						        }
-						        if(admin.is_group_admin == 1){
-						      		var rms =[];
-									Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
-										if(err){
-											return res.serverError(err);
-										}
-										for (var i = 0; i < roommates.length; i++) {
-											rms[i] = roommates[i].userid;
-										}
-										inclause = "(";
-										for (var i = 0; i < rms.length - 1; i++) {
-											inclause = inclause + rms[i] + ","; 
-										}
-								  		inclause = inclause + rms[rms.length-1] + ")";
-										var query = "SELECT name,userid from studentdata where userid in "+inclause;
-										StudentData.query(query,[], function(err, names){
-											//for sending names and ids to mess page
-											Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
-											  	if(err){
-													return res.serverError(err);
-												}
-												sails.log(result6);	
-												var messesid=[];
-												for (var i = 0; i < result6.length; i++) {
-											  		messesid[i] = result6[i].mess;
-												}
-											  	sails.log(messesid);
-											 	inclause = "(";
-											  	for (var i = 0; i < messesid.length - 1; i++) {
-										  			inclause = inclause + messesid[i] + ","; 
-										  		}
-										  		inclause = inclause + messesid[messesid.length-1] + ")";
-										  		query = "SELECT * from mess where id in" + inclause;
-										  		Mess.query(query, [], function(err, result7){
-										  			if(err){
-										  				return res.serverError(err)
-										  			}
-										  			sails.log(result7);	
-										  			sails.log(names);	  					
-													return res.view('choosemessgroup',{messes : result7, names: names});
-												});	
-											});	
-										}); 
-									});				            
 						        }
 						    });    
 						});
