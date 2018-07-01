@@ -22,6 +22,8 @@ module.exports.routes = {
   '/fillallotmenttable': 'BookingController.fillallotmenttable',
   // '/mygroup': 'Rmr_student_groupsController.mygroup',
   '/receivedrequests': 'Rmr_student_groupsController.receivedrequests',
+  '/createGroup': 'Rmr_student_groupsController.createGroup',
+  '/inviteMate': 'Rmr_student_groupsController.inviteMate',
   '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
   // '/messbook/:messname': 'BookingController.bookmess',
 

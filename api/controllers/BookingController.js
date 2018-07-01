@@ -44,7 +44,7 @@ module.exports = {
 				  			if(err14)
 				  					return res.serverError(err14);
 
-				  			var fl = 0
+				  			var fl = 0;
 				  			for(var i = 0; i < result12.length; i++)
 				  			{
 				  				if(result12[i].reg_no == result.registration_number)
@@ -784,25 +784,36 @@ mygroup: function(req,res){
 			  				sails.log(result5.id);
 							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){ ///add condition of if no group
 								var rms =[];
-								Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
-									if(err){
-										return res.serverError(err);
-									}
-									for (var i = 0; i < roommates.length; i++) {
-										rms[i] = roommates[i].userid;
-									}
-									inclause = "(";
-									for (var i = 0; i < rms.length - 1; i++) {
-										inclause = inclause + rms[i] + ","; 
-									}
-							  		inclause = inclause + rms[rms.length-1] + ")";
-									var query = "SELECT name,userid from studentdata where userid in "+inclause;
-									StudentData.query(query,[], function(err, names){
-										//for sending names and ids to mess page
-										return res.view('my_group',{names: names});
-											
-									}); 
-								});				            
+
+								if(admin == undefined)
+								{
+									var names = "NO groups yet.";
+									sails.log("no group");
+									return res.view('my_group',{names: names, flag: 1});	
+								}
+								else
+								{
+									Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+										if(err){
+											return res.serverError(err);
+										}
+										for (var i = 0; i < roommates.length; i++) {
+											rms[i] = roommates[i].userid;
+										}
+										inclause = "(";
+										for (var i = 0; i < rms.length - 1; i++) {
+											inclause = inclause + rms[i] + ","; 
+										}
+								  		inclause = inclause + rms[rms.length-1] + ")";
+										var query = "SELECT name,userid from studentdata where userid in "+inclause;
+										StudentData.query(query,[], function(err, names){
+											//for sending names and ids to mess page
+											return res.view('my_group',{names: names, flag: 0});
+												
+										}); 
+									});
+								}
+
 							});    
 						});
 					});

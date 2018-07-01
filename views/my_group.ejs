@@ -1,21 +1,75 @@
+
 <div class="ui center aligned container"  style="width: 40%;">
 <!-- <h2>Your Group</h2> -->
-<table class="ui brown center aligned celled table">
-  <thead>
-    <th><h3 style="font-weight: bolder;">Your Group</h3></th>
-  </thead>
-  <tbody>
-<% if (names.length == 0){ %>
-  Boom
+
+<% if (flag == 1) { %>
+  
+  <div class="ui red message">
+    <h2><%= names %></h2>
+  </div>
+<br>
+<br>
+<br>
+
+  <div class = "panel panel-success">
+    <div class="panel-heading">
+        <h3>Create a group</h3>
+    </div>
+    <div class="panel-body">
+
+
+            <form class="form-horizontal" action = '/createGroup' method="POST">
+                <div class='form-group'>
+                    <label class="control-label col-sm-3" for="inputGroupName">Group Name:  </label>
+                    <div class='col-sm-9'>
+                        <input autocomplete="off" name='groupname' type="text" class="form-control" placeholder="Enter group name" required autofocus>
+                    </div>
+                </div>
+                <div class='text-center'>
+                  <button class="ui huge blue button" type="submit" style="">Create</button>
+              </div>
+            </form>
+
+
+    </div>
+  </div>
+
 <% } %>
-<% for(var i=0 ; i < names.length ; i++){ %>
-    <tr>
-    	<td>
-		<h4> <%= names[i].name %> </h4>
-		</td>
-    </tr>
-<br><br>
+
+<% if (flag == 0) { %>
+
+  <table class="ui brown center aligned celled table">
+    <thead>
+      <th><h3 style="font-weight: bolder;">Your Group</h3></th>
+    </thead>
+    <tbody>
+  <% if (names.length == 0){ %>
+    Boom
+  <% } %>
+  <% for(var i=0 ; i < names.length ; i++){ %>
+      <tr>
+      	<td>
+  		<h4> <%= names[i].name %> </h4>
+  		</td>
+      </tr>
+  <br><br>
+  <% } %>
+    </tbody>
+  </table>
+
+  <div class="ui center aligned container">
+    <form class="form-horizontal" action = '/inviteMate' method="POST">
+        <div class='form-group'>
+            <label class="control-label col-sm-3" for="invitingMate">Reg No:  </label>
+            <div class='col-sm-9'>
+                <input autocomplete="off" name='newmateregno' type="text" class="form-control" placeholder="Enter registration number" required autofocus>
+            </div>
+        </div>
+        <div class='text-center'>
+          <button class="ui huge white button" type="submit" style="">Invite Roommate</button>
+      </div>
+    </form>
+  </div>
+
 <% } %>
-  </tbody>
-</table>
 </div>
