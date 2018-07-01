@@ -20,6 +20,8 @@ module.exports.routes = {
   '/messbook/:messid': 'BookingController.bookmess',
   'post /messbookgroup': 'BookingController.messbookgroup',
   '/fillallotmenttable': 'BookingController.fillallotmenttable',
+  // '/mygroup': 'Rmr_student_groupsController.mygroup',
+  '/receivedrequests': 'Rmr_student_groupsController.receivedrequests',
   '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
   // '/messbook/:messname': 'BookingController.bookmess',
 

@@ -63,6 +63,8 @@ module.exports = {
             sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
                 if(res1){
+                    req.session.me = result.id;
+                    return res.view('rmr_instructions')
                     StudentData.findOne({userid:result.id}).exec(function (err, re){
                         if (err) {
                             return res.serverError(err);
@@ -108,13 +110,16 @@ module.exports = {
                                                     }
                                                     else if(!result1.mess){
                                                         Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                                            if(!admin){
+                                                            sails.log(admin);
+                                                            if(admin == null){
                                                                 return res.redirect('onlymess');
                                                             }
-                                                            if(admin.is_group_admin == 1)
-                                                                return res.redirect('onlymess');
-                                                            else
-                                                                return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                            else{
+                                                                if(admin.is_group_admin == 1)
+                                                                    return res.redirect('onlymess');
+                                                                else
+                                                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                            }
                                                         });        
 
                                                     }

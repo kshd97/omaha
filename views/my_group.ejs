@@ -5,7 +5,9 @@
     <th><h3 style="font-weight: bolder;">Your Group</h3></th>
   </thead>
   <tbody>
-
+<% if (names.length == 0){ %>
+  Boom
+<% } %>
 <% for(var i=0 ; i < names.length ; i++){ %>
     <tr>
     	<td>
