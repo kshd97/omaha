@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
   	admissiontype: {
             type: "string",
-            enum: ['JEE','DASA'],
+            enum: ['1','2'], //1 jee 2 dasa
         },
 
   }

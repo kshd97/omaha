@@ -1,3 +1,3 @@
 module.exports.orm = {
-	_hookTimeout: 180000
+	_hookTimeout: 280000
 };
