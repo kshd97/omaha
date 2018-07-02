@@ -1,5 +1,6 @@
 module.exports = {
 
+  tableName: 'rmr_student_requests',
   attributes: {
   	sender:{
   		type: "integer"

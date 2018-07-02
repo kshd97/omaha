@@ -10,6 +10,7 @@ module.exports.routes = {
   '/mess': { view:'choosemess'},
   //'/students': { view:'students'},
 
+  '/gotoDash': 'UsersController.gotoDash',
   '/admin': 'BookingController.startallot',
   '/start/:id': 'BookingController.startallot',
   '/stop/:id': 'BookingController.stopallot',
@@ -24,6 +25,9 @@ module.exports.routes = {
   '/receivedrequests': 'Rmr_student_groupsController.receivedrequests',
   '/createGroup': 'Rmr_student_groupsController.createGroup',
   '/inviteMate': 'Rmr_student_groupsController.inviteMate',
+  '/acceptInvite': 'Rmr_student_groupsController.acceptInvite',
+  '/removeMate': 'Rmr_student_groupsController.removeMate',
+  '/deleteGroup': 'Rmr_student_groupsController.deleteGroup',
   '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
   // '/messbook/:messname': 'BookingController.bookmess',
 

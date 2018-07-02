@@ -1,0 +1,38 @@
+<div class="ui center aligned container">
+	<% if (flag == 1) { %>
+
+	 	<div class = 'ui black message'>
+	 		<h3> You have received no requests.</h3>
+	 	</div>
+	
+	<% } %>
+
+	<% if (flag == 0) { %>
+
+		<table class="ui brown center aligned celled table">
+			<thead>
+				<th><h4>Sender</h4></th>
+				<th><h4></h4></th>		
+			</thead>
+			<tbody>
+				<% for(var i=0 ; i < mems.length ; i++){ %>
+				<tr>
+					<td>
+						<h4> <%= mems[i].sender %> </h4>
+					</td>
+					<td>
+
+				    <form class="form-horizontal" action = '/acceptInvite' method="POST">
+		                	
+		                	<input autocomplete="off" name='myMate' value="<%= mems[i].sender %>" type="text" class="hidden" required>
+				          	<button class="ui large black button" type="submit" style="">Accept</button>
+
+				    </form>
+					</td>
+				</tr>
+				<% } %>
+			</tbody>
+		</table>
+
+	<% } %>
+ </div>
