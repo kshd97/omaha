@@ -38,9 +38,18 @@
 
 <% if (flag == 0) { %>
 
+  <div class="ui green message">
+    <h3>Your Group</h3>
+  </div>
+
+    <form class="form-horizontal" action = '/deleteGroup' method="POST">
+      <button class="ui large red button" type="submit" style="">Delete Group</button>
+    </form>
+
   <table class="ui brown center aligned celled table">
     <thead>
-      <th><h3 style="font-weight: bolder;">Your Group</h3></th>
+      <th><h4>Members</h4></th>
+      <th><h4></h4></th>
     </thead>
     <tbody>
   <% if (names.length == 0){ %>
@@ -51,6 +60,12 @@
       	<td>
   		<h4> <%= names[i].name %> </h4>
   		</td>
+        <td>
+            <form class="form-horizontal" action = '/removeMate' method="POST">
+              <input autocomplete="off" name='toremove' value="<%= names[i].registration_number %>" type="text" class="hidden" required>
+              <button class="ui red button" type="submit" style="">Remove</button>
+            </form>
+        </td>
       </tr>
   <br><br>
   <% } %>

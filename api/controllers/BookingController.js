@@ -73,8 +73,9 @@ module.exports = {
 				  				return res.serverError(err4);
 				  			}
 
-				  			sails.log('result4 is ' + result4.id);
-				  			
+				  			sails.log('admissiontype is ' + result4.id + "and resulttype is " + resulttype);
+				  		
+
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
 				  				if(err5){
 				  					sails.log('this is err5');
@@ -388,6 +389,7 @@ bookroom: function(req,res){
 								  	if(err3){
 										return res.serverError(err3);
 									}
+									sails.log(req.session.studenttypeid);
 									sails.log("3456");
 									sails.log(result3);	
 									var messesid=[];
@@ -782,7 +784,7 @@ mygroup: function(req,res){
 					  			return res.serverError(err5);
 					  		}
 			  				sails.log(result5.id);
-							Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){ ///add condition of if no group
+							Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
 								var rms =[];
 
 								if(admin == undefined)
@@ -805,7 +807,7 @@ mygroup: function(req,res){
 											inclause = inclause + rms[i] + ","; 
 										}
 								  		inclause = inclause + rms[rms.length-1] + ")";
-										var query = "SELECT name,userid from studentdata where userid in "+inclause;
+										var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 										StudentData.query(query,[], function(err, names){
 											//for sending names and ids to mess page
 											return res.view('my_group',{names: names, flag: 0});
