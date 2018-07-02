@@ -81,14 +81,14 @@ module.exports = {
 			                	{
 			                		sails.log(err1)
 			                	}
+
+                				return res.redirect('/mygroup');	
 			                });
 			            }
 			        });
 				}
-			});
-	    }
-
-		return res.redirect('/mygroup');		
+			});	
+	    }	
 	},
 
 	deleteGroup: function(req, res) {
@@ -174,6 +174,8 @@ module.exports = {
                     break;
                 }
 
+
+
             if(flag == 1)
             {
     			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
@@ -189,11 +191,22 @@ module.exports = {
 							if(result3 == undefined)
 							{
 								StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
-									var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
-									Rmr_student_requests.query(insert, function(err3, record2) {
-										if(err3)
+
+									sails.log("sender is " + result6.registration_number + " and receiver is " + newmate);
+									var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
+									
+									Rmr_student_requests.query(q, [], function(error7, result07) 
+									{
+										sails.log("resylt07 is " + result07);
+										if(result07.length == 0)
 										{
-											return res.serverError(err3);
+											var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
+											Rmr_student_requests.query(insert, function(err3, record2) {
+												if(err3)
+												{
+													return res.serverError(err3);
+												}
+											});
 										}
 									});
 								});
