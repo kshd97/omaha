@@ -78,13 +78,17 @@ module.exports = {
 
                         var flag = 0;
                         for(var i = 0; i < studs.length; i++)
+                        {
                             if(studs[i] == re.registration_number)
                             {
                                 flag = 1;
                                 break;
                             }
 
-                        sails.log("flag is " + flag);
+                            sails.log(studs[i]);
+                        }
+
+                        sails.log("flag is " + flag + "and regno is " + re.registration_number);
                         if(flag == 1)
                         {
 
