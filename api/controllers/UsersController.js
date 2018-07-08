@@ -62,7 +62,7 @@ module.exports = {
             if (err) return res.negotiate(err);
             sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
-                if(true){
+                if(res1){
                     req.session.me = result.id;
                     // return res.view('rmr_instructions');      
                     
