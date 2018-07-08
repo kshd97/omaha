@@ -163,8 +163,8 @@ module.exports = {
 			var newmate = req.param("newmateregno");
 
             var fs = require("fs");
-            var data = fs.readFileSync("student_data.csv");
-            var studs = data.toString().split("\"");
+            var data = fs.readFileSync("rmr_eligible.csv");
+            var studs = data.toString().split('\n');
 
             var flag = 0;
             for(var i = 0; i < studs.length; i++)
