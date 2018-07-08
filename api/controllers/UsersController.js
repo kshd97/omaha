@@ -96,6 +96,7 @@ module.exports = {
                                     return res.view('rmr_instructions');
                                 else
                                 {
+                                    return res.view('notyourtime');
                                     Course.findOne({course: re.course}).exec(function(err1, re1){
                                         if(err1){ 
                                             return res.serverError(err1);
