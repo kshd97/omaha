@@ -68,9 +68,9 @@ module.exports = {
 			            else
 			            {
 			                // res.redirect('/mygroup');
-			                sails.log("1. " + grpid);
-			                sails.log("2. " + result5.registration_number);
-			                sails.log("3. " + sz);
+			                // sails.log("1. " + grpid);
+			                // sails.log("2. " + result5.registration_number);
+			                // sails.log("3. " + sz);
 
 
 

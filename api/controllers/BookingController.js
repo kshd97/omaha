@@ -35,32 +35,6 @@ module.exports = {
 				  			return res.serverError(err3);
 				  		}
 
-				  		// sails.log(result.registration_number);
-				  		// var admTypeQuery = 'SELECT * from type_of_admission';
-				  		// var resulttype;
-				  		
-				  		// Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
-
-				  		// 	if(err14)
-				  		// 			return res.serverError(err14);
-
-				  		// 	var fl = 0;
-				  		// 	for(var i = 0; i < result12.length; i++)
-				  		// 	{
-				  		// 		if(result12[i].reg_no == result.registration_number)
-				  		// 		{
-				  		// 			resulttype = result12[i].admissiontypeid;
-				  		// 			fl = 1;
-				  		// 			break;
-				  		// 		}
-				  		// 	}
-
-				  		// 	if(fl == 0)
-				  		// 	{
-				  		// 		return res.serverError(err14);
-				  		// 	}
-				  		// });
-
 
 				  		Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 			  			sails.log(resulttype.admissiontypeid + ' is the type');
@@ -591,37 +565,6 @@ onlymess: function(req,res){
 			  			return res.serverError(err3);
 			  		}
 
-			  		// sails.log(result.registration_number);
-			  		// var admTypeQuery = 'SELECT * from type_of_admission';
-			  		// var resulttype;
-			  		
-			  		// Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
-
-			  		// 	if(err14)
-			  		// 			return res.serverError(err14);
-
-			  		// 	var fl = 0
-			  		// 	for(var i = 0; i < result12.length; i++)
-			  		// 	{
-			  		// 		if(result12[i].reg_no == result.registration_number)
-			  		// 		{
-			  		// 			resulttype = result12[i].admissiontypeid;
-			  		// 			fl = 1;
-			  		// 			break;
-			  		// 		}
-			  		// 	}
-
-			  		// 	if(fl == 0)
-			  		// 	{
-			  		// 		return res.serverError(err14);
-			  		// 	}
-			  		// });
-
-			  		// if(resulttype == 1)
-			  		// 	resulttype = 'JEE';
-			  		// else
-			  		// 	resulttype = 'DASA';
-
 
 			  		Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 
@@ -756,36 +699,6 @@ mygroup: function(req,res){
 			  		}
 
 					sails.log(result.registration_number);
-			  		// var admTypeQuery = 'SELECT * from type_of_admission';
-			  		// var resulttype;
-			  		
-			  		// Type_of_admission.query(admTypeQuery, [], function(err14, result12) {
-
-			  		// 	if(err14)
-			  		// 			return res.serverError(err14);
-
-			  		// 	var fl = 0
-			  		// 	for(var i = 0; i < result12.length; i++)
-			  		// 	{
-			  		// 		if(result12[i].reg_no == result.registration_number)
-			  		// 		{
-			  		// 			resulttype = result12[i].admissiontypeid;
-			  		// 			fl = 1;
-			  		// 			break;
-			  		// 		}
-			  		// 	}
-
-			  		// 	if(fl == 0)
-			  		// 	{
-			  		// 		return res.serverError(err14);
-			  		// 	}
-			  		// });
-
-			  		// if(resulttype == 1)
-			  		// 	resulttype = 'JEE';
-			  		// else
-			  		// 	resulttype = 'DASA';
-
 
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 		  			

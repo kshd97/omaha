@@ -55,7 +55,7 @@ module.exports = {
     },
 
     login: function (req, res) {
-        sails.log("gdjhghgdsgd");
+
         var bcrypt = require('bcryptjs');
         var password = req.param('password'); 
         Users.findOne({username: req.param('username'),}).exec(function(err, result){
@@ -64,17 +64,17 @@ module.exports = {
             bcrypt.compare(password, result.password, function(err, res1) {
                 if(res1){
                     req.session.me = result.id;
-                    // return res.view('rmr_instructions');    
+                    // return res.view('rmr_instructions');      
                     
                     StudentData.findOne({userid:result.id}).exec(function (err, re){
                         if (err) {
                             return res.serverError(err);
                         }
-                        sails.log(re.registration_number);
+                        sails.log(re.registration_number + " has logged");
 
                         var fs = require("fs");
-                        var data = fs.readFileSync("student_data.csv");
-                        var studs = data.toString().split("\"");
+                        var data = fs.readFileSync("rmr_eligible.csv");
+                        var studs = data.toString().split('\n');
 
                         var flag = 0;
                         for(var i = 0; i < studs.length; i++)
@@ -84,19 +84,15 @@ module.exports = {
                                 flag = 1;
                                 break;
                             }
-
-                            sails.log(studs[i]);
                         }
 
-                        sails.log("flag is " + flag + "and regno is " + re.registration_number);
                         if(flag == 1)
                         {
 
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
 
-                                sails.log("result11 ki admissiontypeid is " + result11.admissiontypeid);
-
-                                if(result11.admissiontypeid == 1)
+                                sails.log(result11.admissiontypeid);
+                                if(result11.admissiontypeid == 1 || re.gender == "F")
                                     return res.view('rmr_instructions'); 
                                 else
                                 {
@@ -222,8 +218,8 @@ module.exports = {
                         sails.log(re.registration_number);
 
                         var fs = require("fs");
-                        var data = fs.readFileSync("student_data.csv");
-                        var studs = data.toString().split("\"");
+                        var data = fs.readFileSync("rmr_eligible.csv");
+                        var studs = data.toString().split('\n');
 
                         var flag = 0;
                         for(var i = 0; i < studs.length; i++)
@@ -237,7 +233,7 @@ module.exports = {
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error12, result12) {
                                 
-                                if(result12.admissiontypeid == 1)
+                                if(result12.admissiontypeid == 1 || re.gender == "F")
                                     return res.view('rmr_instructions');                                   
                                 else
                                 {
