@@ -747,22 +747,26 @@ mygroup: function(req,res){
 												if(admin == undefined)
 												{
 													var names = "NO groups yet.";
-													sails.log("no group");
-													return res.view('my_group',{names: names,posroommates: posroommates, flag: 1, group_size: 0, gender: result3.gender, current_year: result3.current_year});	
+													sails.log(names);
+													return res.view('my_group',{names: names,posroommates: posroommates, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
 												}
 												else
 												{
 													Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
 														Rmr_student_groups.findOne({group_id: admin.group_id}).exec(function(err90, result90){
-															for (var i = 0; i < rms.length - 1; i++) {
-																inclause = inclause + rms[i] + ","; 
+															inclause="(";
+															for (var i = 0; i < roommates.length - 1; i++) {
+																inclause = inclause +"'"+ roommates[i].userid + "',"; 
 															}
-													  		inclause = inclause + rms[rms.length-1] + ")";
+													  		inclause = inclause +"'"+ roommates[roommates.length-1].userid + "')";
+													  		sails.log(inclause);
+													  		sails.log("qweeww");
 															var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 															StudentData.query(query,[], function(err, names){
 																//for sending names and ids to mess page
 																if(admin.is_group_admin==1){
-																	return res.view('my_group',{names: names,posroommates: posroommates, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result3.current_year});
+																	sails.log(result90.group_size + result3.gender + result.current_year);
+																	return res.view('my_group',{names: names,posroommates: posroommates, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result.current_year});
 																}
 																else{
 																	return res.view('groupfornonadmins',{names: names});

@@ -204,7 +204,7 @@ module.exports = {
 
 				Rmr_student_groups_members.findOne({userid: acceptfrom}).exec(function(err7, result7) {
 					Rmr_student_groups.findOne({group_id: result7.group_id}).exec(function(err1, result1){
-						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F')){
+						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F' && result1.group_size<4)){
 							var q = "UPDATE rmr_student_groups SET group_size = group_size + 1 WHERE group_id = " + result7.group_id;
 							Rmr_student_groups.query(q, [], function(err8, result8) {
 								StudentData.findOne({userid: req.session.me}).exec(function(err9, result9) {

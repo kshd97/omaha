@@ -51,9 +51,6 @@
       <th><h4></h4></th>
     </thead>
     <tbody>
-  <% if (names.length == 0){ %>
-    Boom
-  <% } %>
   <% for(var i=0 ; i < names.length ; i++){ %>
       <tr>
       	<td>
@@ -71,7 +68,7 @@
     </tbody>
   </table>
 
-  <% if ((group_size < 4 && gender == 'F') || (gender == 'M' && group_size == 2 && (current_year == 3 || current_year == 2))) { %>
+  <% if ((group_size < 4 && gender == 'F') || (gender == 'M' && group_size < 2 && current_year == 3) || (gender == 'M' && group_size < 3 && current_year == 2)) { %>
 
     <div class="ui center aligned container">
       <form class="form-horizontal" action = '/inviteMate' method="POST">
