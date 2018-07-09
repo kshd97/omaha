@@ -1,3 +1,7 @@
+<script>
+    var a = <%= JSON.stringify(posroommates) %> 
+    console.log(a);   
+</script>
 
 <div class="ui center aligned container"  style="width: 40%;">
 <!-- <h2>Your Group</h2> -->
@@ -77,14 +81,33 @@
         <div class='form-group'>
             <label class="control-label col-sm-3" for="invitingMate">Reg No:  </label>
             <div class='col-sm-9'>
-                <input autocomplete="off" name='newmateregno' type="text" class="form-control" placeholder="Enter registration number" required autofocus>
+                <input autocomplete="off" name='newmateregno' id="newmateregno" type="text" class="form-control" placeholder="Enter registration number" required autofocus>
             </div>
         </div>
         <div class='text-center'>
-          <button class="ui huge white button" type="submit" style="">Invite Roommate</button>
+          <button class="ui huge white button" style="" onclick="check()">Check ELigibility of Roommate</button>
+          <button class="ui huge white button" type="submit" id="submitbutton" style="" disabled="true">Invite Roommate</button>
       </div>
     </form>
   </div>
 
 <% } %>
 </div>
+<script>
+  function check() {
+    var posroommates = a;
+    var regno = document.getElementById("newmateregno");
+    var flag = 0;
+    console.die(posroommates);
+    for (var i = 0; i < posroommates.length; i++) {
+      if(posroommates[i] == regno){
+        flag = 1;
+        submit = document.getElementById("submitbutton");
+        submit.disabled = "false";
+      }
+    }
+    if(flag == 0){
+      alert("Roommate chosen isn't eligible");
+    }
+  }
+</script>

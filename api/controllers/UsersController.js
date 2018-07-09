@@ -80,7 +80,8 @@ module.exports = {
                         for(var i = 0; i < studs.length; i++)
                         {
                             if(studs[i] == re.registration_number)
-                            {
+                            {   
+                                sails.log("jijii");
                                 flag = 1;
                                 break;
                             }

@@ -703,7 +703,7 @@ mygroup: function(req,res){
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 		  			
 			  			sails.log(resulttype + ' is the type');
-
+			  			var resulttype1=resulttype.admissiontypeid;
 				  		if(resulttype.admissiontypeid == 1)
 				  			resulttype = 'JEE';
 				  		else
@@ -719,39 +719,63 @@ mygroup: function(req,res){
 						  			return res.serverError(err5);
 						  		}
 				  				sails.log(result5.id);
-								Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
-									var rms =[];
+				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
+				  					inclause="(";
+				  					for (var i=0;i<studentlist.length-1;i++){
+				  						if(studentlist[i].registration_number == '811457')
+				  							sails.log('Found it');
+				  						inclause=inclause+"'"+studentlist[i].registration_number+"',";
+				  					}
+				  					inclause = inclause + "'"+studentlist[studentlist.length-1].registration_number + "')";
+				  					var query1 = "SELECT reg_no from type_of_admission WHERE admissiontypeid=" + resulttype1 + " AND reg_no IN "+ inclause;
+				  					sails.log(query1);
+				  					Type_of_admission.query(query1,[],function(err21,regnos) {
+				  						inclause="(";
+				  						for (var i=0;i<regnos.length-1;i++){
 
-									if(admin == undefined)
-									{
-										var names = "NO groups yet.";
-										sails.log("no group");
-										return res.view('my_group',{names: names, flag: 1});	
-									}
-									else
-									{
-										Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
-											if(err){
-												return res.serverError(err);
-											}
-											for (var i = 0; i < roommates.length; i++) {
-												rms[i] = roommates[i].userid;
-											}
-											inclause = "(";
-											for (var i = 0; i < rms.length - 1; i++) {
-												inclause = inclause + rms[i] + ","; 
-											}
-									  		inclause = inclause + rms[rms.length-1] + ")";
-											var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
-											StudentData.query(query,[], function(err, names){
-												//for sending names and ids to mess page
-												return res.view('my_group',{names: names, flag: 0});
-													
-											}); 
+				  							inclause=inclause+"'"+regnos[i].reg_no+"',";
+				  						}
+				  						inclause = inclause +"'"+ regnos[regnos.length-1].reg_no + "')";
+				  						var query2 = "SELECT name, registration_number from studentdata where registration_number in "+inclause+" and registration_number!='"+result.registration_number+"'";
+				  						sails.log(query2);
+										StudentData.query(query2,[], function(err, posroommates){
+											sails.log(posroommates);
+											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
+												var rms =[];
+
+												if(admin == undefined)
+												{
+													var names = "NO groups yet.";
+													sails.log("no group");
+													return res.view('my_group',{names: names,posroommates: posroommates, flag: 1});	
+												}
+												else
+												{
+													Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+														if(err){
+															return res.serverError(err);
+														}
+														for (var i = 0; i < roommates.length; i++) {
+															rms[i] = roommates[i].userid;
+														}
+														inclause = "(";
+														for (var i = 0; i < rms.length - 1; i++) {
+															inclause = inclause + rms[i] + ","; 
+														}
+												  		inclause = inclause + rms[rms.length-1] + ")";
+														var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
+														StudentData.query(query,[], function(err, names){
+															//for sending names and ids to mess page
+															return res.view('my_group',{names: names,posroommates: posroommates, flag: 0});
+																
+														}); 
+													});
+												}
+
+											});
 										});
-									}
-
-								});    
+									});    
+								});
 							});
 						});
 			  		});
