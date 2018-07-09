@@ -740,6 +740,7 @@ mygroup: function(req,res){
 				  						sails.log(query2);
 										StudentData.query(query2,[], function(err, posroommates){
 											sails.log(posroommates);
+											req.session.posroommates=posroommates;
 											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
 												var rms =[];
 
