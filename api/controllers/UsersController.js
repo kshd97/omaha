@@ -177,7 +177,7 @@ module.exports = {
                                                                 });
                                                             }
                                                             else{
-                                                                return res.view('notyourtime');
+                                                                return res.view('fail', {message: "Not your time to book"});
                                                             }
                                                         });
                                                     });
@@ -190,13 +190,12 @@ module.exports = {
                         }
                         else
                         {
-                            return res.view('notyourtime');    
+                            return res.view('fail', {message: "Ineligible for RMR."});    
                         }
                     }); 
                 }                                           
-                else{
-                    sails.log("Incorrect");
-                    return res.redirect('/fail');
+                else{ 
+                    return res.view('fail', {message: "Wrong password."});  
                 }
             });
         });
@@ -318,7 +317,7 @@ module.exports = {
                                                                 });
                                                             }
                                                             else{
-                                                                return res.view('notyourtime');
+                                                                return res.view('fail', {message: "Not your time to book"});
                                                             }
                                                         });
                                                     });
@@ -331,7 +330,7 @@ module.exports = {
                         }
                         else
                         {
-                            return redirect('/fail');
+                            return res.view('fail', {message: "Ineligible for RMR"});
                         }
                     }); 
                 // }                                           
