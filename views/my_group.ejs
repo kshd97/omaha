@@ -88,21 +88,3 @@
 
 <% } %>
 </div>
-<script>
-  function check() {
-    var posroommates = a;
-    var regno = document.getElementById("newmateregno");
-    var flag = 0;
-    console.die(posroommates);
-    for (var i = 0; i < posroommates.length; i++) {
-      if(posroommates[i] == regno){
-        flag = 1;
-        submit = document.getElementById("submitbutton");
-        submit.disabled = "false";
-      }
-    }
-    if(flag == 0){
-      alert("Roommate chosen isn't eligible");
-    }
-  }
-</script>
