@@ -201,36 +201,44 @@ module.exports = {
 	acceptInvite: function(req, res) {
 
 		var acceptfrom = req.param("myMate");
-	
-		Rmr_student_groups_members.findOne({userid: acceptfrom}).exec(function(err7, result7) {
+		StudentData.findOne({registration_number: acceptfrom}).exec(function(err10, result112){
+			Type_of_admission.findOne({reg_no: acceptfrom}).exec(function(err11,result11){
 
-			var q = "UPDATE rmr_student_groups SET group_size = group_size + 1 WHERE group_id = " + result7.group_id;
-			Rmr_student_groups.query(q, [], function(err8, result8) {
+				Rmr_student_groups_members.findOne({userid: acceptfrom}).exec(function(err7, result7) {
+					Rmr_student_groups.findOne({group_id: result7.group_id}).exec(function(err1, result1){
+						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F')){
+							var q = "UPDATE rmr_student_groups SET group_size = group_size + 1 WHERE group_id = " + result7.group_id;
+							Rmr_student_groups.query(q, [], function(err8, result8) {
+								StudentData.findOne({userid: req.session.me}).exec(function(err9, result9) {
+									var insert = "INSERT INTO rmr_student_groups_members (group_id, userid, is_group_admin) VALUES (" + result7.group_id + "," + result9.registration_number + "," + 0 + ")";
+									Rmr_student_groups_members.query(insert, function(err3, record2) {
+										if(err3)
+										{
+											return res.serverError(err3);
+										}
 
+										var delQ = "DELETE FROM rmr_student_requests where receiver = " + result9.registration_number + " and sender = " + acceptfrom;
+										Rmr_student_requests.query(delQ, function(err10, result10) {
 
-				StudentData.findOne({userid: req.session.me}).exec(function(err9, result9) {
-					var insert = "INSERT INTO rmr_student_groups_members (group_id, userid, is_group_admin) VALUES (" + result7.group_id + "," + result9.registration_number + "," + 0 + ")";
-					Rmr_student_groups_members.query(insert, function(err3, record2) {
-						if(err3)
-						{
-							return res.serverError(err3);
+											if(err10)
+											{
+												return res.serverError(err10);
+											}
+											else
+											{
+												return res.redirect('/receivedrequests');										
+											}
+										});
+									});
+								});					
+							});
 						}
-
-						var delQ = "DELETE FROM rmr_student_requests where receiver = " + result9.registration_number + " and sender = " + acceptfrom;
-						Rmr_student_requests.query(delQ, function(err10, result10) {
-
-							if(err10)
-							{
-								return res.serverError(err10);
-							}
-							else
-							{
-								return res.redirect('/receivedrequests');										
-							}
-						});
+						else{
+							return res.view('fail', {message: "Group is full"});
+						}		
 					});
 				});					
-			});			
+			});
 		});
 
 		// return res.redirect('/receivedrequests');
