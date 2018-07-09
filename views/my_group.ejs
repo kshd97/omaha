@@ -57,10 +57,12 @@
   		<h4> <%= names[i].name %> </h4>
   		</td>
         <td>
+          <% if(names[i].registration_number != myreg_no) { %>
             <form class="form-horizontal" action = '/removeMate' method="POST">
               <input autocomplete="off" name='toremove' value="<%= names[i].registration_number %>" type="text" class="hidden" required>
               <button class="ui red button" type="submit" style="">Remove</button>
             </form>
+          <% } %>
         </td>
       </tr>
   <br><br>

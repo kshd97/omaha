@@ -748,7 +748,7 @@ mygroup: function(req,res){
 												{
 													var names = "NO groups yet.";
 													sails.log(names);
-													return res.view('my_group',{names: names,posroommates: posroommates, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
+													return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
 												}
 												else
 												{
@@ -766,7 +766,7 @@ mygroup: function(req,res){
 																//for sending names and ids to mess page
 																if(admin.is_group_admin==1){
 																	sails.log(result90.group_size + result3.gender + result.current_year);
-																	return res.view('my_group',{names: names,posroommates: posroommates, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result.current_year});
+																	return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result.current_year});
 																}
 																else{
 																	return res.view('groupfornonadmins',{names: names});
