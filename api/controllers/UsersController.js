@@ -92,10 +92,11 @@ module.exports = {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
 
                                 sails.log(result11.admissiontypeid);
-                                if(result11.admissiontypeid == 1 || re.gender == "F")
-                                    return res.view('rmr_instructions'); 
+                                if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
+                                    return res.view('rmr_instructions');
                                 else
                                 {
+                                    return res.view('notyourtime');
                                     Course.findOne({course: re.course}).exec(function(err1, re1){
                                         if(err1){ 
                                             return res.serverError(err1);
