@@ -128,65 +128,66 @@ module.exports = {
 		{
 			var newmate = req.param("newmateregno");
 
-            var fs = require("fs");
-            var data = fs.readFileSync("rmr_eligible.csv");
-            var studs = data.toString().split('\n');
+ 	
 
-            var flag = 0;
-            for(var i = 0; i < studs.length; i++)
-                if(studs[i] == newmate)
-                {
-                    flag = 1;
-                    break;
-                }
+            var flag = 1;
+            // for(var i = 0; i < studs.length; i++)
+            //     if(studs[i] == newmate)
+            //     {
+            //         flag = 1;
+            //         break;
+            //     }
 
 
             if(flag == 1)
             {
-    			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
+            	StudentData.findOne({registration_number: newmate}).exec(function(eee, re){
+	    			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
 
-    				if(result06.admissiontypeid == 1)
-    				{
-		            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
-							if(err2)
-							{
-								return res.serverError(err2);
-							}            		
+	    				if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result06.admissiontypeid == 1)){
+			            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
+								if(err2)
+								{
+									return res.serverError(err2);
+								}            		
 
-							if(result3 == undefined)
-							{
-								StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
+								if(result3 == undefined)
+								{
+									StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
 
-									sails.log("sender is " + result6.registration_number + " and receiver is " + newmate);
-									var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
-									
-									Rmr_student_requests.query(q, [], function(error7, result07) 
-									{
-										sails.log("resylt07 is " + result07);
-										if(result07.length == 0)
+										sails.log("sender is " + result6.registration_number + " and receiver is " + newmate);
+										var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
+										
+										Rmr_student_requests.query(q, [], function(error7, result07) 
 										{
-											var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
-											Rmr_student_requests.query(insert, function(err3, record2) {
-												if(err3)
-												{
-													return res.serverError(err3);
-												}
-											});
-										}
-										else
-										{
-											return res.view('fail', {message: "Request already sent"});
-										}
+											sails.log("resylt07 is " + result07);
+											if(result07.length == 0)
+											{
+												var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
+												Rmr_student_requests.query(insert, function(err3, record2) {
+													if(err3)
+													{
+														return res.serverError(err3);
+													}
+													return res.view('pass', {message: "Request sent"});
+												});
+
+											}
+											else
+											{
+												return res.view('fail', {message: "Request already sent"});
+											}
+										});
 									});
-								});
-							}
-							else
-							{
-								return res.view('fail', {message: "That person is already in a group"});
-							}
-		            	});
-					}
-	    		});        	
+								}
+								else
+								{
+									return res.view('fail', {message: "That person is already in a group"});
+								}
+			            	});
+						}
+		    		}); 
+		    	});       	
             }
             else
             {
@@ -194,7 +195,7 @@ module.exports = {
             }    
 		}
 
-		return res.redirect('/mygroup');
+		//return res.redirect('/mygroup');
 	},
 
 	acceptInvite: function(req, res) {

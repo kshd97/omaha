@@ -765,11 +765,17 @@ mygroup: function(req,res){
 												  		inclause = inclause + rms[rms.length-1] + ")";
 														var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 														StudentData.query(query,[], function(err, names){
+
 															//for sending names and ids to mess page
-															return res.view('my_group',{names: names,posroommates: posroommates, flag: 0});
-																
+															if(admin.is_group_admin==1){
+																return res.view('my_group',{names: names,posroommates: posroommates, flag: 0});
+															}
+															else{
+																return res.view('groupfornonadmins',{names: names});
+															}	
 														}); 
 													});
+
 												}
 
 											});

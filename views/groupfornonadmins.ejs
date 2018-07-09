@@ -1,0 +1,22 @@
+ <div class="ui green message">
+    <h3>Your Group</h3>
+  </div>
+
+  <table class="ui brown center aligned celled table">
+    <thead>
+      <th><h4>Members</h4></th>
+    </thead>
+    <tbody>
+  <% if (names.length == 0){ %>
+    Boom
+  <% } %>
+  <% for(var i=0 ; i < names.length ; i++){ %>
+      <tr>
+      	<td>
+  		<h4> <%= names[i].name %> </h4>
+  		</td>
+      </tr>
+  <br><br>
+  <% } %>
+    </tbody>
+  </table>

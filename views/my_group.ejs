@@ -1,11 +1,6 @@
-<script>
-    var a = <%= JSON.stringify(posroommates) %> 
-    console.log(a);   
-</script>
-
 <div class="ui center aligned container"  style="width: 40%;">
-<!-- <h2>Your Group</h2> -->
 
+<!-- <h2>Your Group</h2> -->
 <% if (flag == 1) { %>
   
   <div class="ui red message">
@@ -85,8 +80,8 @@
             </div>
         </div>
         <div class='text-center'>
-          <button class="ui huge white button" style="" onclick="check()">Check ELigibility of Roommate</button>
-          <button class="ui huge white button" type="submit" id="submitbutton" style="" disabled="true">Invite Roommate</button>
+          <!-- <button class="ui huge white button" style="" onclick="check()">Check ELigibility of Roommate</button> -->
+          <button class="ui huge white button" type="submit" id="submitbutton" style="">Invite Roommate</button>
       </div>
     </form>
   </div>
