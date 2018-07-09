@@ -35,7 +35,6 @@ module.exports.routes = {
   'post /login': 'UsersController.login',
   '/logout': 'UsersController.logout',
 
-
   /**
  * AllotmentController
  *
