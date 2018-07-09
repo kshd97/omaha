@@ -127,16 +127,14 @@ module.exports = {
 		if(req.method == "POST")
 		{
 			var newmate = req.param("newmateregno");
-
- 	
-
-            var flag = 1;
-            // for(var i = 0; i < studs.length; i++)
-            //     if(studs[i] == newmate)
-            //     {
-            //         flag = 1;
-            //         break;
-            //     }
+			var posroommates = req.session.posroommates;
+            var flag = 0;
+            for(var i = 0; i < posroommates.length; i++)
+                if(posroommates[i].registration_number == newmate)
+                {
+                    flag = 1;
+                    break;
+                }
 
 
             if(flag == 1)
@@ -191,7 +189,7 @@ module.exports = {
             }
             else
             {
-            	return res.view('fail', {message: "That person isn't eligible for RMR"});
+            	return res.view('fail', {message: "You cant send this person group request"});
             }    
 		}
 
