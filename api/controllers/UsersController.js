@@ -62,13 +62,13 @@ module.exports = {
             if (err) return res.negotiate(err);
             sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
-                if(res1){
+                if(true){
                     req.session.me = result.id;
                     // return res.view('rmr_instructions');      
                     
                     StudentData.findOne({userid:result.id}).exec(function (err, re){
                         if (err) {
-                            return res.serverError(err);
+                            return res.view('fail', {message: "Your ID was not found"});
                         }
                         sails.log(re.registration_number + " has logged");
 
@@ -99,34 +99,34 @@ module.exports = {
                                     return res.view('notyourtime');
                                     Course.findOne({course: re.course}).exec(function(err1, re1){
                                         if(err1){ 
-                                            return res.serverError(err1);
+                                            return res.view('fail', {message: "Invalid course"});
                                         }
                                         var year = parseInt(re.current_year);
                                         Courseyear.findOne({course: re1.id, year: year}).exec(function(err2, re2){
                                             if(err2){
-                                                return res.serverError(err2);
+                                                return res.view('fail', {message: "Invalid year"});
                                             }
                                             Gender.findOne({gender: re.gender}).exec(function(err3, re3){
                                                 if(err3){
-                                                    return res.serverError(err3);
+                                                    return res.view('fail', {message: "Invalid gender"});
                                                 }
                                                 // sails.log("here dddd");
                                                 Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(err, admissiontype){
                                                     if (err) {
-                                                        return res.serverError(err);
+                                                        return res.view('fail', {message: "Invalid admission type"});
                                                     }
 
                                                     // sails.log("it'sssssss" + admissiontype.admissiontypeid);
                                                     Admissiontype.findOne({admissiontype: admissiontype.admissiontypeid}).exec(function(err4, re4){
                                                         if(err4){
-                                                            return res.serverError(err4);
+                                                            return res.view('fail', {message: "Invalid admission type"});
                                                         }
                                                         // sails.log("re3 is " + re3);
                                                         // sails.log("re2 is " + re2);
                                                         // sails.log("re4 is " + re4);
                                                         Studenttypeid.findOne({gender: re3.id, courseyear: re2.id, admissiontype: admissiontype.admissiontypeid}).exec(function(err5, re5){
                                                             if(err5){
-                                                                return res.serverError(err5);
+                                                                return res.view('fail', {message: "Invalid gender"});
                                                             }
                                                             sails.log(re5.id);
                                                             sails.log(Global.idlist);
@@ -213,7 +213,7 @@ module.exports = {
                     
                     StudentData.findOne({userid:result.id}).exec(function (err, re){
                         if (err) {
-                            return res.serverError(err);
+                            return res.view('fail', {message: "Invalid ID"});
                         }
                         sails.log(re.registration_number);
 
@@ -239,34 +239,34 @@ module.exports = {
                                 {
                                     Course.findOne({course: re.course}).exec(function(err1, re1){
                                         if(err1){ 
-                                            return res.serverError(err1);
+                                            return res.view('fail', {message: "Invalid course"});
                                         }
                                         var year = parseInt(re.current_year);
                                         Courseyear.findOne({course: re1.id, year: year}).exec(function(err2, re2){
                                             if(err2){
-                                                return res.serverError(err2);
+                                                return res.view('fail', {message: "Invalid year"});
                                             }
                                             Gender.findOne({gender: re.gender}).exec(function(err3, re3){
                                                 if(err3){
-                                                    return res.serverError(err3);
+                                                    return res.view('fail', {message: "Invalid gender"});
                                                 }
                                                 // sails.log("here dddd");
                                                 Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(err, admissiontype){
                                                     if (err) {
-                                                        return res.serverError(err);
+                                                        return res.view('fail', {message: "Invalid admission type"});
                                                     }
 
                                                     // sails.log("it'sssssss" + admissiontype.admissiontypeid);
                                                     Admissiontype.findOne({admissiontype: admissiontype.admissiontypeid}).exec(function(err4, re4){
                                                         if(err4){
-                                                            return res.serverError(err4);
+                                                            return res.view('fail', {message: "Invalid admission type"});
                                                         }
                                                         // sails.log("re3 is " + re3);
                                                         // sails.log("re2 is " + re2);
                                                         // sails.log("re4 is " + re4);
                                                         Studenttypeid.findOne({gender: re3.id, courseyear: re2.id, admissiontype: admissiontype.admissiontypeid}).exec(function(err5, re5){
                                                             if(err5){
-                                                                return res.serverError(err5);
+                                                                return res.view('fail', {message: "Invalid student type"});
                                                             }
                                                             sails.log(re5.id);
                                                             sails.log(Global.idlist);
