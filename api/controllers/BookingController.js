@@ -736,7 +736,7 @@ mygroup: function(req,res){
 				  						inclause = inclause +"'"+ regnos[regnos.length-1].reg_no + "')";
 				  						var query2 = "SELECT name, registration_number from studentdata where registration_number in "+inclause+" and registration_number!='"+result.registration_number+"'";
 
-											req.session.posroommates=posroommates;
+											// req.session.posroommates=posroommates;
 											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
 												var rms =[];
 
@@ -780,7 +780,7 @@ mygroup: function(req,res){
 				});
 			});
 		});
-	});	
+	// });	
 	}
 	else
 		return res.redirect('/');
