@@ -11,17 +11,17 @@ module.exports = {
        	sails.log("HRIHGI"); 
 		Gender.find().exec(function(err, allgen){
 			if(err){
-				return res.serverError(err);
+				// return res.serverError(err);
 			}
 			sails.log(allgen.length);
 			Courseyear.find().exec(function(err, allcou){
 				if(err){
-					return res.serverError(err);
+					// return res.serverError(err);
 				}
 				sails.log(allcou.length);
 				Admissiontype.find().exec(function(err, alladm){
 					if(err){
-						return res.serverError(err);
+						// return res.serverError(err);
 					}
 					for (var i = 0; i < allgen.length ; i++) {
 						for (var j = 0; j < allcou.length; j++) {
