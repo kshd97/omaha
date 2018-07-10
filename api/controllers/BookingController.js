@@ -720,7 +720,7 @@ mygroup: function(req,res){
 				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
 				  					inclause="(";
 				  					for (var i=0;i<studentlist.length-1;i++){
-				  						if(studentlist[i].registration_number == '811457')
+				  						// if(studentlist[i].registration_number == '811457')
 
 				  						inclause=inclause+"'"+studentlist[i].registration_number+"',";
 				  					}
@@ -736,7 +736,12 @@ mygroup: function(req,res){
 				  						inclause = inclause +"'"+ regnos[regnos.length-1].reg_no + "')";
 				  						var query2 = "SELECT name, registration_number from studentdata where registration_number in "+inclause+" and registration_number!='"+result.registration_number+"'";
 
-											// req.session.posroommates=posroommates;
+				  							// sails.log(query2);
+
+				  							StudentData.query(query2, [], function(err, posroommates) {
+				  								// sails.log(posroommates);
+
+											req.session.posroommates=posroommates; 
 											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
 												var rms =[];
 
@@ -771,6 +776,8 @@ mygroup: function(req,res){
 													});
 												}
 											});
+				  							});
+
 										});
 									});    
 								});

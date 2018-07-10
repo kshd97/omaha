@@ -122,12 +122,14 @@ module.exports = {
 			var posroommates = req.session.posroommates;
             var flag = 0;
             for(var i = 0; i < posroommates.length; i++)
+            {
+            	// sails.log("possible is" + posroommates[i].registration_number);
                 if(posroommates[i].registration_number == newmate)
                 {
                     flag = 1;
                     break;
                 }
-
+			}
 
             if(flag == 1)
             {
