@@ -60,7 +60,7 @@ module.exports = {
         var password = req.param('password'); 
         Users.findOne({username: req.param('username'),}).exec(function(err, result){
             if (err) return res.negotiate(err);
-            sails.log(result);
+            // sails.log(result);
             bcrypt.compare(password, result.password, function(err, res1) {
                 if(true){
                     req.session.me = result.id;
@@ -70,7 +70,7 @@ module.exports = {
                         if (err) {
                             return res.view('fail', {message: "Your ID was not found"});
                         }
-                        sails.log(re.registration_number + " has logged");
+                        // sails.log(re.registration_number + " has logged");
 
                         var fs = require("fs");
                         var data = fs.readFileSync("rmr_eligible.csv");
@@ -91,7 +91,7 @@ module.exports = {
 
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
 
-                                sails.log(result11.admissiontypeid);
+                                // sails.log(result11.admissiontypeid);
                                 if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
                                     return res.view('rmr_instructions');
                                 else
@@ -128,12 +128,12 @@ module.exports = {
                                                             if(err5){
                                                                 return res.view('fail', {message: "Invalid gender"});
                                                             }
-                                                            sails.log(re5.id);
-                                                            sails.log(Global.idlist);
+                                                            // sails.log(re5.id);
+                                                            // sails.log(Global.idlist);
                                                             if(Global.idlist.indexOf(re5.id) != -1){   
-                                                                sails.log("Matched");
+                                                                // sails.log("Matched");
                                                                 req.session.me = result.id;
-                                                                sails.log(req.session.me);
+                                                                // sails.log(req.session.me);
                                                                 Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
                                                                     if(!result1.room && !result1.mess){
                                                                         Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
@@ -148,7 +148,7 @@ module.exports = {
                                                                     }
                                                                     else if(!result1.mess){
                                                                         Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                                                            sails.log(admin);
+                                                                            // sails.log(admin);
                                                                             if(admin == null){
                                                                                 return res.redirect('onlymess');
                                                                             }
@@ -215,7 +215,7 @@ module.exports = {
                         if (err) {
                             return res.view('fail', {message: "Invalid ID"});
                         }
-                        sails.log(re.registration_number);
+                        // sails.log(re.registration_number);
 
                         var fs = require("fs");
                         var data = fs.readFileSync("rmr_eligible.csv");
@@ -268,12 +268,12 @@ module.exports = {
                                                             if(err5){
                                                                 return res.view('fail', {message: "Invalid student type"});
                                                             }
-                                                            sails.log(re5.id);
-                                                            sails.log(Global.idlist);
+                                                            // sails.log(re5.id);
+                                                            // sails.log(Global.idlist);
                                                             if(Global.idlist.indexOf(re5.id) != -1){   
-                                                                sails.log("Matched");
+                                                                // sails.log("Matched");
                                                                 req.session.me = result.id;
-                                                                sails.log(req.session.me);
+                                                                // sails.log(req.session.me);
                                                                 Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
                                                                     if(!result1.room && !result1.mess){
                                                                         Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
@@ -288,7 +288,7 @@ module.exports = {
                                                                     }
                                                                     else if(!result1.mess){
                                                                         Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                                                            sails.log(admin);
+                                                                            // sails.log(admin);
                                                                             if(admin == null){
                                                                                 return res.redirect('onlymess');
                                                                             }
@@ -349,7 +349,7 @@ module.exports = {
             if (err) return res.negotiate(err);
             // If session refers to a user who no longer exists, still allow logout.
             if (!user) {
-                sails.log.verbose('Session refers to a user who no longer exists.');
+                // sails.log.verbose('Session refers to a user who no longer exists.');
                 return res.backToHomePage();
             }
             // Wipe out the session (log out)

@@ -168,7 +168,7 @@ module.exports = {
 				  										// sails.log(map);
 				  										// sails.log("nmnmnm");
 				  										map.forEach(function(value, key) {
-														    // console.log(key + " : " + JSON.stringify(value));
+														    console.log(key + " : " + JSON.stringify(value));
 														});
 														Rmr_student_groups_members.findOne({userid: uid}).exec(function(err12, group){
 															if(!group){
@@ -235,8 +235,8 @@ bookroom: function(req,res){
 	if(req.session.me)
 	{
 		// sails.log("I am here");
-		// console.log(req.roomnames);
-		// console.log(req.param('roomno'));
+		console.log(req.roomnames);
+		console.log(req.param('roomno'));
 		var userid = req.session.me;
 		var roomno = req.param('roomno');
 		var criteria = {};
@@ -433,7 +433,7 @@ bookmess:function(req,res){
 		var userid = req.session.me;
 		var criteria = {studentdata: userid};
 		var valuestoset = {mess: messid};
-		// console.log(messid);
+		console.log(messid);
 		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
 			if(err1) {
 				return res.serverError(err1);
@@ -681,21 +681,20 @@ mygroup: function(req,res){
 	if(req.session.me){
 		StudentData.findOne({userid:req.session.me}).exec(function (err, result){
 		  if (err) {
-		    return res.view('fail', {message: "Invalid student data. Contact administrator"});
+		  		return res.view('fail', {message: "Invalid student data. Contact Admin"});
 		  }
 		  Course.findOne({course: result.course}).exec(function(err1, result1){
 		  	if(err1){
-		  		
-		  		return res.view('fail', {message: "Invalid course. Contact administrator"});
+				return res.view('fail', {message: "Invalid course. Contact Admin"});
 		  	}
 		  	var year = parseInt(result.current_year);
 		  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
 			  	if(err2){
-			  		return res.view('fail', {message: "Invalid year. Contact administrator"});
+			  		return res.view('fail', {message: "Invalid year. Contact Admin"});
 			  	}
 			  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
 			  		if(err3){
-			  			return res.view('fail', {message: "Invalid gender. Contact administrator"});
+			  			return res.view('fail', {message: "Invalid gender. Contact Admin"});
 			  		}
 
 					// sails.log(result.registration_number);
@@ -703,7 +702,7 @@ mygroup: function(req,res){
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 		  			
 			  			// sails.log(resulttype + ' is the type');
-
+			  			var resulttype1=resulttype.admissiontypeid;
 				  		if(resulttype.admissiontypeid == 1)
 				  			resulttype = 'JEE';
 				  		else
@@ -711,47 +710,74 @@ mygroup: function(req,res){
 
 				  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
 				  			if(err4){
-				  				return res.view('fail', {message: "Invalid admission type. Contact administrator"});
+				  				return res.view('fail', {message: "Invalid admission type. Contact Admin"});
 				  			}
 				  			
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
 				  				if(err5){
-						  			return res.view('fail', {message: "Invalid student category. Contact administrator"});
+						  			return res.view('fail', {message: "Invalid student type. Contact Admin"});
 						  		}
 				  				// sails.log(result5.id);
-								Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
-									var rms =[];
+				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
+				  					inclause="(";
+				  					for (var i=0;i<studentlist.length-1;i++){
+				  						if(studentlist[i].registration_number == '811457')
+				  							// sails.log('Found it');
+				  						inclause=inclause+"'"+studentlist[i].registration_number+"',";
+				  					}
+				  					inclause = inclause + "'"+studentlist[studentlist.length-1].registration_number + "')";
+				  					var query1 = "SELECT reg_no from type_of_admission WHERE admissiontypeid=" + resulttype1 + " AND reg_no IN "+ inclause;
+				  					// sails.log(query1);
+				  					Type_of_admission.query(query1,[],function(err21,regnos) {
+				  						inclause="(";
+				  						for (var i=0;i<regnos.length-1;i++){
 
-									if(admin == undefined)
-									{
-										var names = "NO groups yet.";
-										// sails.log("no group");
-										return res.view('my_group',{names: names, flag: 1});	
-									}
-									else
-									{
-										Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
-											if(err){
-												return res.view('fail', {message: "Could not find roommates. Contact administrator"});
-											}
-											for (var i = 0; i < roommates.length; i++) {
-												rms[i] = roommates[i].userid;
-											}
-											inclause = "(";
-											for (var i = 0; i < rms.length - 1; i++) {
-												inclause = inclause + rms[i] + ","; 
-											}
-									  		inclause = inclause + rms[rms.length-1] + ")";
-											var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
-											StudentData.query(query,[], function(err, names){
-												//for sending names and ids to mess page
-												return res.view('my_group',{names: names, flag: 0});
-													
-											}); 
+				  							inclause=inclause+"'"+regnos[i].reg_no+"',";
+				  						}
+				  						inclause = inclause +"'"+ regnos[regnos.length-1].reg_no + "')";
+				  						var query2 = "SELECT name, registration_number from studentdata where registration_number in "+inclause+" and registration_number!='"+result.registration_number+"'";
+				  						// sails.log(query2);
+										StudentData.query(query2,[], function(err, posroommates){
+											// sails.log(posroommates);
+											req.session.posroommates=posroommates;
+											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
+												var rms =[];
+
+												if(admin == undefined)
+												{
+													var names = "NO groups yet.";
+													// sails.log(names);
+													return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
+												}
+												else
+												{
+													Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
+														Rmr_student_groups.findOne({group_id: admin.group_id}).exec(function(err90, result90){
+															inclause="(";
+															for (var i = 0; i < roommates.length - 1; i++) {
+																inclause = inclause +"'"+ roommates[i].userid + "',"; 
+															}
+													  		inclause = inclause +"'"+ roommates[roommates.length-1].userid + "')";
+													  		// sails.log(inclause);
+													  		// sails.log("qweeww");
+															var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
+															StudentData.query(query,[], function(err, names){
+																//for sending names and ids to mess page
+																if(admin.is_group_admin==1){
+																	// sails.log(result90.group_size + result3.gender + result.current_year);
+																	return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result.current_year});
+																}
+																else{
+																	return res.view('groupfornonadmins',{names: names});
+																}	
+															}); 
+														});
+													});
+												}
+											});
 										});
-									}
-
-								});    
+									});    
+								});
 							});
 						});
 			  		});
