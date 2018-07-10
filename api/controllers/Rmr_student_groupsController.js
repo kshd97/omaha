@@ -7,8 +7,6 @@
 
 module.exports = {
 	createGroup: function(req, res) {
-
-		// sails.log(req.session.me);
 	    if(req.method=="POST")
 	    {
 
@@ -19,7 +17,7 @@ module.exports = {
 			StudentData.findOne({userid: req.session.me}).exec(function(err5, result5) {
 				if(err5)
 				{
-					return res.serverError(err5);
+					return res.view('fail', {message: "Invalid student data. Contact WSDC"});
 				}
 				else
 				{
@@ -29,23 +27,17 @@ module.exports = {
 			        {
 			            if(err)
 			            {
-			                sails.log(err);
+			                // sails.log(err);
 			            }
 			            else
 			            {
-			                // res.redirect('/mygroup');
-			                // sails.log("1. " + grpid);
-			                // sails.log("2. " + result5.registration_number);
-			                // sails.log("3. " + sz);
-
-
 
 			                insert = "INSERT INTO rmr_student_groups_members (group_id, userid, is_group_admin) VALUES (" + grpid + "," + result5.registration_number + "," + sz + ")";
 			                Rmr_student_groups_members.query(insert, function(err1, record1)
 			                {
 			                	if(err1)
 			                	{
-			                		sails.log(err1)
+			                		// sails.log(err1)
 			                	}
 
                 				return res.redirect('/mygroup');	
@@ -61,13 +53,13 @@ module.exports = {
 
 		if(req.method == "POST")
 		{
-			sails.log("here deleting");
+			// sails.log("here deleting");
 			StudentData.findOne({userid: req.session.me}).exec(function(error1, result01) {
 
-				sails.log("group by " + result01.registration_number);
+				// sails.log("group by " + result01.registration_number);
 				Rmr_student_groups_members.findOne({userid: result01.registration_number}).exec(function(error2, result02) {
 
-					sails.log("ID is " + result02.group_id);
+					// sails.log("ID is " + result02.group_id);
 					var q = "DELETE FROM rmr_student_groups_members WHERE group_id = " + result02.group_id;
 					Rmr_student_groups_members.query(q, [], function(error3, result03) {
 
@@ -79,7 +71,7 @@ module.exports = {
 
 								if(error5)
 								{
-									return res.serverError(error5);
+									return res.view('fail', {message: "Could not delete. Contact admin"});
 								}
 								else
 								{
@@ -111,7 +103,7 @@ module.exports = {
 					{
 						if(err13)
 						{
-							return res.serverError(err13);
+							return res.view('fail', {message: "Could not remove. Contact admin"});
 						}
 						else
 						{
@@ -130,12 +122,14 @@ module.exports = {
 			var posroommates = req.session.posroommates;
             var flag = 0;
             for(var i = 0; i < posroommates.length; i++)
+            {
+            	// sails.log("possible is" + posroommates[i].registration_number);
                 if(posroommates[i].registration_number == newmate)
                 {
                     flag = 1;
                     break;
                 }
-
+			}
 
             if(flag == 1)
             {
@@ -146,26 +140,23 @@ module.exports = {
 			            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
 								if(err2)
 								{
-									return res.serverError(err2);
+									return res.view('fail', {message: "Invalid group members. Contact admin"});
 								}            		
 
 								if(result3 == undefined)
 								{
 									StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
-
-										sails.log("sender is " + result6.registration_number + " and receiver is " + newmate);
 										var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
 										
 										Rmr_student_requests.query(q, [], function(error7, result07) 
 										{
-											sails.log("resylt07 is " + result07);
 											if(result07.length == 0)
 											{
 												var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
 												Rmr_student_requests.query(insert, function(err3, record2) {
 													if(err3)
 													{
-														return res.serverError(err3);
+														return res.view('fail', {message: "Invalid request. Contact admin"});
 													}
 													return res.view('pass', {message: "Request sent"});
 												});
@@ -204,7 +195,7 @@ module.exports = {
 
 				Rmr_student_groups_members.findOne({userid: acceptfrom}).exec(function(err7, result7) {
 					Rmr_student_groups.findOne({group_id: result7.group_id}).exec(function(err1, result1){
-						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F' && result1.group_size<4)){
+						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F' && result1.group_size<5)){
 							var q = "UPDATE rmr_student_groups SET group_size = group_size + 1 WHERE group_id = " + result7.group_id;
 							Rmr_student_groups.query(q, [], function(err8, result8) {
 								StudentData.findOne({userid: req.session.me}).exec(function(err9, result9) {
@@ -212,7 +203,7 @@ module.exports = {
 									Rmr_student_groups_members.query(insert, function(err3, record2) {
 										if(err3)
 										{
-											return res.serverError(err3);
+											return res.view('fail', {message: "Invalid group members. Contact admin"});
 										}
 
 										var delQ = "DELETE FROM rmr_student_requests where receiver = " + result9.registration_number + " and sender = " + acceptfrom;
@@ -220,7 +211,7 @@ module.exports = {
 
 											if(err10)
 											{
-												return res.serverError(err10);
+												return res.view('fail', {message: "Invalid request. Contact admin"});
 											}
 											else
 											{
@@ -250,14 +241,14 @@ module.exports = {
 			StudentData.findOne({userid: uid}).exec(function(err0, result0) {
 				Rmr_student_groups_members.findOne({userid: result0.registration_number}).exec(function(err, result){
 					if (err) {
-				    	return res.serverError(err);
+						return res.view('fail', {message: "Invalid received requests. Contact admin"});
 				  	}
 				  	if(result){
 				  		Rmr_student_groups.findOne({group_id: result.group_id}).exec(function(err, result1){
 				  			if(result1){
 				  				var query = "SELECT * from Rmr_student_groups_members where group_id = " + result1.group_id
 				  				Rmr_student_groups_members.query(query, [], function(err, result2){
-				  					sails.log(result2);
+				  					// sails.log(result2);
 				  					if(!result2){
 				  						group_members = null
 				  					}
@@ -274,7 +265,7 @@ module.exports = {
 				  		Rmr_student_requests.query(admTypeQuery, [], function(err4, result4) {
 
 				  			if(err4)
-				  					return res.serverError(err4);
+				  					return res.view('fail', {message: "Invalid received requests. Contact admin"});
 				  			
 				  			if(result4.length != 0)
 				  			{
