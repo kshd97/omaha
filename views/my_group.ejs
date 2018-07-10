@@ -1,7 +1,6 @@
-
 <div class="ui center aligned container"  style="width: 40%;">
-<!-- <h2>Your Group</h2> -->
 
+<!-- <h2>Your Group</h2> -->
 <% if (flag == 1) { %>
   
   <div class="ui red message">
@@ -52,19 +51,18 @@
       <th><h4></h4></th>
     </thead>
     <tbody>
-  <% if (names.length == 0){ %>
-    Boom
-  <% } %>
   <% for(var i=0 ; i < names.length ; i++){ %>
       <tr>
       	<td>
   		<h4> <%= names[i].name %> </h4>
   		</td>
         <td>
+          <% if(names[i].registration_number != myreg_no) { %>
             <form class="form-horizontal" action = '/removeMate' method="POST">
               <input autocomplete="off" name='toremove' value="<%= names[i].registration_number %>" type="text" class="hidden" required>
               <button class="ui red button" type="submit" style="">Remove</button>
             </form>
+          <% } %>
         </td>
       </tr>
   <br><br>
@@ -72,19 +70,23 @@
     </tbody>
   </table>
 
-  <div class="ui center aligned container">
-    <form class="form-horizontal" action = '/inviteMate' method="POST">
-        <div class='form-group'>
-            <label class="control-label col-sm-3" for="invitingMate">Reg No:  </label>
-            <div class='col-sm-9'>
-                <input autocomplete="off" name='newmateregno' type="text" class="form-control" placeholder="Enter registration number" required autofocus>
-            </div>
+  <% if ((group_size < 4 && gender == 'F') || (gender == 'M' && group_size < 2 && current_year == 3) || (gender == 'M' && group_size < 3 && current_year == 2)) { %>
+
+    <div class="ui center aligned container">
+      <form class="form-horizontal" action = '/inviteMate' method="POST">
+          <div class='form-group'>
+              <label class="control-label col-sm-3" for="invitingMate">Reg No:  </label>
+              <div class='col-sm-9'>
+                  <input autocomplete="off" name='newmateregno' id="newmateregno" type="text" class="form-control" placeholder="Enter registration number" required autofocus>
+              </div>
+          </div>
+          <div class='text-center'>
+            <!-- <button class="ui huge white button" style="" onclick="check()">Check ELigibility of Roommate</button> -->
+            <button class="ui huge white button" type="submit" id="submitbutton" style="">Invite Roommate</button>
         </div>
-        <div class='text-center'>
-          <button class="ui huge white button" type="submit" style="">Invite Roommate</button>
-      </div>
-    </form>
-  </div>
+      </form>
+    </div>
+  <% } %>
 
 <% } %>
 </div>

@@ -701,7 +701,6 @@ mygroup: function(req,res){
 
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 		  			
-			  			// sails.log(resulttype + ' is the type');
 			  			var resulttype1=resulttype.admissiontypeid;
 				  		if(resulttype.admissiontypeid == 1)
 				  			resulttype = 'JEE';
@@ -717,17 +716,17 @@ mygroup: function(req,res){
 				  				if(err5){
 						  			return res.view('fail', {message: "Invalid student type. Contact Admin"});
 						  		}
-				  				// sails.log(result5.id);
+
 				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
 				  					inclause="(";
 				  					for (var i=0;i<studentlist.length-1;i++){
 				  						if(studentlist[i].registration_number == '811457')
-				  							// sails.log('Found it');
+
 				  						inclause=inclause+"'"+studentlist[i].registration_number+"',";
 				  					}
 				  					inclause = inclause + "'"+studentlist[studentlist.length-1].registration_number + "')";
 				  					var query1 = "SELECT reg_no from type_of_admission WHERE admissiontypeid=" + resulttype1 + " AND reg_no IN "+ inclause;
-				  					// sails.log(query1);
+
 				  					Type_of_admission.query(query1,[],function(err21,regnos) {
 				  						inclause="(";
 				  						for (var i=0;i<regnos.length-1;i++){
@@ -736,9 +735,7 @@ mygroup: function(req,res){
 				  						}
 				  						inclause = inclause +"'"+ regnos[regnos.length-1].reg_no + "')";
 				  						var query2 = "SELECT name, registration_number from studentdata where registration_number in "+inclause+" and registration_number!='"+result.registration_number+"'";
-				  						// sails.log(query2);
-										StudentData.query(query2,[], function(err, posroommates){
-											// sails.log(posroommates);
+
 											req.session.posroommates=posroommates;
 											Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err,admin){ ///add condition of if no group
 												var rms =[];
@@ -746,7 +743,7 @@ mygroup: function(req,res){
 												if(admin == undefined)
 												{
 													var names = "NO groups yet.";
-													// sails.log(names);
+
 													return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
 												}
 												else
@@ -758,13 +755,12 @@ mygroup: function(req,res){
 																inclause = inclause +"'"+ roommates[i].userid + "',"; 
 															}
 													  		inclause = inclause +"'"+ roommates[roommates.length-1].userid + "')";
-													  		// sails.log(inclause);
-													  		// sails.log("qweeww");
+
 															var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 															StudentData.query(query,[], function(err, names){
 																//for sending names and ids to mess page
 																if(admin.is_group_admin==1){
-																	// sails.log(result90.group_size + result3.gender + result.current_year);
+
 																	return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 0, group_size: result90.group_size, gender: result3.gender, current_year: result.current_year});
 																}
 																else{

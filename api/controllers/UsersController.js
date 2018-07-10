@@ -73,23 +73,25 @@ module.exports = {
                         // sails.log(re.registration_number + " has logged");
 
                         var fs = require("fs");
-                        var data = fs.readFileSync("rmr_eligible.csv");
-                        var studs = data.toString().split('\n');
+                        //var data = fs.readFileSync("rmr_eligible.csv");
+                        //var studs = data.toString().split('\n');
 
-                        var flag = 0;
-                        for(var i = 0; i < studs.length; i++)
-                        {
-                            if(studs[i] == re.registration_number)
-                            {
-                                flag = 1;
-                                break;
-                            }
-                        }
+                        // var flag = 0;
+                        // for(var i = 0; i < studs.length; i++)
+                        // {
+                        //     if(studs[i] == re.registration_number)
+                        //     {   
+                        //         sails.log("jijii");
+                        //         flag = 1;
+                        //         break;
+                        //     }
+                        // }
+                        var flag =1
 
                         if(flag == 1)
                         {
-
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
+                                sails.log(result11)
 
                                 // sails.log(result11.admissiontypeid);
                                 if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
@@ -217,17 +219,17 @@ module.exports = {
                         }
                         // sails.log(re.registration_number);
 
-                        var fs = require("fs");
-                        var data = fs.readFileSync("rmr_eligible.csv");
-                        var studs = data.toString().split('\n');
+                        // var fs = require("fs");
+                        // var data = fs.readFileSync("rmr_eligible.csv");
+                        // var studs = data.toString().split('\n');
 
-                        var flag = 0;
-                        for(var i = 0; i < studs.length; i++)
-                            if(studs[i] == re.registration_number)
-                            {
-                                flag = 1;
-                                break;
-                            }
+                        var flag = 1;
+                        // for(var i = 0; i < studs.length; i++)
+                        //     if(studs[i] == re.registration_number)
+                        //     {
+                        //         flag = 1;
+                        //         break;
+                        //     }
 
                         if(flag == 1)
                         {

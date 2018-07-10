@@ -144,13 +144,10 @@ module.exports = {
 								if(result3 == undefined)
 								{
 									StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
-
-										// sails.log("sender is " + result6.registration_number + " and receiver is " + newmate);
 										var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
 										
 										Rmr_student_requests.query(q, [], function(error7, result07) 
 										{
-											// sails.log("resylt07 is " + result07);
 											if(result07.length == 0)
 											{
 												var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
