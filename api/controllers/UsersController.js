@@ -91,6 +91,9 @@ module.exports = {
                         if(flag == 1)
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
+                                if(error11){
+                                    return res.view('fail',{message: "Reg no not in Type_of_admission"});
+                                }
                                 sails.log(result11)
 
                                 // sails.log(result11.admissiontypeid);

@@ -17,7 +17,7 @@ module.exports = {
 			StudentData.findOne({userid: req.session.me}).exec(function(err5, result5) {
 				if(err5)
 				{
-					return res.view('fail', {message: "Invalid student data. Contact admin"});
+					return res.view('fail', {message: "Invalid student data. Contact WSDC"});
 				}
 				else
 				{
