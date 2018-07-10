@@ -51,19 +51,18 @@
       <th><h4></h4></th>
     </thead>
     <tbody>
-  <% if (names.length == 0){ %>
-    Boom
-  <% } %>
   <% for(var i=0 ; i < names.length ; i++){ %>
       <tr>
       	<td>
   		<h4> <%= names[i].name %> </h4>
   		</td>
         <td>
+          <% if(names[i].registration_number != myreg_no) { %>
             <form class="form-horizontal" action = '/removeMate' method="POST">
               <input autocomplete="off" name='toremove' value="<%= names[i].registration_number %>" type="text" class="hidden" required>
               <button class="ui red button" type="submit" style="">Remove</button>
             </form>
+          <% } %>
         </td>
       </tr>
   <br><br>
@@ -71,7 +70,7 @@
     </tbody>
   </table>
 
-  <% if ((group_size < 4 && gender == 'F') || (gender == 'M' && group_size == 2 && (current_year == 3 || current_year == 2))) { %>
+  <% if ((group_size < 4 && gender == 'F') || (gender == 'M' && group_size < 2 && current_year == 3) || (gender == 'M' && group_size < 3 && current_year == 2)) { %>
 
     <div class="ui center aligned container">
       <form class="form-horizontal" action = '/inviteMate' method="POST">
@@ -91,21 +90,3 @@
 
 <% } %>
 </div>
-<script>
-  function check() {
-    var posroommates = a;
-    var regno = document.getElementById("newmateregno");
-    var flag = 0;
-    console.die(posroommates);
-    for (var i = 0; i < posroommates.length; i++) {
-      if(posroommates[i] == regno){
-        flag = 1;
-        submit = document.getElementById("submitbutton");
-        submit.disabled = "false";
-      }
-    }
-    if(flag == 0){
-      alert("Roommate chosen isn't eligible");
-    }
-  }
-</script>
