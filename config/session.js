@@ -11,7 +11,8 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
-
+ 
+ 
 module.exports.session = {
 
   /***************************************************************************
@@ -37,19 +38,19 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // cookie: {
+  cookie: {
   //   // Cookie expiration in milliseconds.
   //   // For example, use 24 * 60 * 60 * 1000 to make sessions expire in 24 hours.
   //   // Default is null, making it a browser cookie, so the session will
   //   // last only for as long as the browser is open.
-  //   maxAge: null,
+     maxAge: 24*60*60*1000
   //   // Path that the cookie is valid for.
   //   path: '/',
   //   // Should the session cookie be HTTP-only? (See https://www.owasp.org/index.php/HttpOnly)
   //   httpOnly: true,
   //   // Should the session cookie be secure? (only valid for HTTPS sites)
   //   secure: false
-  // },
+  },
 
   /***************************************************************************
   *                                                                          *

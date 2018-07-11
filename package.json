@@ -8,9 +8,15 @@
     "array-unique": "^0.3.2",
     "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
+<<<<<<< HEAD
     "connect-mongo": "1.1.0",
+=======
+    "connect-memcached": "^1.0.0",
+    "connect-mysql": "^2.1.7",
+>>>>>>> 555b5071a5034a1981afc0bfd70435ffe5d59a6a
     "connect-redis": "^3.3.3",
     "ejs": "2.3.4",
+    "express-mysql-session": "^2.0.0",
     "express-session": "^1.15.6",
     "find-process": "^1.1.0",
     "grunt": "1.0.1",

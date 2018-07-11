@@ -679,6 +679,8 @@ else{
 
 mygroup: function(req,res){
 	if(req.session.me){
+		// sails.log(req.cookie.hey);
+		// sails.log("jhhj");
 		StudentData.findOne({userid:req.session.me}).exec(function (err, result){
 		  if (err) {
 		  		return res.view('fail', {message: "Invalid student data. Contact WSDC"});
