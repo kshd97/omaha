@@ -22,7 +22,13 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
   secret: '3bd341554650e6c47d065b195488680e',
-
+//  adapter: 'connect-mysql',
+ // config:{
+//	user: 'root',
+//	password: 'MartinLuther1080',
+//	database: 'omaha',
+ // },
+ /// table: 'sessions',
 
   /***************************************************************************
   *                                                                          *
@@ -57,7 +63,7 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  //adapter: 'connect-redis',
+  adapter: 'connect-redis',
 
   /***************************************************************************
   *                                                                          *
@@ -68,8 +74,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // host: 'localhost',
-  // port: 6379,
+ //  host: 'localhost',
+  // port: 8080,
   // ttl: <redis session TTL in seconds>,
   // db: 0,
   // pass: <redis auth password>,
@@ -87,8 +93,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // adapter: 'mongo',
-  // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
+ // adapter: 'connect-mongo',
+ // url: 'mongodb://localhost/omaha', // user, password and port optional
 
   /***************************************************************************
   *                                                                          *
