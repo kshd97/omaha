@@ -27,7 +27,7 @@ module.exports = {
 			        {
 			            if(err)
 			            {
-			                // sails.log(err);
+			               return res.view('fail', {message: "Invalid group"});
 			            }
 			            else
 			            {
@@ -37,9 +37,8 @@ module.exports = {
 			                {
 			                	if(err1)
 			                	{
-			                		// sails.log(err1)
+			                		return res.view('fail', {message: "Invalid group members"});
 			                	}
-
                 				return res.redirect('/mygroup');	
 			                });
 			            }
@@ -55,20 +54,20 @@ module.exports = {
 		{
 			// sails.log("here deleting");
 			StudentData.findOne({userid: req.session.me}).exec(function(error1, result01) {
+				if(error1) return res.view('fail', {message: "Invalid ID"});
 
 				// sails.log("group by " + result01.registration_number);
 				Rmr_student_groups_members.findOne({userid: result01.registration_number}).exec(function(error2, result02) {
-
+					if(error2) return res.view('fail', {message: "Invalid group"});
 					// sails.log("ID is " + result02.group_id);
 					var q = "DELETE FROM rmr_student_groups_members WHERE group_id = " + result02.group_id;
 					Rmr_student_groups_members.query(q, [], function(error3, result03) {
-
+						if(error3) return res.view('fail', {message: "Invalid group members"});
 						q = "DELETE FROM rmr_student_groups where group_id = " + result02.group_id;
 						Rmr_student_groups.query(q, [], function(error4, result04) {
-
-							q = "DELETE FROM rmr_student_requests where sender = " + result01.registration_number;
+							if(error4) return res.view('fail', {message: "Invalid group"});
+							q = "DEL4TE FROM rmr_student_requests where sender = " + result01.registration_number;
 							Rmr_student_requests.query(q, [], function(error5, result05) {
-
 								if(error5)
 								{
 									return res.view('fail', {message: "Could not delete. Contact admin"});
@@ -94,10 +93,10 @@ module.exports = {
 			var remmate = req.param("toremove");
 
 			Rmr_student_groups_members.findOne({userid: remmate}).exec(function(err11, result11) {
-
+				if(error11) return res.view('fail', {message: "Invalid group"});
 				var q = "UPDATE rmr_student_groups SET group_size = group_size - 1 WHERE group_id = " + result11.group_id;
 				Rmr_student_groups.query(q, [], function(err12, result12) {
-
+					if(error12) return res.view('fail', {message: "Invalid group"});
 					var delQ = "DELETE FROM rmr_student_groups_members where userid = " + remmate;
 					Rmr_student_requests.query(delQ, function(err13, result13) 
 					{
@@ -134,8 +133,9 @@ module.exports = {
             if(flag == 1)
             {
             	StudentData.findOne({registration_number: newmate}).exec(function(eee, re){
+            		if(eee) return res.view('fail', {message: "Invalid ID"});
 	    			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
-
+	    				if(error6) return res.view('fail', {message: "Invalid type of admission"});
 	    				if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result06.admissiontypeid == 1)){
 			            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
 								if(err2)
@@ -146,10 +146,12 @@ module.exports = {
 								if(result3 == undefined)
 								{
 									StudentData.findOne({userid: req.session.me}).exec(function(err6, result6) {
+										if(err6) return res.view('fail', {message: "Invalid ID"});
 										var q = "SELECT * FROM rmr_student_requests where sender = " + result6.registration_number + " AND receiver = " + newmate;
 										
 										Rmr_student_requests.query(q, [], function(error7, result07) 
 										{
+											if(error7) return res.view('fail', {message: "Invalid request"});
 											if(result07.length == 0)
 											{
 												var insert = "INSERT INTO rmr_student_requests (sender, receiver) VALUES (" + result6.registration_number + "," + newmate + ")";
