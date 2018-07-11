@@ -101,7 +101,7 @@ module.exports = {
 
                                 // sails.log(result11.admissiontypeid);
                                 if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
-                                    return res.view('rmr_instructions');
+                                    return res.view('rmr_instructions', {first_name: re.first_name, last_name: re.last_name});
                                 else
                                 {
                                     return res.view('fail', {message: "Not your time to login."});
@@ -244,7 +244,7 @@ module.exports = {
                         }
                         
                         if(result12.admissiontypeid == 1 || re.gender == "F")
-                            return res.view('rmr_instructions');                                   
+                            return res.view('rmr_instructions', {first_name: re.first_name, last_name: re.last_name});                                   
                         else
                         {
                             Course.findOne({course: re.course}).exec(function(err1, re1){
