@@ -28,6 +28,7 @@ module.exports.routes = {
   '/acceptInvite': 'Rmr_student_groupsController.acceptInvite',
   '/removeMate': 'Rmr_student_groupsController.removeMate',
   '/deleteGroup': 'Rmr_student_groupsController.deleteGroup',
+  '/addToDb': 'Rmr_student_groupsController.addToDb',
   '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
   // '/messbook/:messname': 'BookingController.bookmess',
 

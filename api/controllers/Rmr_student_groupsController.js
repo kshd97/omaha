@@ -286,5 +286,29 @@ module.exports = {
 		{
 			return res.view('fail', {message: "Login please"});
 		}
+	},
+
+	addToDb:function(req, res) {
+
+		if(req.method == "POST")
+		{
+			var regnumb = req.param('regnumb');
+			var categor = req.param('categor');
+
+			var inserting = "INSERT INTO type_of_admission (reg_no, admissiontypeid) VALUES ('" + regnumb + "'," + categor + ")";
+			Type_of_admission.query(inserting, [], function(errr, record200) {
+
+				if(errr)
+				{
+					res.view('fail', {message: "Already exists"});
+				}
+				else
+					return res.view('fail', {message: "Successfully added. Login again to continue"});
+			});
+		}	
+		else
+		{
+			return res.view('addToDb');
+		}	
 	}
 };

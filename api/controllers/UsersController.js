@@ -96,7 +96,7 @@ module.exports = {
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
                                 if(error11 || result11 == undefined){
-                                    return res.view('fail',{message: "Reg no not in Type_of_admission"});
+                                    return res.view('fail',{message: "Reg no not in Type_of_admission. To rectify, go to http://wsdc.nitw.ac.in:8080/addToDb"});
                                 }
 
                                 // sails.log(result11.admissiontypeid);
