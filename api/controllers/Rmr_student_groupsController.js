@@ -7,6 +7,7 @@
 
 module.exports = {
 	createGroup: function(req, res) {
+		if(req.session.me){
 	    if(req.method=="POST")
 	    {
 
@@ -46,9 +47,14 @@ module.exports = {
 				}
 			});	
 	    }	
+	}
+	else{
+		return res.redirect('/');
+	}
 	},
 
 	deleteGroup: function(req, res) {
+		if(req.session.me){
 
 		if(req.method == "POST")
 		{
@@ -83,10 +89,15 @@ module.exports = {
 				});
 			});
 		}
+	}
+	else{
+		return res.redirect('/');
+	}
 
 	},
 
 	removeMate: function(req, res) {
+	if(req.session.me){
 
 		if(req.method == "POST")
 		{
@@ -112,9 +123,14 @@ module.exports = {
 				});
 			});
 		}
+	}
+	else{
+		return res.redirect('/');
+	}
 	},
 
 	inviteMate: function(req, res) {
+		if(req.session.me){	
 		if(req.method == "POST")
 		{
 			var newmate = req.param("newmateregno");
@@ -187,10 +203,14 @@ module.exports = {
 		}
 
 		//return res.redirect('/mygroup');
+	}
+	else{
+		return res.redirect('/');
+	}
 	},
 
 	acceptInvite: function(req, res) {
-
+		if(req.session.me){
 		var acceptfrom = req.param("myMate");
 		StudentData.findOne({registration_number: acceptfrom}).exec(function(err10, result112){
 			Type_of_admission.findOne({reg_no: acceptfrom}).exec(function(err11,result11){
@@ -233,12 +253,17 @@ module.exports = {
 		});
 
 		// return res.redirect('/receivedrequests');
+	}
+	else
+	{
+		return res.redirect('/');
+	}
 	},
 
-	receivedrequests: function(req, res) {
-		var uid = req.session.me;		
+	receivedrequests: function(req, res) {		
 		if (req.session.me) 
 		{
+			var uid=req.session.me;
 
 			StudentData.findOne({userid: uid}).exec(function(err0, result0) {
 				Rmr_student_groups_members.findOne({userid: result0.registration_number}).exec(function(err, result){

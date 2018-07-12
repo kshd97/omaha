@@ -60,7 +60,7 @@ module.exports = {
         var password = req.param('password'); 
         var username = req.param('username');
         Users.findOne({username: username}).exec(function(err, result){
-            if (err) {
+            if (err || result == undefined) {
                 return res.view('fail', {message: "Your username was not found"});
              }
             // sails.log(result);
@@ -94,7 +94,7 @@ module.exports = {
                         if(flag == 1)
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
-                                if(error11){
+                                if(error11 || result11 == undefined){
                                     return res.view('fail',{message: "Reg no not in Type_of_admission"});
                                 }
 
@@ -210,10 +210,11 @@ module.exports = {
     },
 
     gotoDash: function(req, res) {
+	if(req.session.me){
 
         // return res.redirect('/dashboard');
         Users.findOne({id: req.session.me}).exec(function(err, result){
-            if(err){
+            if(err || result == undefined){
                 return res.view('fail', {message: "Users id not found"});
             }  
                     
@@ -238,7 +239,7 @@ module.exports = {
                 if(flag == 1)
                 {
                     Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error12, result12) {
-                        if(error12){
+                        if(error12 || result12 == undefined){
                             return res.view('fail', {message: "NO type of admission"});
                         }
                         
@@ -369,6 +370,10 @@ module.exports = {
                 // }
             // });
         });
+	}
+	else{
+	return res.redirect('/');
+	}
 
     },
 
