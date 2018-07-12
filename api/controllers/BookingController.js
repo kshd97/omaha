@@ -702,7 +702,7 @@ mygroup: function(req,res){
 					// sails.log(result.registration_number);
 
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
-				  		if(errr){
+				  		if(errr && resulttype == undefined){
 		  					return res.view('fail', {message: "Reg no not in type_of_admission. Contact WSDC"});
 			  			}
 			  			var resulttype1=resulttype.admissiontypeid;
