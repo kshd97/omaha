@@ -11,7 +11,8 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
-
+ 
+ 
 module.exports.session = {
 
   /***************************************************************************
