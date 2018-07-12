@@ -16,7 +16,7 @@ module.exports = {
 			var grpid = req.session.me + 99;
 
 			StudentData.findOne({userid: req.session.me}).exec(function(err5, result5) {
-				if(err5)
+				if(err5 || result5 ==undefined)
 				{
 					return res.view('fail', {message: "Invalid student data. Contact WSDC"});
 				}
@@ -60,11 +60,11 @@ module.exports = {
 		{
 			// sails.log("here deleting");
 			StudentData.findOne({userid: req.session.me}).exec(function(error1, result01) {
-				if(error1) return res.view('fail', {message: "Invalid ID"});
+				if(error1 || result01 ==undefined) return res.view('fail', {message: "Invalid ID"});
 
 				// sails.log("group by " + result01.registration_number);
 				Rmr_student_groups_members.findOne({userid: result01.registration_number}).exec(function(error2, result02) {
-					if(error2) return res.view('fail', {message: "Invalid group"});
+					if(error2 || result02  ==undefined) return res.view('fail', {message: "Invalid group"});
 					// sails.log("ID is " + result02.group_id);
 					var q = "DELETE FROM rmr_student_groups_members WHERE group_id = " + result02.group_id;
 					Rmr_student_groups_members.query(q, [], function(error3, result03) {
@@ -104,7 +104,7 @@ module.exports = {
 			var remmate = req.param("toremove");
 
 			Rmr_student_groups_members.findOne({userid: remmate}).exec(function(err11, result11) {
-				if(err11) return res.view('fail', {message: "Invalid group"});
+				if(err11 || result11  ==undefined ) return res.view('fail', {message: "Invalid group"});
 				var q = "UPDATE rmr_student_groups SET group_size = group_size - 1 WHERE group_id = " + result11.group_id;
 				Rmr_student_groups.query(q, [], function(err12, result12) {
 					if(err12) return res.view('fail', {message: "Invalid group"});
@@ -149,9 +149,9 @@ module.exports = {
             if(flag == 1)
             {
             	StudentData.findOne({registration_number: newmate}).exec(function(eee, re){
-            		if(eee) return res.view('fail', {message: "Invalid ID"});
+            		if(eee ||re ==undefined) return res.view('fail', {message: "Invalid ID.Contact WSDC"});
 	    			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
-	    				if(error6) return res.view('fail', {message: "Invalid type of admission"});
+	    				if(error6 ||result06 ==undefined ) return res.view('fail', {message: "Type-of admission does not contain reg no.Contact WSDC"});
 	    				if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result06.admissiontypeid == 1)){
 			            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
 								if(err2)
@@ -213,14 +213,32 @@ module.exports = {
 		if(req.session.me){
 		var acceptfrom = req.param("myMate");
 		StudentData.findOne({registration_number: acceptfrom}).exec(function(err10, result112){
+		 if(err10 || result112 ==undefined){
+                        return res.view('fail',{message:"Invalid student id of person sending req. Contact WSDC"});
+                        }
 			Type_of_admission.findOne({reg_no: acceptfrom}).exec(function(err11,result11){
+			 if(err11 || result11 ==undefined){
+                        return res.view('fail',{message:"Type of admission of person sending req. does not exist. Contact WSDC"});
+                        }
 
 				Rmr_student_groups_members.findOne({userid: acceptfrom}).exec(function(err7, result7) {
+				 if(err7 || result7 ==undefined){
+                        return res.view('fail',{message:"Invalid request.sender not in a group. Contact WSDC"});
+                        }
+
 					Rmr_student_groups.findOne({group_id: result7.group_id}).exec(function(err1, result1){
+					 if(err1 || result1 ==undefined){
+                        return res.view('fail',{message:"Invalid group of person sending req. Contact WSDC"});
+                        }
+
 						if((result112.current_year == 3 && result11.admissiontypeid == 1 && result1.group_size < 2 && result112.gender == 'M') || (result112.current_year == 2 && result11.admissiontypeid == 1 && result112.gender == 'M' && result1.group_size < 3) || (result112.gender == 'F' && result1.group_size<5)){
 							var q = "UPDATE rmr_student_groups SET group_size = group_size + 1 WHERE group_id = " + result7.group_id;
 							Rmr_student_groups.query(q, [], function(err8, result8) {
 								StudentData.findOne({userid: req.session.me}).exec(function(err9, result9) {
+ if(err9 || result9 ==undefined){
+                        return res.view('fail',{message:"Invalid student details. Contact WSDC"});
+                        }
+
 									var insert = "INSERT INTO rmr_student_groups_members (group_id, userid, is_group_admin) VALUES (" + result7.group_id + "," + result9.registration_number + "," + 0 + ")";
 									Rmr_student_groups_members.query(insert, function(err3, record2) {
 										if(err3)
@@ -265,7 +283,11 @@ module.exports = {
 		{
 			var uid=req.session.me;
 
-			StudentData.findOne({userid: uid}).exec(function(err0, result0) {
+			StudentData.findOne({userid: uid}).exec(function(err0, result0) { 
+			if(err0 || result0 ==undefined){
+                        return res.view('fail',{message:"Invalid student details. Contact WSDC"});
+                        }
+
 				Rmr_student_groups_members.findOne({userid: result0.registration_number}).exec(function(err, result){
 					if (err) {
 						return res.view('fail', {message: "Invalid received requests. Contact admin"});

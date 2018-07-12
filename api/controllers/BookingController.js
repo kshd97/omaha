@@ -682,20 +682,20 @@ mygroup: function(req,res){
 		// sails.log(req.cookie.hey);
 		// sails.log("jhhj");
 		StudentData.findOne({userid:req.session.me}).exec(function (err, result){
-		  if (err) {
+		  if (err || result ==undefined) {
 		  		return res.view('fail', {message: "Invalid student data. Contact WSDC"});
 		  }
 		  Course.findOne({course: result.course}).exec(function(err1, result1){
-		  	if(err1){
+		  	if(err1 || result1 ==undefined){
 				return res.view('fail', {message: "Invalid course. Contact WSDC"});
 		  	}
 		  	var year = parseInt(result.current_year);
 		  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
-			  	if(err2){
+			  	if(err2 || result2  ==undefined){
 			  		return res.view('fail', {message: "Invalid year. Contact WSDC"});
 			  	}
 			  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
-			  		if(err3){
+			  		if(err3 || result3 ==undefined){
 			  			return res.view('fail', {message: "Invalid gender. Contact WSDC"});
 			  		}
 
@@ -712,18 +712,18 @@ mygroup: function(req,res){
 				  			resulttype = 'DASA';
 
 				  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
-				  			if(err4){
+				  			if(err4 || result4 ==undefined ){
 				  				return res.view('fail', {message: "Invalid admission type. Contact WSDC"});
 				  			}
 				  			
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
-				  				if(err5){
+				  				if(err5 || result5 ==undefined ){
 						  			return res.view('fail', {message: "Invalid student type. Contact WSDC"});
 						  		}
 
 				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
-				  					if(err20){
-				  						return res.view('fail', {message: "Invalid student. Contact Admin"});
+				  					if(err20 || studentlist ==undefined ){
+				  						return res.view('fail', {message: "Invalid student roommates. Contact Admin"});
 				  					}
 				  					inclause="(";
 				  					for (var i=0;i<studentlist.length-1;i++){
@@ -735,7 +735,7 @@ mygroup: function(req,res){
 				  					var query1 = "SELECT reg_no from type_of_admission WHERE admissiontypeid=" + resulttype1 + " AND reg_no IN "+ inclause;
 
 				  					Type_of_admission.query(query1,[],function(err21,regnos) {
-				  						if(err21){
+				  						if(err21 || regnos ==undefined){
 				  							return res.view('fail', {message: "Possible roommates reg no not present in Type_of_admission. Contact WSDC"});
 				  						}
 				  						inclause="(";
@@ -748,7 +748,7 @@ mygroup: function(req,res){
 
 				  							StudentData.query(query2, [], function(err, posroommates) {
 				  								// sails.log(posroommates);
-				  								if(err){
+				  								if(err || posroommates ==undefined){
 				  									return res.view('fail', {message: "Invalid posroommates in studentdata. Contact WSDC"});
 				  								}
 												req.session.posroommates=posroommates; 
@@ -769,9 +769,11 @@ mygroup: function(req,res){
 														Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
 															if(err){
 																return res.view('fail', {message: "Invalid group id in Rmr_student_groups_members. Contact WSDC"});
-															}
+															}if(roommates ==undefined){
+return res.view('fail',{message:"Your group has been deleted.Please login again"});
+}
 															Rmr_student_groups.findOne({group_id: admin.group_id}).exec(function(err90, result90){
-																if(err90){
+																if(err90 || result90 ==undefined){
 																	return res.view('fail', {message: "Invalid group id in Rmr_student_groups. Contact WSDC"});
 																}
 																inclause="(";
@@ -782,7 +784,7 @@ mygroup: function(req,res){
 
 																var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 																StudentData.query(query,[], function(err, names){
-																	if(err){
+																	if(err ||names==undefined){
 																		return res.view('fail', {message: "Invalid group member names from studentdata. Contact WSDC"});
 																	}
 																	//for sending names and ids to mess page

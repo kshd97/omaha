@@ -59,7 +59,7 @@ module.exports = {
         var bcrypt = require('bcryptjs');
         var password = req.param('password'); 
         var username = req.param('username');
-        Users.findOne({username: username}).exec(function(err, result){
+        Users.findOne({ or: [{username: username},{email:username}]}).exec(function(err, result){
             if (err || result == undefined) {
                 return res.view('fail', {message: "Your username was not found"});
              }
@@ -70,7 +70,7 @@ module.exports = {
                     // return res.view('rmr_instructions');      
                     
                     StudentData.findOne({userid:result.id}).exec(function (err, re){
-                        if (err) {
+                        if (err || re==undefined) {
                             return res.view('fail', {message: "Your ID was not found"});
                         }
                         // sails.log(re.registration_number + " has logged");
@@ -89,7 +89,7 @@ module.exports = {
                         //         break;
                         //     }
                         // }
-                        var flag =1
+                        var flag =1;
 
                         if(flag == 1)
                         {
@@ -219,7 +219,7 @@ module.exports = {
             }  
                     
             StudentData.findOne({userid:result.id}).exec(function (err, re){
-                if (err) {
+                if (err || re ==undefined) {
                     return res.view('fail', {message: "Invalid ID"});
                 }
                 // sails.log(re.registration_number);
@@ -247,6 +247,7 @@ module.exports = {
                             return res.view('rmr_instructions', {first_name: re.name});                                   
                         else
                         {
+				return res.view('fail',{message:"Not your time to book"});
                             Course.findOne({course: re.course}).exec(function(err1, re1){
                                 if(err1){ 
                                     return res.view('fail', {message: "Invalid course"});
