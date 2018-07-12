@@ -95,13 +95,13 @@ module.exports = {
                         if(flag == 1)
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
-                                if(error11){
+                                if(error11 || result11 == undefined){
                                     return res.view('fail',{message: "Reg no not in Type_of_admission"});
                                 }
 
                                 // sails.log(result11.admissiontypeid);
                                 if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
-                                    return res.view('rmr_instructions',{first_name: re.first_name, last_name: re.last_name});
+                                    return res.view('rmr_instructions', {first_name: re.first_name, last_name: re.last_name});
                                 else
                                 {
                                     return res.view('fail', {message: "Not your time to login."});
