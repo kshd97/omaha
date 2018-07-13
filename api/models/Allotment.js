@@ -8,8 +8,8 @@
 module.exports = {
 
   attributes: {
-  		studentdata: {
-  			model: 'studentData'
+  		studentdata: { //this is reg no
+  			type:"string"
   		},
   		room: {
   			model: 'rooms',

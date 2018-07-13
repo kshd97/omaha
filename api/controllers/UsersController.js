@@ -73,6 +73,7 @@ module.exports = {
                         if (err || re==undefined) {
                             return res.view('fail', {message: "Your ID was not found"});
                         }
+                        req.session.registration_number = re.registration_number;
                         // sails.log(re.registration_number + " has logged");
 
                         //var fs = require("fs");
@@ -103,95 +104,96 @@ module.exports = {
                                     return res.view('rmr_instructions', {first_name: re.name});
                                 else
                                 {
-                                    return res.view('fail', {message: "Not your time to login."});
-                                    // Course.findOne({course: re.course}).exec(function(err1, re1){
-                                    //     if(err1){ 
-                                    //         return res.view('fail', {message: "Invalid course"});
-                                    //     }
-                                    //     var year = parseInt(re.current_year);
-                                    //     // Courseyear.findOne({course: re1.id, year: year}).exec(function(err2, re2){
-                                    //     //     if(err2){
-                                    //     //         return res.view('fail', {message: "Invalid year"});
-                                    //     //     }
-                                    //     //     // Gender.findOne({gender: re.gender}).exec(function(err3, re3){
-                                    //     //     //     if(err3){
-                                    //     //     //         return res.view('fail', {message: "Invalid gender"});
-                                    //     //     //     }
-                                    //     //     //     // sails.log("here dddd");
-                                    //     //     //     // Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(err, admissiontype){
-                                    //     //     //     //     if (err) {
-                                    //     //     //     //         return res.view('fail', {message: "Invalid admission type"});
-                                    //     //     //     //     }
+                                    //return res.view('fail', {message: "Not your time to login."});
+                                    Course.findOne({course: re.course}).exec(function(err1, re1){
+                                        if(err1){ 
+                                            return res.view('fail', {message: "Invalid course"});
+                                        }
+                                        var year = parseInt(re.current_year);
+                                        Courseyear.findOne({course: re1.id, year: year}).exec(function(err2, re2){
+                                            if(err2){
+                                                return res.view('fail', {message: "Invalid year"});
+                                            }
+                                            Gender.findOne({gender: re.gender}).exec(function(err3, re3){
+                                                if(err3){
+                                                    return res.view('fail', {message: "Invalid gender"});
+                                                }
+                                                sails.log("here dddd");
+                                                Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(err, admissiontype){
+                                                    if (err) {
+                                                        return res.view('fail', {message: "Invalid admission type"});
+                                                    }
 
-                                    //     //     //     //     // sails.log("it'sssssss" + admissiontype.admissiontypeid);
-                                    //     //     //     //     // Admissiontype.findOne({admissiontype: admissiontype.admissiontypeid}).exec(function(err4, re4){
-                                    //     //     //     //     //     if(err4){
-                                    //     //     //     //     //         return res.view('fail', {message: "Invalid admission type"});
-                                    //     //     //     //     //     }
-                                    //     //     //     //     //     // sails.log("re3 is " + re3);
-                                    //     //     //     //     //     // sails.log("re2 is " + re2);
-                                    //     //     //     //     //     // sails.log("re4 is " + re4);
-                                    //     //     //     //     //     // Studenttypeid.findOne({gender: re3.id, courseyear: re2.id, admissiontype: admissiontype.admissiontypeid}).exec(function(err5, re5){
-                                    //     //     //     //     //     //     if(err5){
-                                    //     //     //     //     //     //         return res.view('fail', {message: "Invalid gender"});
-                                    //     //     //     //     //     //     }
-                                    //     //     //     //     //     //     // sails.log(re5.id);
-                                    //     //     //     //     //     //     // sails.log(Global.idlist);
-                                    //     //     //     //     //     //     // if(Global.idlist.indexOf(re5.id) != -1){   
-                                    //     //     //     //     //     //     //     // sails.log("Matched");
-                                    //     //     //     //     //     //     //     req.session.me = result.id;
-                                    //     //     //     //     //     //     //     // sails.log(req.session.me);
-                                    //     //     //     //     //     //     //     Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
-                                    //     //     //     //     //     //     //         if(!result1.room && !result1.mess){
-                                    //     //     //     //     //     //     //             Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                    //     //     //     //     //     //     //                 if(!admin){
-                                    //     //     //     //     //     //     //                     return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
-                                    //     //     //     //     //     //     //                 }
-                                    //     //     //     //     //     //     //                 if(admin.is_group_admin == 1)
-                                    //     //     //     //     //     //     //                     return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
-                                    //     //     //     //     //     //     //                 else
-                                    //     //     //     //     //     //     //                     return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
-                                    //     //     //     //     //     //     //             });        
-                                    //     //     //     //     //     //     //         }
-                                    //     //     //     //     //     //     //         else if(!result1.mess){
-                                    //     //     //     //     //     //     //             Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                    //     //     //     //     //     //     //                 // sails.log(admin);
-                                    //     //     //     //     //     //     //                 if(admin == null){
-                                    //     //     //     //     //     //     //                     return res.redirect('onlymess');
-                                    //     //     //     //     //     //     //                 }
-                                    //     //     //     //     //     //     //                 else{
-                                    //     //     //     //     //     //     //                     if(admin.is_group_admin == 1)
-                                    //     //     //     //     //     //     //                         return res.redirect('onlymess');
-                                    //     //     //     //     //     //     //                     else
-                                    //     //     //     //     //     //     //                         return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
-                                    //     //     //     //     //     //     //                 }
-                                    //     //     //     //     //     //     //             });        
+                                                    sails.log("it'sssssss" + admissiontype.admissiontypeid);
+                                                    Admissiontype.findOne({admissiontype: admissiontype.admissiontypeid}).exec(function(err4, re4){
+                                                        if(err4){
+                                                            return res.view('fail', {message: "Invalid admission type"});
+                                                        }
+                                                        sails.log("re3 is " + re3);
+                                                        sails.log("re2 is " + re2);
+                                                        sails.log("re4 is " + re4);
+                                                        Studenttypeid.findOne({gender: re3.id, courseyear: re2.id, admissiontype: admissiontype.admissiontypeid}).exec(function(err5, re5){
+                                                            if(err5){
+                                                                return res.view('fail', {message: "Invalid gender"});
+                                                            }
+                                                            sails.log(re5.id);
+                                                            sails.log(Global.idlist);
+                                                            if(Global.idlist.indexOf(re5.id) != -1){   
+                                                                // sails.log("Matched");
+                                                                req.session.me = result.id;
+                                                                // sails.log(req.session.me);
+                                                                sails.log(result.id);
+                                                                Allotment.findOne({studentdata: re.registration_number}).exec(function(err, result1){
+                                                                    if(!result1.room && !result1.mess){
+                                                                        Rmr_student_groups_members.findOne({userid: re.registration_number}).exec(function(err,admin){
+                                                                            if(!admin){
+                                                                                return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                                                            }
+                                                                            if(admin.is_group_admin == 1)
+                                                                                return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
+                                                                            else
+                                                                                return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                        });        
+                                                                    }
+                                                                    else if(!result1.mess){
+                                                                        Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                                                            // sails.log(admin);
+                                                                            if(admin == null){
+                                                                                return res.redirect('onlymess');
+                                                                            }
+                                                                            else{
+                                                                                if(admin.is_group_admin == 1)
+                                                                                    return res.redirect('onlymess');
+                                                                                else
+                                                                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                            }
+                                                                        });        
 
-                                    //     //     //     //     //     //     //         }
-                                    //     //     //     //     //     //     //         else{
-                                    //     //     //     //     //     //     //             Rooms.findOne({id:result1.room}).exec(function(err,room){
-                                    //     //     //     //     //     //     //                 Mess.findOne({id:result1.mess}).exec(function(err,mess){
-                                    //     //     //     //     //     //     //                     StudentData.findOne({userid:result.id}).exec(function(err,details){
-                                    //     //     //     //     //     //     //                         Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
-                                    //     //     //     //     //     //     //                             Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
-                                    //     //     //     //     //     //     //                                 return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
-                                    //     //     //     //     //     //     //                             })
-                                    //     //     //     //     //     //     //                         });
-                                    //     //     //     //     //     //     //                     });
-                                    //     //     //     //     //     //     //                 });
-                                    //     //     //     //     //     //     //             }); 
-                                    //     //     //     //     //     //     //         }
-                                    //     //     //     //     //     //     //     });
-                                    //     //     //     //     //     //     // }
-                                    //     //     //     //     //     //     // else{
-                                    //     //     //     //     //     //     //     return res.view('fail', {message: "Not your time to book"});
-                                    //     //     //     //     //     //     // }
-                                    //     //     //     //     //     // });
-                                    //     //     //     //     // });
-                                    //     //     //     // });
-                                    //     //     // });
-                                    //     // });
-                                    // });
+                                                                    }
+                                                                    else{
+                                                                        Rooms.findOne({id:result1.room}).exec(function(err,room){
+                                                                            Mess.findOne({id:result1.mess}).exec(function(err,mess){
+                                                                                StudentData.findOne({userid:result.id}).exec(function(err,details){
+                                                                                    Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                                                                        Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                                                                            return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+                                                                                        })
+                                                                                    });
+                                                                                });
+                                                                            });
+                                                                        }); 
+                                                                    }
+                                                                });
+                                                            }
+                                                            else{
+                                                                return res.view('fail', {message: "Not your time to book"});
+                                                            }
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
                                 }
                             });
                         }
@@ -247,7 +249,7 @@ module.exports = {
                             return res.view('rmr_instructions', {first_name: re.name});                                   
                         else
                         {
-				return res.view('fail',{message:"Not your time to book"});
+				            //return res.view('fail',{message:"Not your time to book"});
                             Course.findOne({course: re.course}).exec(function(err1, re1){
                                 if(err1){ 
                                     return res.view('fail', {message: "Invalid course"});
