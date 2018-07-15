@@ -11,7 +11,7 @@ module.exports = {
 			var uid = req.session.me;
 			var unique = require('array-unique').immutable;
 			var HashMap = require('hashmap');
-			// sails.log(uid);
+			sails.log("HETTE"+uid);
 			StudentData.findOne({userid:uid}).exec(function (err, result){
 			  if (err) {
 			    return res.serverError(err);
@@ -35,6 +35,8 @@ module.exports = {
 				  			return res.serverError(err3);
 				  		}
 
+				  		sails.log("Kuch nahi chal rha");
+
 
 				  		Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
 			  			// sails.log(resulttype.admissiontypeid + ' is the type');
@@ -57,7 +59,7 @@ module.exports = {
 				  					// sails.log('this is err5');
 						  			return res.serverError(err5);
 						  		}
-				  				// sails.log('not err5' + result5.id);
+				  				sails.log('not err5' + result5.id);
 				  				req.session.studenttypeid = result5.id;
 				  				Hosteltypeid.find({studenttypeid: result5.id}).exec(function(err6, result6){
 				  					if(err6){
@@ -79,11 +81,12 @@ module.exports = {
 				  					}
 				  					inclause = inclause + hostelfloors[hostelfloors.length-1] + ")";
 				  					var query = "SELECT * from hostelfloors where id in" + inclause;
+				  					sails.log(query);
 				  					Hostelfloors.query(query, [], function(err7, result7){
 				  						if(err7){
 				  							return res.serverError(err7);
 				  						}
-				  						// sails.log(result7);
+				  						sails.log(result7);
 				  						var hostelids = []; 
 				  						for (var i = 0; i < result7.length; i++) {
 				  							hostelids[i] = result7[i].hostel;
@@ -219,7 +222,7 @@ deleteshit: function(req, res){
 	Global.idlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
-		valuestoset = {allotted: 0, noofbedsleft: 1, capacity: 1};
+		valuestoset = {allotted: 0};
 		Rooms.update(criteria, valuestoset).exec(function(err, result){
 			valuestoset = {allotted : 0};
 			Mess.update(criteria, valuestoset).exec(function(err, result){
@@ -234,7 +237,7 @@ bookroom: function(req,res){
 
 	if(req.session.me)
 	{
-		// sails.log("I am here");
+		sails.log("I am here");
 		console.log(req.roomnames);
 		console.log(req.param('roomno'));
 		var userid = req.session.me;
@@ -245,7 +248,7 @@ bookroom: function(req,res){
 	        if (err || re==undefined) {
 	            return res.view('fail', {message: "Your ID was not found"});
 	        }
-		// sails.log("DAMN");
+		sails.log("DAMN");
 		// sails.log(Global.roomlist);	
 		// var str = "hsgf"
 			if(Global.roomlist.indexOf(roomno) != -1){

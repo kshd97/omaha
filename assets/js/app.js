@@ -59,6 +59,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
   	  $scope.hostelfloor = $resource('/hostelfloors/:id').query({hostel:result[0].id , block: final.block, floor: final.floor})
       console.log($scope.hostelfloor);
       $scope.hostelfloor.$promise.then(function(result1){
+        console.log("hgsdhgjhgs");
         console.log(result1[0].id);  
         $scope.roomlist = $resource('/rooms').query({hostelfloors: result1[0].id, allotted: 0, conditionid: 1});
         $scope.roomlist.$promise.then(function(result2){
