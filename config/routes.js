@@ -10,7 +10,7 @@ module.exports.routes = {
   '/mess': { view:'choosemess'},
   //'/students': { view:'students'},
 
-  '/gotoDash': 'UsersController.gotoDash',
+  // '/gotoDash': 'UsersController.gotoDash',
   '/admin': 'BookingController.startallot',
   '/start/:id': 'BookingController.startallot',
   '/stop/:id': 'BookingController.stopallot',

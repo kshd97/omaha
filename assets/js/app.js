@@ -65,7 +65,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
           for (var i = 0; i < result2.length; i++) {
             console.log(result2[i].roomno);
             //var single = {id: result2[i].id, roomno: result2[i].roomno};
-            if(result2[i].noofbedsleft>=group_size){
+            if(result2[i].noofbedsleft>=group_size){  
               roomEntries.unshift(result2[i].roomno);
               // for (var i = 0; i < 10 ; i++) {
               //    roomEntries.unshift("1100");            
