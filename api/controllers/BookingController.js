@@ -13,58 +13,49 @@ module.exports = {
 			var HashMap = require('hashmap');
 			sails.log("HETTE"+uid);
 			StudentData.findOne({userid:uid}).exec(function (err, result){
-			  if (err) {
-			    return res.serverError(err);
+			  if (err || result == undefined) {
+			    return res.view('fail', {message: "Invalid ID"});
 			  }
 			  // sails.log(result.current_year);
 			  // sails.log(result.course);
 			  Course.findOne({course: result.course}).exec(function(err1, result1){
-			  	if(err1){
-			  		
-			  		return res.serverError(err1);
+			  	if(err1 || result1 == undefined){
+			  		return res.view('fail', {message: "Invalid course"});
 			  	}
 			  	// sails.log(result1);
 			  	var year = parseInt(result.current_year);
 			  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
-				  	if(err2){
-				  		return res.serverError(err2);
+				  	if(err2 || result2 == undefined){
+				  		return res.view('fail', {message: "Invalid course year"});
 				  	}
 				  	// sails.log(result2);
 				  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
-				  		if(err3){
-				  			return res.serverError(err3);
+				  		if(err3 || result3 == undefined){
+				  			return res.view('fail', {message: "Invalid gender"});
 				  		}
 
-				  		sails.log("Kuch nahi chal rha");
-
-
 				  		Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
-			  			// sails.log(resulttype.admissiontypeid + ' is the type');
+							if(errr || resulttype == undefined){
+				  				return res.view('fail', {message: "Invalid type of admission"});
+				  			}				  			
 
-			  			if(resulttype.admissiontypeid == 1)
-			  				resulttype = "JEE";
-			  			else
-			  				resulttype = "DASA";
+				  			if(resulttype.admissiontypeid == 1)
+				  				resulttype = "JEE";
+				  			else
+				  				resulttype = "DASA";
 
 				  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
-				  			if(err4){ 
-				  				return res.serverError(err4);
+				  			if(err4 || result4 == undefined){ 
+				  				return res.view('fail', {message: "Invalid admissiontype"});
 				  			}
-
-				  			// sails.log('admissiontype is ' + result4 + "and resulttype is " + resulttype);
-				  		
-
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
-				  				if(err5){
-				  					// sails.log('this is err5');
-						  			return res.serverError(err5);
+				  				if(err5 || result5 == undefined){
+						  			return res.view('fail', {message: "Invalid studenttypeid"});
 						  		}
-				  				sails.log('not err5' + result5.id);
-				  				req.session.studenttypeid = result5.id;
+						  		req.session.studenttypeid = result5.id;
 				  				Hosteltypeid.find({studenttypeid: result5.id}).exec(function(err6, result6){
-				  					if(err6){
-				  						// sails.log('this is err6');
-				  						return res.serverError(err6);
+				  					if(err6 || result6 == undefined){
+				  						return res.view('fail', {message: "Invalid hostel type"});
 				  					}
 				  					// sails.log('result6 is ' + result6);
 				  					var hostelfloors = [];
@@ -81,12 +72,10 @@ module.exports = {
 				  					}
 				  					inclause = inclause + hostelfloors[hostelfloors.length-1] + ")";
 				  					var query = "SELECT * from hostelfloors where id in" + inclause;
-				  					sails.log(query);
 				  					Hostelfloors.query(query, [], function(err7, result7){
-				  						if(err7){
-				  							return res.serverError(err7);
+				  						if(err7 || result7 == undefined){
+				  							return res.view('fail', {message: "Invalid hostel floors"});
 				  						}
-				  						sails.log(result7);
 				  						var hostelids = []; 
 				  						for (var i = 0; i < result7.length; i++) {
 				  							hostelids[i] = result7[i].hostel;
@@ -101,8 +90,8 @@ module.exports = {
 				  						inclause = inclause + hostelids[hostelids.length-1] + ")";
 				  						query = "SELECT * from hostel where id in" + inclause;
 				  						Hostel.query(query, [], function(err8, result8){
-				  							if(err8){
-				  								return res.serverError(err8)
+				  							if(err8 || result8 == undefined){
+				  								return res.view('fail', {message: "Invalid type of admissiontype"});
 				  							}
 				  							// sails.log(result8);
 				  							var hostelnames = [];
@@ -118,7 +107,9 @@ module.exports = {
 					  						inclause = inclause + a[a.length-1] + ")";
 				  							query = "SELECT * from hostelfloors where hostel in "+ inclause;
 				  							Hostelfloors.query(query, [], function(err9, result9){
-				  								// sails.log(result9);
+				  								if(err9 || result9 == undefined){
+				  									return res.view('fail', {message: "Invalid hostel floors"});
+				  								}
 				  								var b = [];
 				  								for (var i = 0; i < result9.length; i++) {
 				  									b[i] = result9[i].id;
@@ -130,7 +121,9 @@ module.exports = {
 				  								inclause = inclause + b[b.length-1] + ")";
 				  								query = "SELECT hostelfloors from hosteltypeid where hostelfloors in "+ inclause + "and studenttypeid = "+ result5.id;
 				  								Hosteltypeid.query(query, [], function(err10, result10){
-				  									// sails.log(result10);
+				  									if(err || result10 == undefined){
+				  										return res.view('fail', {message: "Invalid hostel type"});
+				  									}
 				  									var finalhostelfloors = [];
 				  									for (var i = 0; i < result10.length; i++) {
 				  										finalhostelfloors[i] = result10[i].hostelfloors;
@@ -145,6 +138,9 @@ module.exports = {
 				  									Hostelfloors.query(query, [], function(err11, result11){
 				  										// sails.log(result11);
 				  										// var arr2d = [][];
+				  										if(err || result11 == undefined){
+				  											return res.view('fail', {message: "Invalid hostel floors"});
+				  										}
 				  										var map = new HashMap();
 				  										for (var i = 0; i < result11.length; i++) {
 				  											if(!map.get(result11[i].name)){
@@ -168,24 +164,24 @@ module.exports = {
 				  												// sails.log(map);
 				  											}
 				  										}
-				  										// sails.log(map);
-				  										// sails.log("nmnmnm");
 				  										map.forEach(function(value, key) {
 														    console.log(key + " : " + JSON.stringify(value));
 														});
 														Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err12, group){
+															if(err12){
+																return res.view('fail', {message: "Invalid group members"});
+															}
 															if(!group){
-																// sails.log("zzzzzz");
-
 																return res.view('displayhostels', {
 						    										hostels: map,
 						    										req: req,
 						    										group_size: 1,
 									  							});
 															}
-															// sails.log("llllllll");
 															Rmr_student_groups.findOne({group_id: group.group_id}).exec(function(err13, group1){
-																// sails.log("qqqq");
+																if(err12){
+																	return res.view('fail', {message: "Invalid group members"});
+																}
 																return res.view('displayhostels', {
 						    										hostels: map,
 						    										req: req,
@@ -237,9 +233,6 @@ bookroom: function(req,res){
 
 	if(req.session.me)
 	{
-		sails.log("I am here");
-		console.log(req.roomnames);
-		console.log(req.param('roomno'));
 		var userid = req.session.me;
 		var roomno = req.param('roomno');
 		var criteria = {};
@@ -248,7 +241,6 @@ bookroom: function(req,res){
 	        if (err || re==undefined) {
 	            return res.view('fail', {message: "Your ID was not found"});
 	        }
-		sails.log("DAMN");
 		// sails.log(Global.roomlist);	
 		// var str = "hsgf"
 			if(Global.roomlist.indexOf(roomno) != -1){
@@ -256,13 +248,31 @@ bookroom: function(req,res){
 				return res.redirect('/bookroom');
 			}
 			Allotment.findOne({studentdata:re.registration_number}).exec(function(err,alreadybookcheck){
+				if (err || alreadybookcheck == undefined) {
+		            return res.view('fail', {message: "Not in Allotment"});
+		        }
 				if(alreadybookcheck.room != null){
 					//user already booked a room and tries to access through url
 					Rooms.findOne({id:alreadybookcheck.room}).exec(function(err,room){
+						if (err || room == undefined) {
+				            return res.view('fail', {message: "Not a valid room."});
+				        }
 	                    Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
+	                    	if (err || mess == undefined) {
+					            return res.view('fail', {message: "Not a valid mess."});
+					        }
 	                        StudentData.findOne({userid:userid}).exec(function(err,details){
+	                        	if (err || details == undefined) {
+						            return res.view('fail', {message: "Your ID was not found"});
+						        }
 	                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+	                            	if (err || hostelfloor == undefined) {
+							            return res.view('fail', {message: "Invalid hostel floor"});
+							        }
 	                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+	                                	if (err || hostel == undefined) {
+								            return res.view('fail', {message: "Invalid hostel"});
+								        }
 	                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
 	                                })
 	                            });
@@ -272,6 +282,9 @@ bookroom: function(req,res){
 				}
 				else{
 					Rooms.findOne({roomno: roomno}).exec(function(err, result){
+						if (err || result == undefined) {
+				            return res.view('fail', {message: "Invalid Room"});
+				        }
 						if(result.allotted == 1){
 							// sails.log("Room is ALREADY BOOKED,book another");
 							return res.redirect("/bookroom");
@@ -281,14 +294,14 @@ bookroom: function(req,res){
 						}
 						valuestoset = {room: result.id};
 						Rmr_student_groups_members.findOne({userid: re.registration_number}).exec(function(err,groupid){
-							if(err){
-								return res.serverError(err);
+							if(err || groupid == undefined){
+								return res.view('fail', {message: "Invalid Group members"});
 							}
 							if(groupid){
 								var rms =[];
 								Rmr_student_groups_members.find({group_id: groupid.group_id}).exec(function(err, roommates){
-									if(err){
-										return res.serverError(err);
+									if(err || roommates == undefined){
+										return res.view('fail', {message: "Invalid roommate ids"});
 									}
 									for (var i = 0; i < roommates.length; i++) {
 										rms[i] = roommates[i].userid;
@@ -299,14 +312,16 @@ bookroom: function(req,res){
 									}
 							  		inclause = inclause +"'"+ rms[rms.length-1] + "')";
 									var query = "SELECT name,registration_number from studentdata where registration_number in "+inclause;
-									sails.log(query);
 									StudentData.query(query,[], function(err, names){
 										//for sending names and ids to mess page
+										if(err || names == undefined){
+											return res.view('fail', {message: "Roommate names dont exist"});
+										}
 										for (var i = 0; i < roommates.length; i++) { 
 											criteria = {studentdata: roommates[i].userid};
 											Allotment.update(criteria, valuestoset).exec(function(err, result1){
-												if(err){
-													return res.serverError(err1);
+												if(err || result1 == undefined){
+													return res.view('fail', {message: "Allotment couldn't update"});
 												}
 											});
 										}	
@@ -318,16 +333,15 @@ bookroom: function(req,res){
 
 										result.save(function(err){
 											if(err){
-												return res.serverError(err);
+												return res.view('fail', {message: "Couldn't save room."});
 											}
 											sails.sockets.broadcast('rooms', 'new_entry', roomno);
 										});
 										Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
 										Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
-										  	if(err3){
-												return res.serverError(err3);
+										  	if(err3 || result3 == undefined){
+												return res.view('fail', {message: "Invalid mess type id."});
 											}
-											// sails.log(result3);	
 											var messesid=[];
 											for (var i = 0; i < result3.length; i++) {
 										  		messesid[i] = result3[i].mess;
@@ -340,11 +354,9 @@ bookroom: function(req,res){
 									  		inclause = inclause + messesid[messesid.length-1] + ")";
 									  		query = "SELECT * from mess where id in" + inclause;
 									  		Mess.query(query, [], function(err4, result4){
-									  			if(err4){
-									  				return res.serverError(err4)
-									  			}
-									  			// sails.log(result4);	
-									  			// sails.log(names);	  					
+									  			if(err4 || result4 == undefined){
+									  				return res.view('fail', {message: "Couldn't update mess."});
+									  			} 					
 												return res.view('choosemessgroup',{messes : result4, names: names});
 											});	
 										});	
@@ -357,8 +369,8 @@ bookroom: function(req,res){
 								// sails.log("1234");
 								criteria =  {studentdata: re.registration_number};
 								Allotment.update(criteria, valuestoset).exec(function(err, result1){
-									if(err){
-										return res.serverError(err);
+									if(err || result1 == undefined){
+										return res.view('fail', {message: "Allotment couldn't update"});
 									}
 									result.noofbedsleft--;
 									if(result.noofbedsleft == 0){
@@ -366,24 +378,20 @@ bookroom: function(req,res){
 									}
 									result.save(function(err){
 										if(err){
-											return res.serverError(err);
+											return res.view('fail', {message: "Couldn't save"});
 										}
 										// sails.log("2345");
 										sails.sockets.broadcast('rooms', 'new_entry', roomno);
 									});
 									Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
 									Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
-									  	if(err3){
-											return res.serverError(err3);
+									  	if(err3 || result3 == undefined){
+											return res.view('fail', {message: "Invalid mess type id"});
 										}
-										// sails.log(req.session.studenttypeid);
-										// sails.log("3456");
-										// sails.log(result3);	
 										var messesid=[];
 										for (var i = 0; i < result3.length; i++) {
 									  		messesid[i] = result3[i].mess;
 										}
-									  	// sails.log(messesid);
 									 	inclause = "(";
 									  	for (var i = 0; i < messesid.length - 1; i++) {
 								  			inclause = inclause + messesid[i] + ","; 
@@ -391,8 +399,8 @@ bookroom: function(req,res){
 								  		inclause = inclause + messesid[messesid.length-1] + ")";
 								  		query = "SELECT * from mess where id in" + inclause;
 								  		Mess.query(query, [], function(err4, result4){
-								  			if(err4){
-								  				return res.serverError(err4)
+								  			if(err4 || result4 == undefined){
+								  				return res.view('fail', {message: "Invalid mess"});
 								  			}
 								  			// sails.log(result4);		  					
 											return res.view('choosemess',{messes : result4});
@@ -445,21 +453,36 @@ bookmess:function(req,res){
 		var valuestoset = {mess: messid};
 		console.log(messid);
 		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
-			if(err1) {
-				return res.serverError(err1);
+			if(err1 || result1 == undefined) {
+				return res.view('fail', {message: "Allotment couldn't update"});
 			}
 			// sails.log(result1[0].room);
 			Mess.findOne({id:messid}).exec(function(err2, result2) {
-				if(err2){
-					return res.serverError(err);
+				if(err2 || result2 == undefined){
+					return res.view('fail', {message: "Invalid mess"});
 				}
 				// sails.log(result2);
 				result2.allotted++;
-	  			result2.save(function(err2) { /* updated user */ 
+	  			result2.save(function(err2){
+	  				if(err2){
+						return res.view('fail', {message: "Couldn't save"});
+					} 
 	  				Rooms.findOne({id:result1[0].room}).exec(function(err,room){
+	  					if(err || room == undefined){
+							return res.view('fail', {message: "Room not found."});
+						}
                         StudentData.findOne({userid:userid}).exec(function(err,details){
+                        	if(err || details == undefined){
+								return res.view('fail', {message: "Invalid ID"});
+							}
                             Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                            	if(err || hostelfloor == undefined){
+									return res.view('fail', {message: "Invalid hostel floors"});
+								}
                                 Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                	if(err || hostel == undefined){
+										return res.view('fail', {message: "Invalid hostel"});
+									}
                                     return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:result2.name ,reg_no:details.registration_number,name: details.name});
                                 })
                             });
