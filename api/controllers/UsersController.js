@@ -100,7 +100,7 @@ module.exports = {
                                 }
 
                                 // sails.log(result11.admissiontypeid);
-                                if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1))
+                                if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1 && re.course=='btech'))
                                     return res.view('rmr_instructions', {first_name: re.name});
                                 else
                                 {
@@ -291,12 +291,12 @@ module.exports = {
                                                         // sails.log("Matched");
                                                         req.session.me = result.id;
                                                         // sails.log(req.session.me);
-                                                        Allotment.findOne({studentdata: result.id}).exec(function(err, result1){
+                                                        Allotment.findOne({studentdata: re.registration_numberd}).exec(function(err, result1){
                                                             if(err){
                                                                 return res.view('fail', {message: "Invalid allotment ID"});
                                                             }
                                                             if(!result1.room && !result1.mess){
-                                                                Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                                                Rmr_student_groups_members.findOne({userid: re.registration_number}).exec(function(err,admin){
                                                                     if(err){
                                                                         return res.view('fail', {message: "Invalid Group Members"});
                                                                     }

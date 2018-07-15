@@ -219,7 +219,7 @@ module.exports = {
 deleteshit: function(req, res){
 	var criteria = {};
 	Global.roomlist = [];
-	Global.idlist = [];
+//	Global.idlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
 		valuestoset = {allotted: 0};

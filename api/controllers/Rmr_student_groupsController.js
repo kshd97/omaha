@@ -152,7 +152,7 @@ module.exports = {
             		if(eee ||re ==undefined) return res.view('fail', {message: "Invalid ID.Contact WSDC"});
 	    			Type_of_admission.findOne({reg_no: newmate}).exec(function(error6, result06) {
 	    				if(error6 ||result06 ==undefined ) return res.view('fail', {message: "Type-of admission does not contain reg no.Contact WSDC"});
-	    				if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result06.admissiontypeid == 1)){
+	    				if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result06.admissiontypeid == 1 && re.course =='btech')){
 			            	Rmr_student_groups_members.findOne({userid: newmate}).exec(function(err2, result3) {
 								if(err2)
 								{
