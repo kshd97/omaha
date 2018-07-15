@@ -123,7 +123,7 @@ module.exports = {
 				  								inclause = "(";
 				  								for (var i = 0; i < b.length-1; i++) {
 				  									inclause = inclause + b[i] + ",";
-				  								}
+				  								} 
 				  								inclause = inclause + b[b.length-1] + ")";
 				  								query = "SELECT hostelfloors from hosteltypeid where hostelfloors in "+ inclause + "and studenttypeid = "+ result5.id;
 				  								Hosteltypeid.query(query, [], function(err10, result10){
@@ -140,7 +140,11 @@ module.exports = {
 				  									inclause = inclause + finalhostelfloors[finalhostelfloors.length-1] + ")";
 				  									query = "SELECT hostel.name, hostelfloors.block, hostelfloors.floor from hostelfloors, hostel where hostelfloors.id in "+ inclause +"and hostel.id = hostelfloors.hostel";
 				  									Hostelfloors.query(query, [], function(err11, result11){
-				  										// sails.log(result11);
+				  										sails.log(result11);
+
+//REMOVE HERE TO START ALLOTMENT
+														return res.view('viewRooms', {possible: result11, person: result});				  											
+
 				  										// var arr2d = [][];
 				  										var map = new HashMap();
 				  										for (var i = 0; i < result11.length; i++) {

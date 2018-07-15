@@ -96,7 +96,7 @@ module.exports = {
                         {
                             Type_of_admission.findOne({reg_no: re.registration_number}).exec(function(error11, result11) {
                                 if(error11 || result11 == undefined){
-                                    return res.view('fail',{message: "Reg no not in Type_of_admission"});
+                                    return res.view('fail',{message: "Reg no not in Type_of_admission. To rectify, go to http://wsdc.nitw.ac.in:8080/addToDb"});
                                 }
 
                                 // sails.log(result11.admissiontypeid);
@@ -211,6 +211,42 @@ module.exports = {
 
     },
 
+    forgotPasswd: function(req, res) {
+
+        if(req.method == 'GET')
+        {
+            return res.view('forgotPasswd');
+        }
+        else
+        {
+            var usernm = req.param('usernm');
+
+            Users.findOne({ or: [{username: usernm},{email:usernm}]}).exec(function(err, result) {
+
+                if(err || !result)
+                {
+                    return res.view('fail', {message: 'Invalid username / email'});
+                }
+                else
+                {
+                    var q = "UPDATE users SET password = '$2y$08$tk4lFKhB.ylklzbyHySuguUBbdwUhxy7vyihwCPl80LMlE.3vwele' WHERE id = " + result.id;
+
+                    Users.query(q, function(err3, res3) {
+
+                        if(err3)
+                        {
+                            return res.view('fail', {message: 'Could not update password'});
+                        }
+                        else
+                        {
+                            return res.redirect('/');
+                        }
+                    });                    
+                }
+            });
+        }
+    },
+
     gotoDash: function(req, res) {
 	if(req.session.me){
 
@@ -245,8 +281,8 @@ module.exports = {
                             return res.view('fail', {message: "NO type of admission"});
                         }
                         
-                        if(result12.admissiontypeid == 1 || re.gender == "F")
-                            return res.view('rmr_instructions', {first_name: re.name});                                   
+                            if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result12.admissiontypeid == 1 && re.course=='btech'))
+                                return res.view('rmr_instructions', {first_name: re.name});                                   
                         else
                         {
 				            //return res.view('fail',{message:"Not your time to book"});
