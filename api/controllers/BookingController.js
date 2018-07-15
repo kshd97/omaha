@@ -143,7 +143,7 @@ module.exports = {
 				  										sails.log(result11);
 
 //REMOVE HERE TO START ALLOTMENT
-														return res.view('viewRooms', {possible: result11, person: result});				  											
+														//return res.view('viewRooms', {possible: result11, person: result});				  											
 
 				  										// var arr2d = [][];
 				  										var map = new HashMap();
@@ -442,6 +442,7 @@ bookmess:function(req,res){
 		var messid = req.param('messid');
 		var userid = req.session.me;
 		var reg_no =req.session.registration_number;
+		sails.log(reg_no);
 		var criteria = {studentdata: reg_no};
 		var valuestoset = {mess: messid};
 		console.log(messid);
@@ -456,6 +457,7 @@ bookmess:function(req,res){
 				}
 				// sails.log(result2);
 				result2.allotted++;
+				sails.log(result1);
 	  			result2.save(function(err2) { /* updated user */ 
 	  				Rooms.findOne({id:result1[0].room}).exec(function(err,room){
                         StudentData.findOne({userid:userid}).exec(function(err,details){
