@@ -14,7 +14,8 @@ module.exports.routes = {
   '/admin': 'BookingController.startallot',
   '/start/:id': 'BookingController.startallot',
   '/stop/:id': 'BookingController.stopallot',
-  '/bookroom': 'BookingController.book',
+  '/viewRooms': 'BookingController.book',                // Remove later
+  // '/bookroom': 'BookingController.book',
   '/onlymess': 'BookingController.onlymess',
   '/mygroup': 'BookingController.mygroup',
   '/book/:roomno': 'BookingController.bookroom',
@@ -30,6 +31,7 @@ module.exports.routes = {
   '/deleteGroup': 'Rmr_student_groupsController.deleteGroup',
   '/addToDb': 'Rmr_student_groupsController.addToDb',
   '/deleteshit': 'BookingController.deleteshit', //**********************DO NOT USE DURING OMAHA************
+  '/forgotPasswd': 'UsersController.forgotPasswd',
   // '/messbook/:messname': 'BookingController.bookmess',
 
   '/genstdtypeids' : 'StudenttypeidController.index',

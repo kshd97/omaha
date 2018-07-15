@@ -3,10 +3,10 @@ module.exports = {
   tableName: 'rmr_student_requests',
   attributes: {
   	sender:{
-  		type: "integer"
+  		type: "string"
   	},
   	receiver: {
-  		type: "integer"
+  		type: "string"
   	},
   	status:{ 
   		type: "integer" //accepted = 1 declined = 2 otherwise null

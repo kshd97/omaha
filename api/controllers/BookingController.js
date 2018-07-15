@@ -123,7 +123,7 @@ module.exports = {
 				  								inclause = "(";
 				  								for (var i = 0; i < b.length-1; i++) {
 				  									inclause = inclause + b[i] + ",";
-				  								}
+				  								} 
 				  								inclause = inclause + b[b.length-1] + ")";
 				  								query = "SELECT hostelfloors from hosteltypeid where hostelfloors in "+ inclause + "and studenttypeid = "+ result5.id;
 				  								Hosteltypeid.query(query, [], function(err10, result10){
@@ -140,7 +140,11 @@ module.exports = {
 				  									inclause = inclause + finalhostelfloors[finalhostelfloors.length-1] + ")";
 				  									query = "SELECT hostel.name, hostelfloors.block, hostelfloors.floor from hostelfloors, hostel where hostelfloors.id in "+ inclause +"and hostel.id = hostelfloors.hostel";
 				  									Hostelfloors.query(query, [], function(err11, result11){
-				  										// sails.log(result11);
+				  										sails.log(result11);
+
+//REMOVE HERE TO START ALLOTMENT
+														return res.view('viewRooms', {possible: result11, person: result});				  											
+
 				  										// var arr2d = [][];
 				  										var map = new HashMap();
 				  										for (var i = 0; i < result11.length; i++) {
@@ -170,7 +174,7 @@ module.exports = {
 				  										map.forEach(function(value, key) {
 														    console.log(key + " : " + JSON.stringify(value));
 														});
-														Rmr_student_groups_members.findOne({userid: uid}).exec(function(err12, group){
+														Rmr_student_groups_members.findOne({userid: result.registration_number}).exec(function(err12, group){
 															if(!group){
 																// sails.log("zzzzzz");
 
@@ -216,10 +220,10 @@ module.exports = {
 deleteshit: function(req, res){
 	var criteria = {};
 	Global.roomlist = [];
-	Global.idlist = [];
+//	Global.idlist = [];
 	var valuestoset = {room: null, mess: null};
 	Allotment.update(criteria, valuestoset).exec(function(err, result){
-		valuestoset = {allotted: 0, noofbedsleft: 1, capacity: 1};
+		valuestoset = {allotted: 0};
 		Rooms.update(criteria, valuestoset).exec(function(err, result){
 			valuestoset = {allotted : 0};
 			Mess.update(criteria, valuestoset).exec(function(err, result){
@@ -241,77 +245,131 @@ bookroom: function(req,res){
 		var roomno = req.param('roomno');
 		var criteria = {};
 		var valuestoset = {};
+		StudentData.findOne({userid:userid}).exec(function (err, re){
+	        if (err || re==undefined) {
+	            return res.view('fail', {message: "Your ID was not found"});
+	        }
 		// sails.log("DAMN");
 		// sails.log(Global.roomlist);	
 		// var str = "hsgf"
-		if(Global.roomlist.indexOf(roomno) != -1){
-			// sails.log("HHOHOHOHOHO");  						// send back to booking page
-			return res.redirect('/bookroom');
-		}
-		Allotment.findOne({studentdata:userid}).exec(function(err,alreadybookcheck){
-			if(alreadybookcheck.room != null){
-				//user already booked a room and tries to access through url
-				Rooms.findOne({id:alreadybookcheck.room}).exec(function(err,room){
-                    Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
-                        StudentData.findOne({userid:userid}).exec(function(err,details){
-                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
-                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
-                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
-                                })
-                            });
-                        });
-                    });
-                });
+			if(Global.roomlist.indexOf(roomno) != -1){
+				// sails.log("HHOHOHOHOHO");  						// send back to booking page
+				return res.redirect('/bookroom');
 			}
-			else{
-				Rooms.findOne({roomno: roomno}).exec(function(err, result){
-					if(result.allotted == 1){
-						// sails.log("Room is ALREADY BOOKED,book another");
-						return res.redirect("/bookroom");
-					}
-					if(result.noofbedsleft - 1 == 0){
-						Global.roomlist.push(roomno);
-					}
-					valuestoset = {room: result.id};
-					Rmr_student_groups_members.findOne({userid: userid}).exec(function(err,groupid){
-						if(err){
-							return res.serverError(err);
+			Allotment.findOne({studentdata:re.registration_number}).exec(function(err,alreadybookcheck){
+				if(alreadybookcheck.room != null){
+					//user already booked a room and tries to access through url
+					Rooms.findOne({id:alreadybookcheck.room}).exec(function(err,room){
+	                    Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
+	                        StudentData.findOne({userid:userid}).exec(function(err,details){
+	                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+	                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+	                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+	                                })
+	                            });
+	                        });
+	                    });
+	                });
+				}
+				else{
+					Rooms.findOne({roomno: roomno}).exec(function(err, result){
+						if(result.allotted == 1){
+							// sails.log("Room is ALREADY BOOKED,book another");
+							return res.redirect("/bookroom");
 						}
-						if(groupid){
-							var rms =[];
-							Rmr_student_groups_members.find({group_id: groupid.group_id}).exec(function(err, roommates){
-								if(err){
-									return res.serverError(err);
-								}
-								for (var i = 0; i < roommates.length; i++) {
-									rms[i] = roommates[i].userid;
-								}
-								inclause = "(";
-								for (var i = 0; i < rms.length - 1; i++) {
-									inclause = inclause + rms[i] + ","; 
-								}
-						  		inclause = inclause + rms[rms.length-1] + ")";
-								var query = "SELECT name,userid from studentdata where userid in "+inclause;
-								StudentData.query(query,[], function(err, names){
-									//for sending names and ids to mess page
-									for (var i = 0; i < roommates.length; i++) { 
-										criteria = {studentdata: roommates[i].userid};
-										Allotment.update(criteria, valuestoset).exec(function(err, result1){
+						if(result.noofbedsleft - 1 == 0){
+							Global.roomlist.push(roomno);
+						}
+						valuestoset = {room: result.id};
+						Rmr_student_groups_members.findOne({userid: re.registration_number}).exec(function(err,groupid){
+							if(err){
+								return res.serverError(err);
+							}
+							if(groupid){
+								var rms =[];
+								Rmr_student_groups_members.find({group_id: groupid.group_id}).exec(function(err, roommates){
+									if(err){
+										return res.serverError(err);
+									}
+									for (var i = 0; i < roommates.length; i++) {
+										rms[i] = roommates[i].userid;
+									}
+									inclause = "(";
+									for (var i = 0; i < rms.length - 1; i++) {
+										inclause = inclause +"'"+ rms[i] + "',"; 
+									}
+							  		inclause = inclause +"'"+ rms[rms.length-1] + "')";
+									var query = "SELECT name,registration_number from studentdata where registration_number in "+inclause;
+									sails.log(query);
+									StudentData.query(query,[], function(err, names){
+										//for sending names and ids to mess page
+										for (var i = 0; i < roommates.length; i++) { 
+											criteria = {studentdata: roommates[i].userid};
+											Allotment.update(criteria, valuestoset).exec(function(err, result1){
+												if(err){
+													return res.serverError(err1);
+												}
+											});
+										}	
+										
+										result.noofbedsleft -= roommates.length;
+										if(result.noofbedsleft == 0){
+											result.allotted = 1;
+										}
+
+										result.save(function(err){
 											if(err){
-												return res.serverError(err1);
+												return res.serverError(err);
 											}
+											sails.sockets.broadcast('rooms', 'new_entry', roomno);
 										});
-									}	
+										Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
+										Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
+										  	if(err3){
+												return res.serverError(err3);
+											}
+											// sails.log(result3);	
+											var messesid=[];
+											for (var i = 0; i < result3.length; i++) {
+										  		messesid[i] = result3[i].mess;
+											}
+										  	// sails.log(messesid);
+										 	inclause = "(";
+										  	for (var i = 0; i < messesid.length - 1; i++) {
+									  			inclause = inclause + messesid[i] + ","; 
+									  		}
+									  		inclause = inclause + messesid[messesid.length-1] + ")";
+									  		query = "SELECT * from mess where id in" + inclause;
+									  		Mess.query(query, [], function(err4, result4){
+									  			if(err4){
+									  				return res.serverError(err4)
+									  			}
+									  			// sails.log(result4);	
+									  			// sails.log(names);	  					
+												return res.view('choosemessgroup',{messes : result4, names: names});
+											});	
+										});	
+									}); 
+								});
 									
-									result.noofbedsleft -= roommates.length;
+							}
+							else{
+								// sails.log("hfhgfghghghghghhgjhuhuhuhuftddufufdytfuftydtftfdtftdtyffgfghdf");
+								// sails.log("1234");
+								criteria =  {studentdata: re.registration_number};
+								Allotment.update(criteria, valuestoset).exec(function(err, result1){
+									if(err){
+										return res.serverError(err);
+									}
+									result.noofbedsleft--;
 									if(result.noofbedsleft == 0){
 										result.allotted = 1;
 									}
-
 									result.save(function(err){
 										if(err){
 											return res.serverError(err);
 										}
+										// sails.log("2345");
 										sails.sockets.broadcast('rooms', 'new_entry', roomno);
 									});
 									Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
@@ -319,6 +377,8 @@ bookroom: function(req,res){
 									  	if(err3){
 											return res.serverError(err3);
 										}
+										// sails.log(req.session.studenttypeid);
+										// sails.log("3456");
 										// sails.log(result3);	
 										var messesid=[];
 										for (var i = 0; i < result3.length; i++) {
@@ -335,66 +395,16 @@ bookroom: function(req,res){
 								  			if(err4){
 								  				return res.serverError(err4)
 								  			}
-								  			// sails.log(result4);	
-								  			// sails.log(names);	  					
-											return res.view('choosemessgroup',{messes : result4, names: names});
+								  			// sails.log(result4);		  					
+											return res.view('choosemess',{messes : result4});
 										});	
 									});	
-								}); 
-							});
-								
-						}
-						else{
-							// sails.log("hfhgfghghghghghhgjhuhuhuhuftddufufdytfuftydtftfdtftdtyffgfghdf");
-							// sails.log("1234");
-							criteria =  {studentdata: userid};
-							Allotment.update(criteria, valuestoset).exec(function(err, result1){
-								if(err){
-									return res.serverError(err);
-								}
-								result.noofbedsleft--;
-								if(result.noofbedsleft == 0){
-									result.allotted = 1;
-								}
-								result.save(function(err){
-									if(err){
-										return res.serverError(err);
-									}
-									// sails.log("2345");
-									sails.sockets.broadcast('rooms', 'new_entry', roomno);
 								});
-								Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
-								Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
-								  	if(err3){
-										return res.serverError(err3);
-									}
-									// sails.log(req.session.studenttypeid);
-									// sails.log("3456");
-									// sails.log(result3);	
-									var messesid=[];
-									for (var i = 0; i < result3.length; i++) {
-								  		messesid[i] = result3[i].mess;
-									}
-								  	// sails.log(messesid);
-								 	inclause = "(";
-								  	for (var i = 0; i < messesid.length - 1; i++) {
-							  			inclause = inclause + messesid[i] + ","; 
-							  		}
-							  		inclause = inclause + messesid[messesid.length-1] + ")";
-							  		query = "SELECT * from mess where id in" + inclause;
-							  		Mess.query(query, [], function(err4, result4){
-							  			if(err4){
-							  				return res.serverError(err4)
-							  			}
-							  			// sails.log(result4);		  					
-										return res.view('choosemess',{messes : result4});
-									});	
-								});	
-							});
-						}
+							}
+						});
 					});
-				});
-			}
+				}
+			});
 		});
 	}
 	else{
@@ -431,7 +441,8 @@ bookmess:function(req,res){
 	{
 		var messid = req.param('messid');
 		var userid = req.session.me;
-		var criteria = {studentdata: userid};
+		var reg_no =req.session.registration_number;
+		var criteria = {studentdata: reg_no};
 		var valuestoset = {mess: messid};
 		console.log(messid);
 		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
@@ -470,7 +481,7 @@ messbookgroup:function(req,res){
 		// sails.log("rrrr"); 
 		// sails.log(data);
 		var str = '';
-		str = str + req.session.me;
+		str = str + req.session.registration_number;
 		var index = data.userid.indexOf(str);
 		// sails.log(index);
 		var mess1 = data.student[index];
@@ -480,8 +491,8 @@ messbookgroup:function(req,res){
 			// var flag =0;
 			// sails.log("boom");
 			var messid = data.student[i];
-			var userid = data.userid[i];
-			var criteria = {studentdata: userid};
+			var registration_number = data.registration_number[i];
+			var criteria = {studentdata: registration_number};
 			var valuestoset = {mess: messid};
 			sails.log(messid);
 			Allotment.update(criteria,valuestoset).exec(function(err1, result1){
@@ -503,7 +514,7 @@ messbookgroup:function(req,res){
 		// 	var messid = data.student[i];
 			
 		// }
-		Allotment.findOne({studentdata:req.session.me}).exec(function(err,allot){
+		Allotment.findOne({studentdata:req.session.registration_number}).exec(function(err,allot){
 			Rooms.findOne({id:allot.room}).exec(function(err,room){
 	            Mess.findOne({id:mess1}).exec(function(err,mess){
 	                StudentData.findOne({userid:req.session.me}).exec(function(err,details){
@@ -528,7 +539,7 @@ fillallotmenttable: function(req,res){
 		sails.log(result);
 		for (var i = 0; i < result.length; i++) {
 			sails.log(result[i].id);
-			Allotment.create({studentdata: result[i].userid, room: null, mess: null}).exec(function(err, sample) {
+			Allotment.create({studentdata: result[i].registration_number, room: null, mess: null}).exec(function(err, sample) {
 
 			    if (err) {
 			    	return res.serverError(err);
@@ -585,7 +596,7 @@ onlymess: function(req,res){
 						  			return res.serverError(err5);
 						  		}
 				  				// sails.log(result5.id);
-								Rmr_student_groups_members.findOne({userid: req.session.me}).exec(function(err,admin){
+								Rmr_student_groups_members.findOne({userid: req.session.registration_number}).exec(function(err,admin){
 									// sails.log(admin);
 									if(admin){
 								        if(admin.is_group_admin == 1){
@@ -599,10 +610,10 @@ onlymess: function(req,res){
 												}
 												inclause = "(";
 												for (var i = 0; i < rms.length - 1; i++) {
-													inclause = inclause + rms[i] + ","; 
+													inclause = inclause + "'"+rms[i] + "',"; 
 												}
-										  		inclause = inclause + rms[rms.length-1] + ")";
-												var query = "SELECT name,userid from studentdata where userid in "+inclause;
+										  		inclause = inclause +"'"+ rms[rms.length-1] + "')";
+												var query = "SELECT name,registration_number from studentdata where registration_number in "+inclause;
 												StudentData.query(query,[], function(err, names){
 													//for sending names and ids to mess page
 													Messtypeid.find({studenttypeid: result5.id}).exec(function(err, result6){
@@ -682,27 +693,27 @@ mygroup: function(req,res){
 		// sails.log(req.cookie.hey);
 		// sails.log("jhhj");
 		StudentData.findOne({userid:req.session.me}).exec(function (err, result){
-		  if (err) {
+		  if (err || result ==undefined) {
 		  		return res.view('fail', {message: "Invalid student data. Contact WSDC"});
 		  }
 		  Course.findOne({course: result.course}).exec(function(err1, result1){
-		  	if(err1){
+		  	if(err1 || result1 ==undefined){
 				return res.view('fail', {message: "Invalid course. Contact WSDC"});
 		  	}
 		  	var year = parseInt(result.current_year);
 		  	Courseyear.findOne({course: result1.id, year: year}).exec(function(err2, result2){
-			  	if(err2){
+			  	if(err2 || result2  ==undefined){
 			  		return res.view('fail', {message: "Invalid year. Contact WSDC"});
 			  	}
 			  	Gender.findOne({gender: result.gender}).exec(function(err3, result3){
-			  		if(err3){
+			  		if(err3 || result3 ==undefined){
 			  			return res.view('fail', {message: "Invalid gender. Contact WSDC"});
 			  		}
 
 					// sails.log(result.registration_number);
 
 				  	Type_of_admission.findOne({reg_no: result.registration_number}).exec(function(errr, resulttype) {
-				  		if(errr && resulttype == undefined){
+				  		if(errr || resulttype== undefined){
 		  					return res.view('fail', {message: "Reg no not in type_of_admission. Contact WSDC"});
 			  			}
 			  			var resulttype1=resulttype.admissiontypeid;
@@ -712,18 +723,18 @@ mygroup: function(req,res){
 				  			resulttype = 'DASA';
 
 				  		Admissiontype.findOne({admissiontype: resulttype}).exec(function(err4, result4){
-				  			if(err4){
+				  			if(err4 || result4 ==undefined ){
 				  				return res.view('fail', {message: "Invalid admission type. Contact WSDC"});
 				  			}
 				  			
 				  			Studenttypeid.findOne({gender: result3.id, courseyear: result2.id, admissiontype: result4.id}).exec(function(err5, result5){
-				  				if(err5){
+				  				if(err5 || result5 ==undefined ){
 						  			return res.view('fail', {message: "Invalid student type. Contact WSDC"});
 						  		}
 
 				  				StudentData.find({gender: result.gender, course: result.course ,current_year: result.current_year }).exec(function(err20, studentlist){
-				  					if(err20){
-				  						return res.view('fail', {message: "Invalid student. Contact Admin"});
+				  					if(err20 || studentlist ==undefined ){
+				  						return res.view('fail', {message: "Invalid student roommates. Contact Admin"});
 				  					}
 				  					inclause="(";
 				  					for (var i=0;i<studentlist.length-1;i++){
@@ -735,7 +746,7 @@ mygroup: function(req,res){
 				  					var query1 = "SELECT reg_no from type_of_admission WHERE admissiontypeid=" + resulttype1 + " AND reg_no IN "+ inclause;
 
 				  					Type_of_admission.query(query1,[],function(err21,regnos) {
-				  						if(err21){
+				  						if(err21 || regnos ==undefined){
 				  							return res.view('fail', {message: "Possible roommates reg no not present in Type_of_admission. Contact WSDC"});
 				  						}
 				  						inclause="(";
@@ -748,7 +759,7 @@ mygroup: function(req,res){
 
 				  							StudentData.query(query2, [], function(err, posroommates) {
 				  								// sails.log(posroommates);
-				  								if(err){
+				  								if(err || posroommates ==undefined){
 				  									return res.view('fail', {message: "Invalid posroommates in studentdata. Contact WSDC"});
 				  								}
 												req.session.posroommates=posroommates; 
@@ -769,9 +780,11 @@ mygroup: function(req,res){
 														Rmr_student_groups_members.find({group_id: admin.group_id}).exec(function(err, roommates){
 															if(err){
 																return res.view('fail', {message: "Invalid group id in Rmr_student_groups_members. Contact WSDC"});
-															}
+															}if(roommates ==undefined){
+return res.view('fail',{message:"Your group has been deleted.Please login again"});
+}
 															Rmr_student_groups.findOne({group_id: admin.group_id}).exec(function(err90, result90){
-																if(err90){
+																if(err90 || result90 ==undefined){
 																	return res.view('fail', {message: "Invalid group id in Rmr_student_groups. Contact WSDC"});
 																}
 																inclause="(";
@@ -782,7 +795,7 @@ mygroup: function(req,res){
 
 																var query = "SELECT name, registration_number from studentdata where registration_number in "+inclause;
 																StudentData.query(query,[], function(err, names){
-																	if(err){
+																	if(err ||names==undefined){
 																		return res.view('fail', {message: "Invalid group member names from studentdata. Contact WSDC"});
 																	}
 																	//for sending names and ids to mess page

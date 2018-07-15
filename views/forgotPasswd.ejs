@@ -1,0 +1,29 @@
+<div class="ui center aligned container" style="width: 60%;">
+
+    <div class="ui white message">
+        <p>This new password will only be valid for OMAHA portal.</p>
+        <p>Password for WSDC portal will remain the same.</p>
+    </div>
+
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h3>Reset Password</h3>
+		</div>
+		<div class="panel-body">
+            <form class="form-horizontal" action = '/forgotPasswd' method="POST">
+                <div class='form-group'>
+                    <label class="control-label col-sm-3" for="inputDetails">Username / Email:  </label>
+                    <div class='col-sm-9'>
+                        <input autocomplete="off" name='usernm' type="text" class="form-control" required autofocus>
+                    </div>
+                </div>
+                <div class='text-center'>
+                  <button class="ui huge pink button" type="submit" style="">Proceed</button>
+              </div>
+            </form>
+		</div>
+
+        <div class="ui red message">
+            Your new password will be: <strong>terminator</strong></div>
+        </div>
+</div>

@@ -12,7 +12,7 @@ module.exports = {
   		type: "integer"
   	},
   	userid: {
-  		type: "integer"
+  		type: "string"
   	},
   	is_group_admin:{
   		type: "integer"

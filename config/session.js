@@ -23,7 +23,13 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
   secret: '3bd341554650e6c47d065b195488680e',
-
+//  adapter: 'connect-mysql',
+ // config:{
+//	user: 'root',
+//	password: 'MartinLuther1080',
+//	database: 'omaha',
+ // },
+ /// table: 'sessions',
 
   /***************************************************************************
   *                                                                          *
@@ -32,19 +38,19 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // cookie: {
+ // cookie: {
   //   // Cookie expiration in milliseconds.
   //   // For example, use 24 * 60 * 60 * 1000 to make sessions expire in 24 hours.
   //   // Default is null, making it a browser cookie, so the session will
   //   // last only for as long as the browser is open.
-  //   maxAge: null,
+   //  maxAge: 24*60*60*1000
   //   // Path that the cookie is valid for.
   //   path: '/',
   //   // Should the session cookie be HTTP-only? (See https://www.owasp.org/index.php/HttpOnly)
   //   httpOnly: true,
   //   // Should the session cookie be secure? (only valid for HTTPS sites)
   //   secure: false
-  // },
+ // },
 
   /***************************************************************************
   *                                                                          *
@@ -59,6 +65,7 @@ module.exports.session = {
   ***************************************************************************/
 
   // adapter: 'connect-mongoct-redis',
+  adapter: 'connect-redis',
 
   /***************************************************************************
   *                                                                          *
@@ -69,8 +76,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // host: 'localhost',
-  // port: 6379,
+ //  host: 'localhost',
+  // port: 8080,
   // ttl: <redis session TTL in seconds>,
   // db: 0,
   // pass: <redis auth password>,
@@ -88,8 +95,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // adapter: 'mongo',
-  // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
+ // adapter: 'connect-mongo',
+ // url: 'mongodb://localhost/omaha', // user, password and port optional
 
   /***************************************************************************
   *                                                                          *

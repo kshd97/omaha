@@ -1,0 +1,62 @@
+<!-- <div class="container"> -->
+	<div class="row">
+		<div class="col-sm-4 col-sm-offset-1">
+			
+		<div class="ui red message">
+			<h4>Possible Room Locations</h4>
+		</div>
+
+		  <table class="table table-responsive table-condensed table-bordered">
+		    <thead>
+		      <tr>
+		        <th>Hostel</th>
+		        <th>Block</th>
+		        <th>Floor</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+
+		    	<% for(var i = 0; i < possible.length; i++) { %>
+		    		<tr>
+		    			<td><%=possible[i].name %></td>
+		    			<td>
+		    				<% if(possible[i].block) { %>
+		    					<%=possible[i].block %>
+		    				<% } %>
+		    				
+		    			</td>
+		    			<td><%=possible[i].floor %></td>
+		    		</tr>
+		    	<% } %>
+
+		    </tbody>
+		  </table>
+		</div>
+		
+		<div class="col-sm-5 col-sm-offset-1">
+			<div class="ui red message">
+				<h4>Please report missing or incorrect information to WSDC.</h4>
+			</div>
+
+
+			<table class="ui striped table">
+				<thead>
+					<tr>
+						<td>Registration Number</td>
+						<td>Gender</td>
+						<td>Course</td>
+						<td>Current Year</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					<td><%=person.registration_number %></td>
+					<td><%=person.gender %></td>
+					<td><%=person.course %></td>
+					<td><%=person.current_year %></td>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+<!-- </div> -->
