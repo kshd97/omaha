@@ -59,17 +59,15 @@
       <!-- <% if (req.session.me != undefined) { %> -->
         <!-- <a class='item' href="/gotoDash"> -->
           <!-- <span class="glyphicon glyphicon-home"></span>&nbsp; -->
-          <!-- Home -->
         <!-- </a> -->
-        <!-- <a class="item" href=""> <%=req.session.me %></a> -->
      <!-- <% } %> -->
 
       <div class='right menu'>
           <% if (req.session.me != undefined) { %>
-<!--               <a class='item' href='/mygroup'>
+              <a class='item' href='/mygroup'>
                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
                 My Group
-              </a> -->
+              </a>
 
               <a class='item' href="/logout">
                 <span class="glyphicon glyphicon-log-out"></span>&nbsp;

@@ -143,7 +143,7 @@ module.exports = {
 				  										sails.log(result11);
 
 //REMOVE HERE TO START ALLOTMENT
-														return res.view('viewRooms', {possible: result11, person: result});				  											
+														// return res.view('viewRooms', {possible: result11, person: result});				  											
 
 				  										// var arr2d = [][];
 				  										var map = new HashMap();
@@ -339,7 +339,7 @@ bookroom: function(req,res){
 									  			inclause = inclause + messesid[i] + ","; 
 									  		}
 									  		inclause = inclause + messesid[messesid.length-1] + ")";
-									  		query = "SELECT * from mess where id in" + inclause;
+									  		query = "SELECT * from mess where allotted < capacity and id in" + inclause;
 									  		Mess.query(query, [], function(err4, result4){
 									  			if(err4){
 									  				return res.serverError(err4)
@@ -479,19 +479,20 @@ messbookgroup:function(req,res){
 	{
 		var data = req.params.all();
 		// sails.log("rrrr"); 
-		// sails.log(data);
+		sails.log(data);
 		var str = '';
 		str = str + req.session.registration_number;
+		sails.log(req.session.registration_number);
 		var index = data.userid.indexOf(str);
-		// sails.log(index);
+		sails.log(index);
 		var mess1 = data.student[index];
-		// sails.log(mess1);
+		sails.log(mess1);
 
 		for (var i = 0; i < data.student.length; i++) {
 			// var flag =0;
 			// sails.log("boom");
 			var messid = data.student[i];
-			var registration_number = data.registration_number[i];
+			var registration_number = data.userid[i];
 			var criteria = {studentdata: registration_number};
 			var valuestoset = {mess: messid};
 			sails.log(messid);
@@ -631,7 +632,7 @@ onlymess: function(req,res){
 												  			inclause = inclause + messesid[i] + ","; 
 												  		}
 												  		inclause = inclause + messesid[messesid.length-1] + ")";
-												  		query = "SELECT * from mess where id in" + inclause;
+												  		query = "SELECT * from mess where allotted < capacity and id in" + inclause;
 												  		Mess.query(query, [], function(err, result7){
 												  			if(err){
 												  				return res.serverError(err)
@@ -771,7 +772,7 @@ mygroup: function(req,res){
 
 													if(admin == undefined)
 													{
-														var names = "NO groups yet.";
+														var names = "NO group.";
 
 														return res.view('my_group',{names: names,myreg_no:result.registration_number, flag: 1, group_size: 0, gender: result3.gender, current_year: result.current_year});	
 													}

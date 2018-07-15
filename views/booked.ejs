@@ -1,45 +1,24 @@
-
-<div class="ui center aligned container">
-<div class="panel panel-success">
-	<div class="panel-heading">
-		<h2 class="bookedheader">Your allotment status</h2>
-	</div>
-	<div class="panel-body">
-
-<table class="ui celled table">
-  <thead>
-    <th>Registration Number</th>
-    <th>Name</th>
-    <th>Room Number</th>
-    <th>Block</th>
-    <th>Floor</th>
-    <th>Hostel</th>
-    <th>Mess</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td><%= reg_no %></td>
-      <td><%= name %></td>
-      <td><%= room %></td>
-      <td><%= block %></td>
-      <td><%= floor %></td>
-      <td><%= hostel_name %></td>
-      <td><%= mess %></td>
-
-    </tr>
-    <tr>
-  </tbody>
-</table>
+<div class="container">
+  <div class="row">
 
 
+  <div class="panel panel-success">
+  	<div class="panel-heading">
+  		<h2 class="bookedheader">Allotment Done</h2>
+  	</div>
 
-<!-- 	REGNO: <%= reg_no %><br>
-	NAME: <%= name %><br>
-	ROOMNO: <%= room %> <br>
-	BLOCK: <%= block %> <br>
-	FLOOR: <%= floor %> <br>
-	HOSTEL: <%= hostel_name %> <br>
-	MESS: <%= mess %> <br> -->
-	</div>
+  	<div class="panel-body" style="text-align: justify;">
+      <p><strong>Registration Number:</strong> <%= reg_no %></p>
+      <p><strong>Name:</strong> <%= name %></p>
+      <p><strong>Room Number:</strong> <%= room %></p>
+      <p><strong>Block:</strong> <%= block %></p>
+      <p><strong>Floor:</strong> <%= floor %></p>
+      <p><strong>Hostel:</strong> <%= hostel_name %></p>
+      <p><strong>Mess:</strong> <%= mess %></p>
+
+  	</div>
+
+  </div>
+
 </div>
 </div>

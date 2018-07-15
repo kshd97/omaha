@@ -10,13 +10,14 @@
 
 <!-- <center> -->
   <div class="container-fluid">
-    <div class="ui center aligned container" style="width: 40%;">
+    <div class="ui center aligned container">
   <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="displayhostelheader">You are booking rooms for <%= group_size %> student(s) (including yourself)</h3>
     </div>
       <!-- <br> -->
     <div class="panel-body">
+
     <select name="hostel" id="hostel" onchange="ShowFloors(this, <%=JSON.stringify(hostels)%>)" class='form-control'>  
         <option>Select Hostel</option>
         <% hostels.forEach(function(value, key){ %>
@@ -26,27 +27,34 @@
     <br>
     <br>
 
-    <section ng-controller="RoomCtrl1"> 
+    <section ng-controller="RoomCtrl1">
       <select name="floor" id="floor" disabled="disabled" ng-model="floor" ng-change="showRooms(floor, <%= group_size %>);" class='form-control'>
           <option>Select Block and Floor</option>
       </select>
     </section>
+
     <section ng-controller="RoomCtrl">
-      <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation feed-entry">
+    <div class="row">
+      <div ng-repeat="entry in roomEntries | orderBy:'+'" class="animation">
             <span class="pull-right text-muted" am-time-ago="entry.createdAt"></span>
             <!-- <i class="fa fa-{{entry.icon}} text-muted"></i> -->
-            <div ng-if="$index%10 == 0">
-              <br>
+            <!-- <div ng-if="$index%10 == 0"> -->
+              <!-- <br> -->
+            <!-- </div> -->
+            <div class="col-xs-3">
+              <button class="ui black button" ng-click="thisroomismine(entry)" style="margin-top: 20px;">{{entry}}</button>
             </div>
-            <button class="ui brown button" ng-click="thisroomismine(entry)">{{entry}}</button>
             <!-- <small class="meta text-muted">
             </small> -->
+      </div>
           </div>
     </section>
     </div>
+
   </div>
   </div>
 </div>
 <!-- </div> -->
 <!-- </center> -->
 
+ 

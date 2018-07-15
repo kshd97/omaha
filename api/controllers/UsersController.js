@@ -100,7 +100,8 @@ module.exports = {
                                 }
 
                                 // sails.log(result11.admissiontypeid);
-                                if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1 && re.course=='btech'))
+                                // if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result11.admissiontypeid == 1 && re.course=='btech'))
+                                if(false) 
                                     return res.view('rmr_instructions', {first_name: re.name});
                                 else
                                 {
@@ -152,7 +153,7 @@ module.exports = {
                                                                             if(admin.is_group_admin == 1)
                                                                                 return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
                                                                             else
-                                                                                return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                                return res.view('notallowed', {first_name: result.first_name, last_name: result.last_name});
                                                                         });        
                                                                     }
                                                                     else if(!result1.mess){
@@ -165,7 +166,7 @@ module.exports = {
                                                                                 if(admin.is_group_admin == 1)
                                                                                     return res.redirect('onlymess');
                                                                                 else
-                                                                                    return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                                    return res.view('notallowed', {first_name: result.first_name, last_name: result.last_name});
                                                                             }
                                                                         });        
 
@@ -281,8 +282,9 @@ module.exports = {
                             return res.view('fail', {message: "NO type of admission"});
                         }
                         
-                            if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result12.admissiontypeid == 1 && re.course=='btech'))
-                                return res.view('rmr_instructions', {first_name: re.name});                                   
+                            // if(re.gender == "F" || (re.gender == "M" && (re.current_year == 2 || re.current_year == 3) && result12.admissiontypeid == 1 && re.course=='btech'))
+                                if(false)                            
+                                    return res.view('rmr_instructions', {first_name: re.name});                                   
                         else
                         {
 				            //return res.view('fail',{message:"Not your time to book"});
@@ -338,51 +340,51 @@ module.exports = {
                                                                     if(admin.is_group_admin == 1)
                                                                         return res.view('dashboard', {first_name: result.first_name, last_name: result.last_name});
                                                                     else
-                                                                        return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                        return res.view('notallowed', {first_name: result.first_name, last_name: result.last_name});
                                                                 });        
                                                             }
-                                                            // else if(!result1.mess){
-                                                            //     Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
-                                                            //         if(err){
-                                                            //             return res.view('fail', {message: "Invalid Group Members"});
-                                                            //         }
-                                                            //         if(admin == null){
-                                                            //             return res.redirect('onlymess');
-                                                            //         }
-                                                            //         else{
-                                                            //             if(admin.is_group_admin == 1)
-                                                            //                 return res.redirect('onlymess');
-                                                            //             else
-                                                            //                 return res.view('/notallowed', {first_name: result.first_name, last_name: result.last_name});
-                                                            //         }
-                                                            //     });        
+                                                            else if(!result1.mess){
+                                                                Rmr_student_groups_members.findOne({userid: result.id}).exec(function(err,admin){
+                                                                    if(err){
+                                                                        return res.view('fail', {message: "Invalid Group Members"});
+                                                                    }
+                                                                    if(admin == null){
+                                                                        return res.redirect('onlymess');
+                                                                    }
+                                                                    else{
+                                                                        if(admin.is_group_admin == 1)
+                                                                            return res.redirect('onlymess');
+                                                                        else
+                                                                            return res.view('notallowed', {first_name: result.first_name, last_name: result.last_name});
+                                                                    }
+                                                                });        
 
-                                                            // }
-                                                            // else{
-                                                            //     Rooms.findOne({id:result1.room}).exec(function(err,room){
-                                                            //         if (err) {
-                                                            //             return res.view('fail', {message: "Invalid room id"});
-                                                            //         }
-                                                            //         Mess.findOne({id:result1.mess}).exec(function(err,mess){
-                                                            //             if (err) {
-                                                            //                 return res.view('fail', {message: "Invalid mess id"});
-                                                            //             }
-                                                            //             StudentData.findOne({userid:result.id}).exec(function(err,details){
-                                                            //                 if(err){
-                                                            //                     return res.view('fail', {message: "Invalid id"});
-                                                            //                 }
-                                                            //                 Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
-                                                            //                     if(err){
-                                                            //                         return res.view('fail', {message: "Invalid hostel flors"});
-                                                            //                     }
-                                                            //                     Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
-                                                            //                         return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
-                                                            //                     });
-                                                            //                 });
-                                                            //             });
-                                                            //         });
-                                                            //     }); 
-                                                            // }
+                                                            }
+                                                            else{
+                                                                Rooms.findOne({id:result1.room}).exec(function(err,room){
+                                                                    if (err) {
+                                                                        return res.view('fail', {message: "Invalid room id"});
+                                                                    }
+                                                                    Mess.findOne({id:result1.mess}).exec(function(err,mess){
+                                                                        if (err) {
+                                                                            return res.view('fail', {message: "Invalid mess id"});
+                                                                        }
+                                                                        StudentData.findOne({userid:result.id}).exec(function(err,details){
+                                                                            if(err){
+                                                                                return res.view('fail', {message: "Invalid id"});
+                                                                            }
+                                                                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+                                                                                if(err){
+                                                                                    return res.view('fail', {message: "Invalid hostel flors"});
+                                                                                }
+                                                                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+                                                                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+                                                                                });
+                                                                            });
+                                                                        });
+                                                                    });
+                                                                }); 
+                                                            }
                                                         });
                                                     }
                                                     else{

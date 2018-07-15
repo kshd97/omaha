@@ -48,10 +48,14 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
 		var host = angular.element(document.getElementById("hostel"));
   	var blockfloor = angular.element(document.getElementById("floor"));
   	var str = blockfloor[0].value.split(' ');
-  	//console.log(str);
+  	console.log(str);
   	final.name = host[0].value;
   	final.block = str[0];
   	final.floor = str[2];
+
+    if(final.block == "null")
+      final.block = null;
+
     var roomEntries = [];
     $scope.hostelid = $resource('/hostel').query({name: final.name});
     $scope.hostelid.$promise.then(function(result){

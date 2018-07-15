@@ -10,7 +10,7 @@
 <br>
 <br>
 
-  <div class = "panel panel-success">
+<!--   <div class = "panel panel-success">
     <div class="panel-heading">
         <h3>Create a group</h3>
     </div>
@@ -31,7 +31,7 @@
 
 
     </div>
-  </div>
+  </div> -->
 
 <% } %>
 
@@ -69,24 +69,6 @@
   <% } %>
     </tbody>
   </table>
-
-  <% if ((group_size < 5 && gender == 'F') || (gender == 'M' && group_size < 2 && current_year == 3) || (gender == 'M' && group_size < 3 && current_year == 2)) { %>
-
-    <div class="ui center aligned container">
-      <form class="form-horizontal" action = '/inviteMate' method="POST">
-          <div class='form-group'>
-              <label class="control-label col-sm-3" for="invitingMate">Reg No:  </label>
-              <div class='col-sm-9'>
-                  <input autocomplete="off" name='newmateregno' id="newmateregno" type="text" class="form-control" placeholder="Enter registration number" required autofocus>
-              </div>
-          </div>
-          <div class='text-center'>
-            <!-- <button class="ui huge white button" style="" onclick="check()">Check ELigibility of Roommate</button> -->
-            <button class="ui huge white button" type="submit" id="submitbutton" style="">Invite Roommate</button>
-        </div>
-      </form>
-    </div>
-  <% } %>
 
 <% } %>
 </div>
