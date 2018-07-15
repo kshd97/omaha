@@ -306,9 +306,13 @@ module.exports = {
                                             if (err) {
                                                 return res.view('fail', {message: "Invalid admission type"});
                                             }
+                                            if(admissiontype.admissiontypeid == 1)
+                                                admissiontype = 'JEE';
+                                            else
+                                                admissiontype = 'DASA';
 
                                             // sails.log("it'sssssss" + admissiontype.admissiontypeid);
-                                            Admissiontype.findOne({admissiontype: admissiontype.admissiontypeid}).exec(function(err4, re4){
+                                            Admissiontype.findOne({admissiontype: admissiontype}).exec(function(err4, re4){
                                                 if(err4){
                                                     return res.view('fail', {message: "Invalid admission type"});
                                                 }

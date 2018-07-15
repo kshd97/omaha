@@ -135,7 +135,7 @@ module.exports = {
 		{
 			var newmate = req.param("newmateregno");
 			var posroommates = req.session.posroommates;
-            var flag = 0;
+            var flag = 1;
             for(var i = 0; i < posroommates.length; i++)
             {
             	// sails.log("possible is" + posroommates[i].registration_number);
