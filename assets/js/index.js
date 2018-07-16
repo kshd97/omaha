@@ -23,7 +23,9 @@ function ShowFloors(hostel, hostelsfromcon) {
             //   console.log("HEYYY");
               if(hostelsfromcon[i][j][1][k].name == hostel.value){
                 var name = "";
-                name = name + hostelsfromcon[i][j][1][k].block + " BLOCK  " + hostelsfromcon[i][j][1][k].floor + " FLOOR";
+
+                name = name + "Block: " + hostelsfromcon[i][j][1][k].block + ", " + " Floor: " hostelsfromcon[i][j][1][k].floor;
+
                 objFloor.options.add(new Option(name));
               }
             }

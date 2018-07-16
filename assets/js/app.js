@@ -39,28 +39,27 @@ roomApp.controller('RoomCtrl', ['$scope', '$resource', '$timeout', '$rootScope',
   };  
 }]);
 roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope', function($scope, $resource, $timeout, $rootScope) {
-	$scope.showRooms = function(floor, group_size){
-		var final ={};
+  $scope.showRooms = function(floor, group_size){
+    var final ={};
     //$rootScope.roomnames = [];
     console.log("hgsdhgjhgs");
     console.log(group_size);
     $rootScope.group_size=group_size;
-		var host = angular.element(document.getElementById("hostel"));
-  	var blockfloor = angular.element(document.getElementById("floor"));
-  	var str = blockfloor[0].value.split(' ');
-  	console.log(str);
-  	final.name = host[0].value;
-  	final.block = str[2];
-  	final.floor = str[6];
+    var host = angular.element(document.getElementById("hostel"));
+    var blockfloor = angular.element(document.getElementById("floor"));
+    var str = blockfloor[0].value.split(' ');
+    //console.log(str);
+    final.name = host[0].value;
+    final.block = str[2];
+    final.floor = str[6];
     if (final.block == "null") {
       final.block = null;
     }
-
     var roomEntries = [];
     $scope.hostelid = $resource('/hostel').query({name: final.name});
     $scope.hostelid.$promise.then(function(result){
       console.log(result[0].id);
-  	  $scope.hostelfloor = $resource('/hostelfloors/:id').query({hostel:result[0].id , block: final.block, floor: final.floor})
+      $scope.hostelfloor = $resource('/hostelfloors/:id').query({hostel:result[0].id , block: final.block, floor: final.floor})
       console.log($scope.hostelfloor);
       $scope.hostelfloor.$promise.then(function(result1){
         console.log("hgsdhgjhgs");
@@ -70,7 +69,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
           for (var i = 0; i < result2.length; i++) {
             console.log(result2[i].roomno);
             //var single = {id: result2[i].id, roomno: result2[i].roomno};
-            if(result2[i].noofbedsleft>=group_size){  
+            if(result2[i].noofbedsleft>=group_size){
               roomEntries.unshift(result2[i].roomno);
               // for (var i = 0; i < 10 ; i++) {
               //    roomEntries.unshift("1100");            
@@ -84,6 +83,6 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
         });
       });
   
-		});
+    });
   }
 }]);
