@@ -336,9 +336,12 @@ bookroom: function(req,res){
 											if(err){
 												return res.view('fail', {message: "Couldn't save room."});
 											}
-											sails.sockets.broadcast('rooms', 'new_entry', roomno);
+											// sails.sockets.broadcast('rooms', 'new_entry', roomno);
 										});
+										
+										
 										Global.roomlist.splice(Global.roomlist.indexOf(roomno), 1);
+
 										Messtypeid.find({studenttypeid: req.session.studenttypeid}).exec(function(err3, result3){
 										  	if(err3 || result3 == undefined){
 												return res.view('fail', {message: "Invalid mess type id."});
