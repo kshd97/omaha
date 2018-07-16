@@ -260,7 +260,7 @@ bookroom: function(req,res){
 				        }
 	                    Mess.findOne({id:alreadybookcheck.mess}).exec(function(err,mess){
 	                    	if (err || mess == undefined) {
-					            return res.view('fail', {message: "Not a valid mess."});
+					            return res.view('fail', {message: "Why did you come back ?."});
 					        }
 	                        StudentData.findOne({userid:userid}).exec(function(err,details){
 	                        	if (err || details == undefined) {
@@ -454,45 +454,93 @@ bookmess:function(req,res){
 		var criteria = {studentdata: reg_no};
 		var valuestoset = {mess: messid};
 		console.log(messid);
-		Allotment.update(criteria, valuestoset).exec(function(err1, result1){
-			if(err1 || result1 == undefined) {
-				return res.view('fail', {message: "Allotment couldn't update"});
-			}
-			// sails.log(result1[0].room);
-			Mess.findOne({id:messid}).exec(function(err2, result2) {
-				if(err2 || result2 == undefined){
-					return res.view('fail', {message: "Invalid mess"});
-				}
-				// sails.log(result2);
-				result2.allotted++;
-	  			result2.save(function(err2){
-	  				if(err2){
-						return res.view('fail', {message: "Couldn't save"});
-					} 
 
-	  				Rooms.findOne({id:result1[0].room}).exec(function(err,room){
-	  					if(err || room == undefined){
-							return res.view('fail', {message: "Room not found."});
+		Allotment.find({studentdata: req.session.registration_number}).exec(function(err, result) {
+
+
+			if(err || result == undefined)
+			{
+				sails.log("res is " + result);
+				return res.view('fail', {message: "Allotment not found"});
+			}
+			
+			if(result.mess == null)
+			{
+				Allotment.update(criteria, valuestoset).exec(function(err1, result1){
+					if(err1 || result1 == undefined) {
+						return res.view('fail', {message: "Allotment couldn't update"});
+					}
+					// sails.log(result1[0].room);
+					Mess.findOne({id:messid}).exec(function(err2, result2) {
+						if(err2 || result2 == undefined){
+							return res.view('fail', {message: "Invalid mess"});
 						}
-                        StudentData.findOne({userid:userid}).exec(function(err,details){
-                        	if(err || details == undefined){
-								return res.view('fail', {message: "Invalid ID"});
-							}
-                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
-                            	if(err || hostelfloor == undefined){
-									return res.view('fail', {message: "Invalid hostel floors"});
+						// sails.log(result2);
+						result2.allotted++;
+			  			result2.save(function(err2){
+			  				if(err2){
+								return res.view('fail', {message: "Couldn't save"});
+							} 
+
+			  				Rooms.findOne({id:result1[0].room}).exec(function(err,room){
+			  					if(err || room == undefined){
+									return res.view('fail', {message: "Room not found."});
 								}
-                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
-                                	if(err || hostel == undefined){
-										return res.view('fail', {message: "Invalid hostel"});
+		                        StudentData.findOne({userid:userid}).exec(function(err,details){
+		                        	if(err || details == undefined){
+										return res.view('fail', {message: "Invalid ID"});
 									}
-                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:result2.name ,reg_no:details.registration_number,name: details.name});
-                                })
-                            });
-                        });
-                	});
-	  			});
-			});
+		                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+		                            	if(err || hostelfloor == undefined){
+											return res.view('fail', {message: "Invalid hostel floors"});
+										}
+		                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+		                                	if(err || hostel == undefined){
+												return res.view('fail', {message: "Invalid hostel"});
+											}
+		                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:result2.name ,reg_no:details.registration_number,name: details.name});
+		                                })
+		                            });
+		                        });
+		                	});
+			  			});
+					});
+				});
+			}
+			else
+			{
+				sails.log("booking mess again");
+				if(result.room != null){
+					sails.log("yess");
+					//user already booked a room and tries to access through url
+					Rooms.findOne({id:result.room}).exec(function(err,room){
+						if (err || room == undefined) {
+				            return res.view('fail', {message: "Not a valid room."});
+				        }
+	                    Mess.findOne({id:result.mess}).exec(function(err,mess){
+	                    	if (err || mess == undefined) {
+					            return res.view('fail', {message: "Invalid mess."});
+					        }
+	                        StudentData.findOne({userid:req.session.me}).exec(function(err,details){
+	                        	if (err || details == undefined) {
+						            return res.view('fail', {message: "Your ID was not found"});
+						        }
+	                            Hostelfloors.findOne({id:room.hostelfloors}).exec(function(err,hostelfloor){
+	                            	if (err || hostelfloor == undefined) {
+							            return res.view('fail', {message: "Invalid hostel floor"});
+							        }
+	                                Hostel.findOne({id:hostelfloor.hostel}).exec(function(err,hostel){
+	                                	if (err || hostel == undefined) {
+								            return res.view('fail', {message: "Invalid hostel"});
+								        }
+	                                    return res.view('booked',{room:room.roomno,hostel_name:hostel.name,block:hostelfloor.block,floor:hostelfloor.floor, mess:mess.name ,reg_no:details.registration_number,name: details.name});
+	                                });
+	                            });
+	                        });
+	                    });
+	                });
+				}
+			}
 		});	
 	}
 	else
