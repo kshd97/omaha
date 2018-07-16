@@ -50,11 +50,11 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
   	var str = blockfloor[0].value.split(' ');
   	console.log(str);
   	final.name = host[0].value;
-  	final.block = str[0];
-  	final.floor = str[2];
-
-    if(final.block == "null")
+  	final.block = str[2];
+  	final.floor = str[6];
+    if (final.block == "null") {
       final.block = null;
+    }
 
     var roomEntries = [];
     $scope.hostelid = $resource('/hostel').query({name: final.name});
@@ -63,6 +63,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
   	  $scope.hostelfloor = $resource('/hostelfloors/:id').query({hostel:result[0].id , block: final.block, floor: final.floor})
       console.log($scope.hostelfloor);
       $scope.hostelfloor.$promise.then(function(result1){
+        console.log("hgsdhgjhgs");
         console.log(result1[0].id);  
         $scope.roomlist = $resource('/rooms').query({hostelfloors: result1[0].id, allotted: 0, conditionid: 1});
         $scope.roomlist.$promise.then(function(result2){
