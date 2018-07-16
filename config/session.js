@@ -65,7 +65,7 @@ module.exports.session = {
   ***************************************************************************/
 
   // adapter: 'connect-mongoct-redis',
-  // adapter: 'connect-redis',
+  adapter: 'connect-redis',
 
   /***************************************************************************
   *                                                                          *

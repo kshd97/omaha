@@ -295,7 +295,7 @@ bookroom: function(req,res){
 						}
 						valuestoset = {room: result.id};
 						Rmr_student_groups_members.findOne({userid: re.registration_number}).exec(function(err,groupid){
-							if(err || groupid == undefined){
+							if(err){
 								return res.view('fail', {message: "Invalid Group members"});
 							}
 							if(groupid){

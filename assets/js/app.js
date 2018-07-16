@@ -45,6 +45,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
     console.log("hgsdhgjhgs");
     console.log(group_size);
     $rootScope.group_size=group_size;
+
     var host = angular.element(document.getElementById("hostel"));
     var blockfloor = angular.element(document.getElementById("floor"));
     var str = blockfloor[0].value.split(' ');
@@ -52,6 +53,7 @@ roomApp.controller('RoomCtrl1', ['$scope', '$resource', '$timeout', '$rootScope'
     final.name = host[0].value;
     final.block = str[2];
     final.floor = str[6];
+
     if (final.block == "null") {
       final.block = null;
     }
