@@ -387,7 +387,7 @@ bookroom: function(req,res){
 								  			inclause = inclause + messesid[i] + ","; 
 								  		}
 								  		inclause = inclause + messesid[messesid.length-1] + ")";
-								  		query = "SELECT * from mess where id in" + inclause;
+								  		query = "SELECT * from mess where allotted < capacity and id in" + inclause;
 								  		Mess.query(query, [], function(err4, result4){
 								  			if(err4){
 								  				return res.serverError(err4)
@@ -664,7 +664,7 @@ onlymess: function(req,res){
 									  			inclause = inclause + messesid[i] + ","; 
 									  		}
 									  		inclause = inclause + messesid[messesid.length-1] + ")";
-									  		query = "SELECT * from mess where id in" + inclause;
+									  		query = "SELECT * from mess where allotted < capacity and id in" + inclause;
 									  		Mess.query(query, [], function(err, result7){
 									  			if(err){
 									  				return res.serverError(err)
